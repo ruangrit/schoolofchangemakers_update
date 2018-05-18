@@ -1,0 +1,174 @@
+<?php
+
+function like_menu(){
+ 
+  $items['like/test'] = array(
+    'title' => 'Like comment',
+    'description' => 'Like comment',
+    'page callback' => 'like_test',
+    'access arguments' => array(''),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['like/comment/%/%'] = array(
+    'title' => 'user like comment',
+    'description' => 'user like comment',
+    'page callback' => 'like_comment',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+ 
+  return $items;
+}
+#user function
+
+function like_test(){
+    echo "test";
+}
+
+function checkuser_like_comment($cid) {
+
+  global $user; 
+
+  $comment = comment_load($cid);
+
+  $status = false;
+
+  $type = $comment->node_type;
+
+      if($type=="comment_node_project"){
+        $user_like = $comment->field_user_like['und'];
+      }elseif($type=="comment_node_news"){
+        $user_like = $comment->field_user_like_news['und'];    
+      }elseif($type=="comment_node_forum"){
+        $user_like = $comment->field_user_like_forum['und'];
+      }elseif($type=="comment_node_campaign"){
+        $user_like = $comment->field_user_like_campaign['und'];       
+      }elseif($type=="comment_node_event"){
+        $user_like = $comment->field_user_like_event['und'];       
+      }elseif($type=="comment_node_journal"){
+        $user_like = $comment->field_user_like_journal['und'];       
+      }elseif($type=="comment_node_funding_record"){
+        $user_like = $comment->field_user_like_funding_record['und'];       
+      }elseif($type=="comment_node_knowledge"){
+        $user_like = $comment->field_user_like_knowledge['und'];       
+      }
+
+  
+
+  foreach ($user_like as $key => $value) {
+
+    if($value['uid']==$user->uid && $user->uid!=0){
+
+      $status = true;
+
+    }
+
+  }
+
+  return  $status;
+
+}
+
+function like_comment(){
+
+    //Nalin
+
+    $cid = arg(2);
+
+    $comment = comment_load($cid);
+
+    $type = $comment->node_type;
+
+    $check = checkuser_like_comment($cid);
+
+    $like= 0;
+
+    if(arg(3)==0){
+
+      echo json_encode(array('status'=>0,'msg'=>"Please, login before like this comment.",'value'=>$comment->field_like['und'][0]['value'],'check'=>$check));
+
+    }elseif($check==true){
+
+       echo json_encode(array('status'=>0,'msg'=>"You already liked this comment.",'value'=>$comment->field_like['und'][0]['value'],'check'=>$check));
+       
+    }elseif($check==false){
+
+      if($type=="comment_node_project"){
+
+          $like = $comment->field_like['und'][0]['value']+1;
+
+          $comment->field_like['und'][0]['value'] =  $like;
+
+          $comment->field_user_like['und'][]['uid'] =  arg(3);
+
+      }elseif($type=="comment_node_news"){
+
+          $like = $comment->field_like_news['und'][0]['value']+1;
+
+          $comment->field_like_news['und'][0]['value'] =  $like;
+
+          $comment->field_user_like_news['und'][]['uid'] =  arg(3);
+
+      }elseif($type=="comment_node_event"){
+
+          $like = $comment->field_like_event['und'][0]['value']+1;
+
+          $comment->field_like_event['und'][0]['value'] =  $like;
+
+          $comment->field_user_like_event['und'][]['uid'] =  arg(3);
+
+      }elseif($type=="comment_node_forum"){
+
+          $like = $comment->field_like_forum['und'][0]['value']+1;
+
+          $comment->field_like_forum['und'][0]['value'] =  $like;
+
+          $comment->field_user_like_forum['und'][]['uid'] =  arg(3);
+
+      }elseif($type=="comment_node_campaign"){
+
+          $like = $comment->field_like_campaign['und'][0]['value']+1;
+
+          $comment->field_like_campaign['und'][0]['value'] =  $like;
+
+          $comment->field_user_like_campaign['und'][]['uid'] =  arg(3);
+
+      }elseif($type=="comment_node_knowledge"){
+
+          $like = $comment->field_like_knowledge['und'][0]['value']+1;
+
+          $comment->field_like_knowledge['und'][0]['value'] =  $like;
+
+          $comment->field_user_like_knowledge['und'][]['uid'] =  arg(3);
+
+      }elseif($type=="comment_node_funding_record"){
+
+          $like = $comment->field_like_funding_record['und'][0]['value']+1;
+
+          $comment->field_like_funding_record['und'][0]['value'] =  $like;
+
+          $comment->field_user_like_funding_record['und'][]['uid'] =  arg(3);
+
+      }elseif($type=="comment_node_journal"){
+
+          $like = $comment->field_like_journal['und'][0]['value']+1;
+
+          $comment->field_like_journal['und'][0]['value'] =  $like;
+
+          $comment->field_user_like_journal['und'][]['uid'] =  arg(3);
+
+      }
+
+
+       comment_save($comment);
+
+       echo json_encode(array('status'=>1,'value'=> $like,'check'=>$check));
+
+    }
+
+}
+
+#end general function
+
+?>
+ 

@@ -1,0 +1,172 @@
+input#total_budget,input#funding_amount,input#funding_amount_left,select#funding_amount_status{   
+   color:#000;
+}
+.panelist-about img{
+	max-width: 100%;
+	height: auto;
+}
+.edit_total_budget, .edit_funding_amount, .edit_funding_amount_left, .edit_funding_amount_status{
+	cursor: pointer;
+}
+#myForgot .success-massage {
+    display: none;
+}
+.project-campaign a{
+	display: block;
+	width: 100%;
+	height: 100%;
+}	
+.viewcontent--body .field-name-body img{
+	height: auto;
+}
+#edit-taxonomy-forums{
+	display: none;
+}
+.image-set img {
+	width: 100%;
+    height: 100%;
+}
+.image-campaign-panelist img{
+	width: 100%;
+	height: auto;
+}
+.comment-scroll-bar{
+	overflow-y: auto;
+    max-height: 250px;
+    padding: 0 30px;
+
+}
+#edit-author{
+ display: none;
+}
+#media-browser-page #edit-field-file-image-alt-text,#media-browser-page #edit-field-file-image-title-text{
+	display: none;
+}
+.pointer_hover{
+	cursor: pointer;
+}
+#views_slideshow_controls_text_latest_news-block{
+	position: absolute;
+    /*z-index: 100;*/
+    width: 100%;
+    height: 90%;
+    margin-top: 0;
+}
+#views_slideshow_controls_text_previous_latest_news-block,
+#views_slideshow_controls_text_next_latest_news-block {
+	width: 10%;
+	height: 75%;
+    display: block;
+   
+}
+#views_slideshow_controls_text_previous_latest_news-block{ 
+	float: left;
+	z-index: 100;
+	position: absolute;
+	left: 0;
+}
+#views_slideshow_controls_text_next_latest_news-block { 
+	float: right;
+	z-index: 100;
+	position: absolute;
+	right: 0;
+	}
+#views_slideshow_controls_text_previous_latest_news-block a,
+#views_slideshow_controls_text_next_latest_news-block a{
+	width: 100%;
+	height: 100%;
+    display: block;
+}
+#views_slideshow_controls_text_previous_latest_news-block a{    
+ 	background-image: url('/sites/all/themes/changemakers/images/arrow-left.png');
+ 	text-indent: -9999px;
+}
+#views_slideshow_controls_text_next_latest_news-block a{    
+ 	background-image: url('/sites/all/themes/changemakers/images/arrow-right.png');
+ 	text-indent: -9999px;
+}
+#views_slideshow_controls_text_next_latest_news-block a {
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: 100% 75%;
+    outline: none;
+}
+#views_slideshow_controls_text_previous_latest_news-block a {
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: 0% 75%;
+    outline: none;
+}
+#edit-field-describe-problem-und-0-format{
+	display: none;
+}
+#edit-field-project-goal-und-0-format{
+	display: none;
+}
+#edit-field-project-solutions-und-0-format{
+	display: none;
+}
+#edit-field-project-impact-und-0-format{
+	display: none;
+}
+#edit-field-project-sustainability-pla-und-0-format{
+	display: none;
+}
+#edit-field-project-background-und-0-format{
+	display: none;
+}
+.cke_dialog_contents .cke_dialog_ui_hbox_last{
+	/*display: none;*/
+}
+
+#edit-field-commuity-image #edit-field-commuity-image-und-0-ajax-wrapper .file-upload-js-error{
+	display: none;
+}
+
+#edit-field-journal-image #edit-field-journal-image-und-0-ajax-wrapper .file-upload-js-error{
+	display: none;
+}
+
+#edit-field-project-image #edit-field-project-image-und-0-ajax-wrapper .file-upload-js-error{
+	display: none;
+}
+.set-non-campaign{
+	height: 50px;
+}
+#edit-field-session-und{
+	margin-top: 20px;
+}
+#session-offer-node-form .form-item-title{
+	display: none;
+}
+#webform-client-form-1 .webform-component--email .control-label{
+	display: none;
+}
+.top-campaign-dashboard{
+	margin-top: 90px;
+}
+/*#edit-field-project-source-und-0-format .panel-body{
+	display: none;
+}*/
+/*#project-node-form .group-project-group .form-item-field-project-source-und-0-value .control-label{
+    font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}*/
+.lb-nav {
+       pointer-events: none;
+    }
+
+.lb-prev, .lb-next {
+   pointer-events: auto;
+}
+.online-course-content img{
+ max-width: 100%;
+ height: auto;
+}
+.knowledge-document{
+	margin-top: 10px;
+	margin-bottom: 20px;
+    margin-left: 5%;
+    clear: right;
+}

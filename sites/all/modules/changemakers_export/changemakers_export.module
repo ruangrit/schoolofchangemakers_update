@@ -1,0 +1,1076 @@
+<?php
+/**
+ * Implements hook_menu().
+ */
+
+require_once 'changemakers_export_helper.inc';
+
+function changemakers_export_menu() {
+  $items = array();
+
+  $items['admin/changemakers_export'] = array(
+    'title' => 'Export', 
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+   $items['admin/changemakers_export/user'] = array(
+    'title' => 'Users', 
+    'page callback' =>  'drupal_get_form',
+    'access arguments' => array('access administration pages') ,
+    'page arguments' => array('changemakers_export_users'),
+  );
+   $items['admin/changemakers_export/user/old'] = array(
+    'title' => 'Users old code', 
+    'page callback' =>  'drupal_get_form',
+    'access arguments' => array('access administration pages') ,
+    'page arguments' => array('changemakers_export_users_old'),
+  );
+ 
+   $items['admin/changemakers_export/project'] = array(
+    'title' => 'Project',
+    'description' => 'Customize export filters',  
+    'page callback' =>  'drupal_get_form',
+    'page arguments' => array('changemakers_export_project'),
+    'access arguments' => array('access administration pages') 
+  );
+   $items['admin/changemakers_export/project/owner'] = array(
+    'title' => 'Project Owner',
+    'page callback' =>  'drupal_get_form',
+    'page arguments' => array('changemakers_export_project_owner'),
+    'access arguments' => array('access administration pages') 
+  );
+   $items['admin/changemakers_export/project/member'] = array(
+    'title' => 'Project Member',
+    'page callback' =>  'drupal_get_form',
+    'page arguments' => array('changemakers_export_project_member'),
+    'access arguments' => array('access administration pages') 
+  );
+   $items['admin/changemakers_export/project/coach'] = array(
+    'title' => 'Project Coach',
+    'page callback' =>  'drupal_get_form',
+    'page arguments' => array('changemakers_export_project_coach'),
+    'access arguments' => array('access administration pages') 
+  );
+   $items['admin/changemakers_export/mail'] = array(
+    'title' => 'Mail', 
+    'page callback' =>  'drupal_get_form',
+    'access arguments' => array('access administration pages') ,
+    'page arguments' => array('changemakers_export_mail'),
+  );
+  return $items;
+}
+
+
+/**
+ * Page callback: Exports settings
+ *
+ * @see changemakers_export_menu()
+ */
+function changemakers_export_form($form, &$form_state) {
+  $form['changemakers_export_max'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Maximum number of posts'),
+    '#default_value' => variable_get('current_posts_max', 3),
+    '#size' => 2,
+    '#maxlength' => 2,
+    '#description' => t('The maximum number of links to display in the block.'),
+    '#required' => TRUE,
+  );
+$form['changemakers_export_max_submit'] = array('#type' => 'submit', '#value' => t('Import'));
+
+ // return system_settings_form($form);
+}
+
+
+   
+
+   function changemakers_get_team_project_export($nid){
+    $data_user = node_load($nid);
+ 
+    $user_join_project = array();
+    $count_index = 0;
+    for ($i=0; $i < count($data_user->field_coach_project['und']) ; $i++) { 
+      $user_join = user_load($data_user->field_coach_project['und'][$i]['uid']); 
+      $user_join_project[$count_index]['username'] = $user_join->name;
+      $user_join_project[$count_index]['phone'] = $user_join->field_profile_phone['und'][0]['value'];
+      $user_join_project[$count_index]['fname'] = $user_join->field_profile_firstname['und'][0]['value'];
+      $user_join_project[$count_index]['lname'] = $user_join->field_profile_lastname['und'][0]['value']; 
+      $user_join_project[$count_index]['uid'] = $user_join->uid;
+      $user_join_project[$count_index]['role'] = "Coach";
+      $count_index++;
+    }
+ 
+    for ($i=0; $i < count($data_user->field_organization_project['und']) ; $i++) {   
+      $user_join_project[$count_index]['lname'] = ""; 
+      $user_join_project[$count_index]['username'] = $data_user->field_organization_project['und'][$i]['taxonomy_term']->name;
+      $user_join_project[$count_index]['role'] = "Organization";
+      $count_index++;
+    }
+  //print_r($user_join_project);
+ 
+    for ($i=0; $i < count($data_user->field_partner_project['und']) ; $i++) { 
+      $user_join = user_load($data_user->field_partner_project['und'][$i]['uid']); 
+      $user_join_project[$count_index]['username'] = $user_join->name;
+      $user_join_project[$count_index]['phone'] = $user_join->field_profile_phone['und'][0]['value'];
+      $user_join_project[$count_index]['fname'] = $user_join->field_profile_firstname['und'][0]['value'];
+      $user_join_project[$count_index]['lname'] = $user_join->field_profile_lastname['und'][0]['value']; 
+      $user_join_project[$count_index]['uid'] = $user_join->uid;
+      $user_join_project[$count_index]['role'] = "Partner";
+      $count_index++;
+    }
+ 
+ 
+    return $user_join_project;
+  }
+   
+function changemakers_export_coachs() {
+module_load_include('inc', 'phpexcel'); 
+  $headers = array('Contact Type','SOC Status','Join since','First Name','Nickname','Last Name','Email','Mobile number','Date of Birth','Current Career','Organization','Project','Project Role','Address','Province','Zipcode','Reqions','Social Media Channel','Social Media ID/Name','Skills & Interests','Interested Problems','Interested Target Group','Mail Subsriber');  
+  $data = array();
+ 
+
+$query = db_select('users', 'u');   
+$query->leftjoin('users_roles','r' , 'u.uid = r.uid');
+$query->leftjoin('role','re' , 're.rid = r.rid');   
+$query->fields('u',array('uid','name','created','mail','status'))  
+  ->condition('r.rid', array(5),'IN'); 
+//$query->orderBy('created', 'DESC')->range(0,5);
+$result = $query->execute();
+ 
+while($record = $result->fetchAssoc()) {
+
+$uid=$record["uid"];
+$user_data = user_load($uid);
+ 
+$firstname = $user_data->field_profile_firstname['und'][0]['value'];
+$lastname = $user_data->field_profile_lastname['und'][0]['value'];
+$nickname = $user_data->field_profile_nickname['und'][0]['value'];
+$birthdate = $user_data->field_profile_birthdate['und'][0]['value'];
+
+$organization = $user_data->field_profile_institution['und'][0]['value'];
+$ajoin = $user_data->field_profile_join_interest['und'][0]['value']; 
+$career = $user_data->field_profile_to_study['und'][0]['value']; 
+$contact = $user_data->field_profile_contact['und'][0]['value']; 
+$address = $user_data->field_profile_address['und'][0]['value']; 
+$province = $user_data->field_profile_province['und'][0]['value'];
+$zipcode = $user_data->field_profile_zipcode['und'][0]['value']; 
+$social = $user_data->field_profile_social['und'][0]['value']; 
+$social_name = $user_data->field_profile_social_name['und'][0]['value']; 
+$phone = $user_data->field_profile_phone['und'][0]['value']; 
+$social = ($social!="เลือก")?$social:"";
+$la  = $user_data->field_proflie_language['und'][0]['value']; 
+ 
+ 
+$user_list_project_owner = user_list_project_owner($uid); 
+$status = $user_data->status; 
+$status = ($status==1)?"Active":"Inactive"; 
+$mail = $user_data->mail; 
+$createAt = date('m/d/Y',$user_data->created); 
+if($birthdate!="0000-00-00")
+{ 
+ 
+$birthdate = date("m/d/Y", strtotime($birthdate));
+}else $birthdate=""; 
+$career = ($career==1)?"Study":"Work";
+$subscriber=($contact==3)?"Y":"N";
+$regions ="";
+  $problem_in="";
+  $skill_in="";
+ $target_in="";
+	$countRow = count($user_data->field_profile_problem_interest['und']); 
+	$problem_inter = $user_data->field_profile_problem_interest['und'];
+  if($countRow>0){ 
+	 for ($i=0; $i <  $countRow ; $i++) 
+	 {   
+	 $problem_in .=taxonomy_term_load($problem_inter[$i]['tid'])->name.';'; 
+    }	
+   $pro_in = substr($problem_in,0,-1);
+  }
+  if($countRow2>0){ 
+   $countRow2 = count($user_data->field_profile_target_group['und']); 
+	$target_group = $user_data->field_profile_target_group['und'];
+  
+	 for ($i=0; $i <  $countRow2 ; $i++) 
+	 {   
+	 $target_in .=taxonomy_term_load($target_group[$i]['tid'])->name.';'; 
+    }	
+   $tar_in = substr($target_in,0,-1);
+  }
+    if($countRow3>0){ 
+    $countRow3 = count($user_data->field_profile_skill_interest['und']); 
+	$skill_inter = $user_data->field_profile_skill_interest['und'];
+  
+	 for ($i=0; $i <  $countRow3 ; $i++) 
+	 {     
+  if($skill_inter[$i]['tid']==39) { 
+ 
+   $skill_in .='ภาษาต่างประเทศ '.$l.";";  
+  }else{  
+	 $skill_in .=taxonomy_term_load($skill_inter[$i]['tid'])->name.';'; 
+  }
+    }	
+   $ski_in = substr($skill_in,0,-1);
+    }
+      
+       $data[]=array("Coach",$status,$createAt,$firstname,$nickname,$lastname,$mail,$phone,$birthdate,$career,$organization,"","",$address,$province,$zipcode,$regions,$social,$social_name,$ski_in,$pro_in,$tar_in,$subscriber);
+    }
+ 
+    $dir = file_stream_wrapper_get_instance_by_uri('public://')->realpath();
+   
+    $da = date('YmdHis');
+    $filename = 'coach_'.$da.'.xls';
+    $path = "$dir/$filename"; // echo  $path;
+    $options = array('format' => 'xls');
+        
+    $result = phpexcel_export($headers, $data, $path, $options);
+ 
+    if ($result == PHPEXCEL_SUCCESS) {
+        drupal_set_message(t("Export successful"));
+        drupal_set_message(t("<a href='https://www.schoolofchangemakers.com/sites/default/files/".$filename."'>Download</a>"));
+    }
+    else {
+        drupal_set_message(t("Error"), 'error');
+    }
+
+
+}
+
+function changemakers_export_project_coach() {
+  global $user;
+  module_load_include('inc', 'phpexcel'); 
+    $headers = array(
+      'Project ID',
+      "Project's Coach ID",
+    );  
+  $data = array();
+  $query = db_select('node', 'n');    
+  $query->fields('n',array('nid'))->condition('type', 'project','=');
+  $results = $query->execute();
+
+  while($record = $results->fetchAssoc()) {
+    $nid = $record['nid'];
+    $teams  = changemakers_get_team_project($nid);
+    foreach($teams as $val)
+    { 
+      switch($val['role'])
+      {
+        case "Coach":
+          $data[] = array($nid, $val["uid"]);
+        break;
+      } 
+    }
+
+  }
+  $dir = file_stream_wrapper_get_instance_by_uri('public://')->realpath();
+ 
+  $da = date('Ymd');
+  $filename = 'project_coach'.$da.'.xlsx';
+  $path = "$dir/$filename";
+  $options = array('format' => 'xlsx');
+      
+  $result = phpexcel_export($headers, $data, $path, $options);
+
+  if ($result == PHPEXCEL_SUCCESS) {
+      drupal_set_message(t("Export successful"));
+      drupal_set_message(t("<a href='https://www.schoolofchangemakers.com/sites/default/files/".$filename."'>Download</a>"));
+  }
+  else {
+      drupal_set_message(t("Error"), 'error');
+  }
+
+}
+function changemakers_export_project_member() {
+  global $user;
+  module_load_include('inc', 'phpexcel'); 
+    $headers = array(
+      'Project ID',
+      "Project Members ID",
+    );  
+  $data = array();
+  $query = db_select('node', 'n');    
+  $query->fields('n',array('nid'))->condition('type', 'project','=');
+  $results = $query->execute();
+
+  while($record = $results->fetchAssoc()) {
+    $nid = $record['nid'];
+    $get_form = changemakers_get_data_from_webform_project($nid); 
+    $get_team  = changemakers_get_team($get_form);
+
+    foreach ($get_team as $key => $value) {
+      $data[] = array($nid, $value['uid']); 
+    }
+  }
+
+  $dir = file_stream_wrapper_get_instance_by_uri('public://')->realpath();
+ 
+  $da = date('Ymd');
+  $filename = 'project_member'.$da.'.xlsx';
+  $path = "$dir/$filename";
+  $options = array('format' => 'xlsx');
+      
+  $result = phpexcel_export($headers, $data, $path, $options);
+
+  if ($result == PHPEXCEL_SUCCESS) {
+      drupal_set_message(t("Export successful"));
+      drupal_set_message(t("<a href='https://www.schoolofchangemakers.com/sites/default/files/".$filename."'>Download</a>"));
+  }
+  else {
+      drupal_set_message(t("Error"), 'error');
+  }
+
+}
+function changemakers_export_project_owner() {
+  global $user;
+  module_load_include('inc', 'phpexcel'); 
+    $headers = array(
+      'Project ID',
+      "Project's Owner ID",
+    );  
+  $data = array();
+  $query = db_select('node', 'n');    
+  $query->fields('n',array('nid', 'uid'))->condition('type', 'project','=');
+  $results = $query->execute();
+
+  while($record = $results->fetchAssoc()) {
+    $data[] = array($record['nid'], $record['uid']);
+  }
+
+  $dir = file_stream_wrapper_get_instance_by_uri('public://')->realpath();
+ 
+  $da = date('Ymd');
+  $filename = 'project_owner'.$da.'.xlsx';
+  $path = "$dir/$filename";
+  $options = array('format' => 'xlsx');
+      
+  $result = phpexcel_export($headers, $data, $path, $options);
+
+  if ($result == PHPEXCEL_SUCCESS) {
+      drupal_set_message(t("Export successful"));
+      drupal_set_message(t("<a href='https://www.schoolofchangemakers.com/sites/default/files/".$filename."'>Download</a>"));
+  }
+  else {
+      drupal_set_message(t("Error"), 'error');
+  }
+
+}
+
+function changemakers_export_project()
+{
+  echo "Start time is " . date("h:i:sa");
+  global $user;
+  module_load_include('inc', 'phpexcel'); 
+  /*
+   $headers = array('Project ID','Project Name','Status','Project Owner','Project Member','Coach','Project Stage','Project Type','Start Date','End Date','Description','Working Area','Education','Environment & Sustainability','Health / Fitness','Development & Prosperity','Human Rights & Equality','Civic Engagement','Peace & Harmonious Relation','Business & Social Enterprise','Interest Target Group','Campaign','Partner');  
+   */
+   $headers = array(
+    'Project ID',
+    'Project Name',
+    'Status',
+    'Project Owner',
+    'Project Member',
+    'Coach',
+    'Project Stage',
+    'Project Type',
+    'Start Date',
+    'End Date',
+    'Description',
+    'Working Area',
+    'Education',
+    'Environment & Sustainability',
+    'Health / Fitness',
+    'Development & Prosperity',
+    'Human Rights & Equality',
+    'Civic Engagement',
+    'Peace & Harmonious Relation',
+    'Business & Social Enterprise',
+    'Interest Target Group',
+    'Campaign',
+    'Partner'
+    );  
+
+
+/*
+'Education','Environment & Sustainability','Health / Fitness','Development & Prosperity','Civic Engagement','Peace & Harmonious Relation','Business & Social Enterprise'
+
+สิ่งแวดล้อม 11 
+สุขภาพ 86 
+เศรษฐกิจ / ความยากจน 12 
+สันติภาพ / ความสงบสุข 10 
+ธุรกิจและกิจการเพื่อสังคม 13 
+การมีส่วนร่วม 15  
+การศึกษา 8 
+สิทธิและความเท่าเทียม 9
+*/
+
+
+  $data = array();
+   $query = db_select('node', 'n');    
+   $query->fields('n',array('nid'))->condition('type', 'project','=');//->condition('nid',11270,'=');  
+   $results = $query->execute();
+   $area = "";
+
+$maingroup =array(8,9,10,11,12,13,15,86); 
+$problems = array();
+$problems_load = array();
+foreach ($maingroup as $key => $value) {
+  $terms = taxonomy_get_children($value);
+  $terms_id = array();
+  foreach ($terms as $key_term => $value_term) {
+    $terms_id[] = $value_term->tid;
+    $problems_load[$value_term->tid] = $value_term;
+  }
+  $problems[$value] = $terms_id; 
+}
+
+  while($record = $results->fetchAssoc()) {
+    $nid = $record["nid"]; 
+    $node = node_load($nid); 
+    $desc=str_replace("&nbsp;","",strip_tags($node->body['und'][0]['value']));
+   // print_r($node);
+    $get_form = changemakers_get_data_from_webform_project($nid); 
+    $project_join_campaign = changemakers_get_join_campaign($nid);
+  //join campaign 
+  $campaign_array = array();
+  if(count($project_join_campaign)>0){ 
+   foreach($project_join_campaign as $val)
+   {
+ $campaign_array[] = $val["node_id"];
+   }}
+    $campaign =implode(';', $campaign_array);
+  //  print_r($project_join_campaign);
+   $area = $node->field_project_area_province['und'][0]['value']; 
+    if(taxonomy_term_load($node->field_project_area_district['und'][0]['tid'])->name)
+    $area .=":".taxonomy_term_load($node->field_project_area_district['und'][0]['tid'])->name;
+  //member
+      $get_team_all  = changemakers_get_team_project($nid);
+  
+        $coach_array = array();
+        $partner_array = array();
+         
+        foreach($get_team_all as $val)
+        { 
+          switch($val['role'])
+          {
+                 case "Coach":
+                  $coach_array[] =  $val["uid"];
+                  break;
+                  case "Organization": 
+                  $partner_array[] =  $val["username"];
+                  break;
+          } 
+        }
+             $get_team  = changemakers_get_team($get_form);
+           
+        $team_array  = array();
+        foreach($get_team as $val)
+        {
+          $team_array[] = $val["uid"];
+        }
+        $member =implode(';', $team_array);
+         
+        $coach =implode(';', $coach_array);
+        $partner =implode(';', $partner_array);
+   
+ 
+/*
+$problems = array(
+8=>array(53,1154,54,56,59,58,1145,55,57,1138),
+9=>array(1143,78,80,77,75,104,62,1146,83,82),
+10=>array(67,68,1144,69,1155,1156),
+11=>array(99,1149,1150,1148,100,102,1137,103,105,1147),
+12=>array(1152,72,1141,149,73,74,70,71),
+13=>array(93,94,95,96,97,98),
+15=>array(66,63,64,61,84,150),
+86=>array(85,1151,87,91,88,1142,1153,90,92)
+);
+*/
+
+              $problem_tax =array();
+              $problem = array();
+              $i = 0;
+             $all = count($node->field_problem_topic['und']); 
+      
+              foreach($node->field_problem_topic['und'] as $val)
+              {    $tid =  $val["tid"];  
+                      foreach($problems as $key=>$val){  
+                       if(in_array($tid, $val)){   
+                          $problem_tax[$key][]=  $problems_load[$tid]->name;
+                        }
+                          $problem[$key] =implode(';', $problem_tax[$key]);
+                      }  
+              }
+            
+               
+          
+
+
+ 
+
+  $target_tax = array(); 
+                for ($i=0; $i < count($node->field_project_target['und']) ; $i++) {  
+                    if(taxonomy_term_load($node->field_project_target['und'][$i]['tid'])->name!= "All" ) 
+                       if(taxonomy_term_load($node->field_project_target['und'][$i]['tid'])->name == "อื่น ๆ (ระบุ)"){
+                            $target_tax[] =$node->field_project_target_other['und'][0]['value'];       
+                        }else{
+                            $target_tax[] =taxonomy_term_load($node->field_project_target['und'][$i]['tid'])->name; 
+                        }
+                }
+                      if(count($problem_tax)<12)
+                $target =implode(';', $target_tax);
+                else $target= "All";
+              
+  if($node->field_verification['und'][0]['value'] == 1){
+                            $project_type= "Verified";
+                        }else if($node->field_verification['und'][0]['value'] == 2){
+                           $project_type= "Not verified";
+                        } 
+                        elseif($node->field_verification['und'][0]['value'] == 3){
+                            $project_type= "Unverified";
+                        }else{
+                             $project_type= "Unverified";
+                        }
+ 
+    $title = $node->title; 
+    $owner = $node->uid;
+    $status = ($node->field_project_status['und'][0]['value']==1)?"Active":"Not Active";    
+   $end = date("Y-m-d",$node->changed);
+   $start = date("Y-m-d",$node->created); //startdate 
+  $partner ="";
+    $get_progress_project  = changemakers_get_progress_project($node->field_project_progress['und'][0]['value']); 
+     $data[] = array($nid,$title,$status,$owner,$member,$coach,$get_progress_project,$project_type,$start,$end,$desc,$area,$problem[8],$problem[11],$problem[86],$problem[12],$problem[9],$problem[15],$problem[10],$problem[13],$target,$campaign,$partner);
+ 
+  }
+  
+   $dir = file_stream_wrapper_get_instance_by_uri('public://')->realpath();
+   
+    $da = date('Ymd');
+    $filename = 'project_'.$da.'.xlsx';
+    $path = "$dir/$filename"; // echo  $path;
+    $options = array('format' => 'xlsx');
+        
+    $result = phpexcel_export($headers, $data, $path, $options);
+ 
+    if ($result == PHPEXCEL_SUCCESS) {
+        drupal_set_message(t("Export successful"));
+        drupal_set_message(t("<a href='https://www.schoolofchangemakers.com/sites/default/files/".$filename."'>Download</a>"));
+      echo "Success time is " . date("h:i:sa");
+    }
+    else {
+        drupal_set_message(t("Error"), 'error');
+    }
+ 
+}
+
+
+function changemakers_export_users() {
+module_load_include('inc', 'phpexcel');  //		
+/*
+  $headers = array('User Unique ID','Contact Type','SOC Status','Join since','First Name','Nickname','Last Name','Email','Mobile number','Date of Birth','Current Career','Organization','Project','Project Role','Address','Province','Zipcode','Reqions','Social Media Channel','Social Media ID/Name','Computer/IT','Business and Industry','Communication','Art & Craft','Sports and Entertainment','Social Enterprise','Education','Environment & Sustainability','Health / Fitness','Development & Prosperity','Human Rights & Equality','Civic Engagement','Peace & Harmonious Relation','Business & Social Enterprise','Interested Target Group','Mail Subsriber','Note','Lastest Modified');  
+  */
+  echo "Start time is " . date("h:i:sa");
+  $headers = array(
+    'User Unique ID',
+    'Contact Type',
+    'SOC Status',
+    'Join since',
+    'First Name',
+    'Nickname',
+    'Last Name',
+    'Email',
+    'Mobile number',
+    'Date of Birth',
+    'Current Career',
+    'Organization',
+    'Project',
+    'Project Role',
+    'Address',
+    'Province',
+    'Zipcode',
+    'Reqions',
+    'Social Media Channel',
+    'Social Media ID/Name',
+    'Computer/IT',
+    'Business and Industry',
+    'Communication',
+    'Art & Craft',
+    'Sports and Entertainment',
+    'Social Enterprise',
+    'Education',
+    'Environment & Sustainability',
+    'Health / Fitness',
+    'Development & Prosperity',
+    'Human Rights & Equality',
+    'Civic Engagement',
+    'Peace & Harmonious Relation',
+    'Business & Social Enterprise',
+    'Interested Target Group',
+    'Mail Subsriber',
+    'Note',
+    'Lastest Modified'
+    );  
+  $data = array();
+ 
+$arg1= arg(3);
+
+$query = db_select('users', 'u');   
+$query->leftjoin('users_roles','r' , 'u.uid = r.uid');
+$query->leftjoin('role','re' , 're.rid = r.rid');   
+$query->fields('u',array('uid','name','created','mail','status'))  
+  ->condition('r.rid', array(4,5,10),'IN');
+  //->condition('u.uid', 2493,'>='); 
+  /*
+  switch($arg1)
+{
+  case "500":
+
+  break;
+  case "1000":
+    $query->orderBy('created', 'ASC')->range(501,1000);
+
+  break;
+  case "1500":
+   $query->orderBy('created', 'ASC')->range(1001,1000);
+  break;
+  case "0":
+   $query->orderBy('created', 'ASC')->range(1500,3000);
+  break;
+  case "":
+
+  break;
+}*/
+  //$query->orderBy('created', 'ASC')->range(0,500);
+  $query->orderBy('created', 'ASC');
+ //$query=$query->extend('PagerDefault')->limit(24); 
+$result = $query->execute();
+//$results = $query->execute();
+$maingroup =array(8,9,10,11,12,13,15,86);
+$problems_load = array(); 
+$problems = array();
+foreach ($maingroup as $key => $value) {
+  $terms = taxonomy_get_children($value);
+  $terms_id = array();
+  foreach ($terms as $key_term => $value_term) {
+    $terms_id[] = $value_term->tid;
+    $problems_load[$value_term->tid] = $value_term;
+  }
+  $problems[$value] = $terms_id; 
+}
+
+$main_skill  =array(26,27,28,29,30,31);
+
+$skills = array();
+$skills_load = array();
+foreach ($main_skill as $key => $value) {
+  $terms = taxonomy_get_children($value);
+  $terms_id = array();
+  foreach ($terms as $key_term => $value_term) {
+    $terms_id[] = $value_term->tid;
+    $skills_load[$value_term->tid] = $value_term;
+  }
+  $skills[$value] = $terms_id; 
+}
+
+$target_load = array();
+$target_terms = taxonomy_get_tree(5);
+
+foreach ($target_terms as $key_term => $value_term) {
+  $target_load[$value_term->tid] = $value_term;
+}
+//dpm($target_load);
+
+while($record = $result->fetchAssoc()) {
+
+$uid=$record["uid"];
+$user_data = user_load($uid);
+ 
+$firstname = $user_data->field_profile_firstname['und'][0]['value'];
+$lastname = $user_data->field_profile_lastname['und'][0]['value'];
+$nickname = $user_data->field_profile_nickname['und'][0]['value'];
+$birthdate = $user_data->field_profile_birthdate['und'][0]['value']; 
+$organization = $user_data->field_profile_institution['und'][0]['value'];
+$ajoin = $user_data->field_profile_join_interest['und'][0]['value']; 
+$career = $user_data->field_profile_to_study['und'][0]['value']; 
+$contact = $user_data->field_profile_contact['und'][0]['value']; 
+$address = $user_data->field_profile_address['und'][0]['value']; 
+$province = $user_data->field_profile_province['und'][0]['value'];
+$zipcode = $user_data->field_profile_zipcode['und'][0]['value']; 
+$social = $user_data->field_profile_social['und'][0]['value']; 
+$social_name = $user_data->field_profile_social_name['und'][0]['value']; 
+$phone = $user_data->field_profile_phone['und'][0]['value']; 
+
+
+$social = ($social!="เลือก")?$social:"";
+$la  = $user_data->field_proflie_language['und'][0]['value']; 
+if(isset($user_data->roles[10]))
+$roles = "Unverified";
+else $roles = "Verified"; 
+ 
+$user_list_project_owner = user_list_project_owner($uid); 
+$status = $user_data->status; 
+$status = ($status==1)?"Active":"Inactive"; 
+$mail = $user_data->mail; 
+$createAt = date('m/d/Y',$user_data->created); 
+ 
+if($birthdate!="0000-00-00")
+{ 
+  
+$birthdate = date("m/d/Y", strtotime($birthdate));
+}else $birthdate=""; 
+$career = ($career==1)?"Study":"Work";
+$subscriber=($contact==3)?"Y":"N";
+$regions ="";
+  
+ $target_in=array(); 
+ 
+/*
+$problems = array(
+8=>array(53,1154,54,56,59,58,1145,55,57,1138),
+9=>array(1143,78,80,77,75,104,62,1146,83,82),
+10=>array(67,68,1144,69,1155,1156),
+11=>array(99,1149,1150,1148,100,102,1137,103,105,1147),
+12=>array(1152,72,1141,149,73,74,70,71),
+13=>array(93,94,95,96,97,98),
+15=>array(66,63,64,61,84,150),
+86=>array(85,1151,87,91,88,1142,1153,90,92)
+);
+*/
+
+              $problem_tax =array();
+              $problem = array();
+              $i = 0;
+             $all = count($user_data->field_profile_problem_interest['und']); 
+      
+              foreach($user_data->field_profile_problem_interest['und'] as $val)
+              {    $tid =  $val["tid"];  
+                      foreach($problems as $key=>$val){  
+                       if(in_array($tid, $val)){   
+                          //$problem_tax[$key][]=  taxonomy_term_load($tid)->name;
+                          $problem_tax[$key][]=  $problems_load[$tid]->name;
+                        }
+                          $problem[$key] =implode(';', $problem_tax[$key]);
+                      }  
+              }
+
+/*
+$skills = array(
+  26=>array(33,35,37,34,36),
+  27=>array(120,125,130,121,126,131,122,127,132,123,128,133,124,129),
+  28=>array(39,40,41,134,42),
+  29=>array(135,137,139,136,138,140),
+  30=>array(141,144,146,142,145,147,143),
+  31=>array(43,45,46,44)
+);
+*/
+  $skill_tax =array();
+              $skill = array();
+              $i = 0;
+             $all_skill = count($user_data->field_profile_skill_interest['und']); 
+             $l =($la!="")?$la:"";
+              foreach($user_data->field_profile_skill_interest['und'] as $val)
+              {    $tid =  $val["tid"];  
+                      foreach($skills as $key=>$val){  
+                       if(in_array($tid, $val)){   
+                          if($tid==39){
+                            //$skill_tax[$key][]=  taxonomy_term_load($tid)->name.' '.$l;
+                            $skill_tax[$key][]=  $skills_load[$tid]->name.' '.$l;
+                          }
+                          else{
+                            //$skill_tax[$key][]=  taxonomy_term_load($tid)->name;
+                            $skill_tax[$key][]=  $skills_load[$tid]->name;
+                          }
+                        }
+                          $skill[$key] =implode(';', $skill_tax[$key]);
+                      }  
+              }
+ 
+   $countRow2 = count($user_data->field_profile_target_group['und']); 
+  if($countRow2>0){ 
+
+	$target_group = $user_data->field_profile_target_group['und'];
+  
+	 for ($i=0; $i <  $countRow2 ; $i++) 
+	 {   
+	   //$target_in[] = taxonomy_term_load($target_group[$i]['tid'])->name; 
+     $target_in[] = $target_load[$target_group[$i]['tid']]->name; 
+   }	
+   $tar_in =implode(';', $target_in);
+  }
+   
+      $province = ($province=="n/a"||$province=="")?"":$province;
+       $zipcode= ($zipcode=="n/a"||$zipcode=="")?"":$zipcode;
+       $address= ($address=="n/a"||$address=="")?"":$address;
+       $data[]=array($uid,$roles,$status,$createAt,$firstname,$nickname,$lastname,$mail,$phone,$birthdate,$career,$organization,"","",$address,$province,$zipcode,$regions,$social,$social_name,$skill[26],$skill[27],$skill[28],$skill[29],$skill[30],$skill[31],$problem[8],$problem[11],$problem[86],$problem[12],$problem[9],$problem[15],$problem[10],$problem[13],$tar_in,$subscriber,'','');
+    }
+ //print_r($data);exit;
+    $dir = file_stream_wrapper_get_instance_by_uri('public://')->realpath();
+   
+    $da = date('Ymd');
+    $filename = 'users_'.$da.'.xlsx';
+    $path = "$dir/$filename";//  echo  $path;
+    $options = array('format' => 'xlsx');
+        
+    $result = phpexcel_export($headers, $data, $path, $options);
+ 
+    if ($result == PHPEXCEL_SUCCESS) {
+        drupal_set_message(t("Export successful"));
+        drupal_set_message(t("<a href='https://www.schoolofchangemakers.com/sites/default/files/".$filename."'>Download</a>"));
+        echo "Success time is " . date("h:i:sa");
+    }
+    else {
+        drupal_set_message(t("Error"), 'error');
+    }
+
+}
+
+
+function chagemakers_export_mail($key, &$message, $params) {
+ 
+  $file_path='https://www.schoolofchangemakers.com/sites/default/files/';
+  $project_today = "project_".date('Ymd')."xlsx";
+  $project_owner_today = "project_owner".date('Ymd')."xlsx";
+  $project_member_today = "project_member".date('Ymd')."xlsx";
+  $project_coach_today = "project_coach".date('Ymd')."xlsx";
+  $user_today = "users_".date('Ymd')."xlsx"; 
+  $fileproject = $file_path.$project_today;
+  $fileuser = $file_path.$user_today;
+  $fileproject_owner = $file_path.$project_owner_today;
+  $fileproject_member = $file_path.$project_member_today;
+  $fileproject_coach = $file_path.$project_coach_today;
+ $file1 = file_load($fileproject);
+ $file2 = file_load($fileuser);
+ $file3 = file_load($fileproject_owner);
+ $file4 = file_load($fileproject_member);
+ $file5 = file_load($fileproject_coach);
+
+ $to = 'parisa.bs@gmail.com';
+$from = 'crm@schoolofchangemakers.com';
+$subject = 'Cron Email '.date("Y-m-d");
+
+$module = 'mimemail';
+$token = time();
+
+$message = array(
+  'id' => 'mimemail_WaDK1ckO3uwniwn2q_spZT3UBrpMrXY_KIoCdRPe0Po',
+  'to' => $to,
+  'subject' => $subject,
+  'body' => array('cron email systems'),
+  'headers' => array(
+    'From' => $from,
+    'Sender' => $from,
+    'Return-Path' => $from,
+    'MIME-Version' => '1.0',
+    'Content-Type' => 'text/html; charset=UTF-8',
+  )
+);
+/*
+,
+  'params' => array(
+    'attachments' => array(
+      0 => array(
+        'path' => file_stream_wrapper_get_instance_by_uri($file1->uri)->realpath(),
+        'filecontent' => file_get_contents($file1->uri),
+        'filename' => $file1->filename,
+        'mime' => $file1->filemime,
+        'encoding' => 'base64',
+        'disposition' => 'attachment',
+        'list' => TRUE,
+      ),
+      1 => array(
+        'path' => file_stream_wrapper_get_instance_by_uri($file2->uri)->realpath(),
+        'filecontent' => file_get_contents($file2->uri),
+        'filename' => $file2->filename,
+        'mime' => $file2->filemime,
+        'encoding' => 'base64',
+        'disposition' => 'attachment',
+        'list' => TRUE,
+      ),
+    ),
+  ),*/
+$system = drupal_mail_system($module, $token);
+$message = $system->format($message);
+
+if ($system->mail($message)) {
+  return "Email Send to ".$to." with 5 attachment";
+}
+else {
+  return "Error to send email";
+}
+ 
+}
+
+function changemakers_export_users_old() {
+
+  echo "Start time is " . date("h:i:sa");
+module_load_include('inc', 'phpexcel');  //   
+  $headers = array('User Unique ID','Contact Type','SOC Status','Join since','First Name','Nickname','Last Name','Email','Mobile number','Date of Birth','Current Career','Organization','Project','Project Role','Address','Province','Zipcode','Reqions','Social Media Channel','Social Media ID/Name','Computer/IT','Business and Industry','Communication','Art & Craft','Sports and Entertainment','Social Enterprise','Education','Environment & Sustainability','Health / Fitness','Development & Prosperity','Human Rights & Equality','Civic Engagement','Peace & Harmonious Relation','Business & Social Enterprise','Interested Target Group','Mail Subsriber','Note','Lastest Modified');  
+  $data = array();
+ 
+$arg1= arg(3);
+
+$query = db_select('users', 'u');   
+$query->leftjoin('users_roles','r' , 'u.uid = r.uid');
+$query->leftjoin('role','re' , 're.rid = r.rid');   
+$query->fields('u',array('uid','name','created','mail','status'))  
+  ->condition('r.rid', array(4,5,10),'IN'); 
+  /*
+  switch($arg1)
+{
+  case "500":
+
+  break;
+  case "1000":
+    $query->orderBy('created', 'ASC')->range(501,1000);
+
+  break;
+  case "1500":
+   $query->orderBy('created', 'ASC')->range(1001,1000);
+  break;
+  case "0":
+   $query->orderBy('created', 'ASC')->range(1500,3000);
+  break;
+  case "":
+
+  break;
+}*/
+  //$query->orderBy('created', 'ASC')->range(0,500);
+  $query->orderBy('created', 'ASC');
+ //$query=$query->extend('PagerDefault')->limit(24); 
+$result = $query->execute();
+//$results = $query->execute();
+while($record = $result->fetchAssoc()) {
+
+$uid=$record["uid"];
+$user_data = user_load($uid);
+ 
+$firstname = $user_data->field_profile_firstname['und'][0]['value'];
+$lastname = $user_data->field_profile_lastname['und'][0]['value'];
+$nickname = $user_data->field_profile_nickname['und'][0]['value'];
+$birthdate = $user_data->field_profile_birthdate['und'][0]['value']; 
+$organization = $user_data->field_profile_institution['und'][0]['value'];
+$ajoin = $user_data->field_profile_join_interest['und'][0]['value']; 
+$career = $user_data->field_profile_to_study['und'][0]['value']; 
+$contact = $user_data->field_profile_contact['und'][0]['value']; 
+$address = $user_data->field_profile_address['und'][0]['value']; 
+$province = $user_data->field_profile_province['und'][0]['value'];
+$zipcode = $user_data->field_profile_zipcode['und'][0]['value']; 
+$social = $user_data->field_profile_social['und'][0]['value']; 
+$social_name = $user_data->field_profile_social_name['und'][0]['value']; 
+$phone = $user_data->field_profile_phone['und'][0]['value']; 
+
+
+$social = ($social!="เลือก")?$social:"";
+$la  = $user_data->field_proflie_language['und'][0]['value']; 
+if(isset($user_data->roles[10]))
+$roles = "Unverified";
+else $roles = "Verified"; 
+ 
+$user_list_project_owner = user_list_project_owner($uid); 
+$status = $user_data->status; 
+$status = ($status==1)?"Active":"Inactive"; 
+$mail = $user_data->mail; 
+$createAt = date('m/d/Y',$user_data->created); 
+ 
+if($birthdate!="0000-00-00")
+{ 
+  
+$birthdate = date("m/d/Y", strtotime($birthdate));
+}else $birthdate=""; 
+$career = ($career==1)?"Study":"Work";
+$subscriber=($contact==3)?"Y":"N";
+$regions ="";
+  
+ $target_in=array(); 
+ 
+$maingroup =array(8,9,10,11,12,13,15,86); 
+$problems = array(
+8=>array(53,1154,54,56,59,58,1145,55,57,1138),
+9=>array(1143,78,80,77,75,104,62,1146,83,82),
+10=>array(67,68,1144,69,1155,1156),
+11=>array(99,1149,1150,1148,100,102,1137,103,105,1147),
+12=>array(1152,72,1141,149,73,74,70,71),
+13=>array(93,94,95,96,97,98),
+15=>array(66,63,64,61,84,150),
+86=>array(85,1151,87,91,88,1142,1153,90,92)
+);
+
+              $problem_tax =array();
+              $problem = array();
+              $i = 0;
+             $all = count($user_data->field_profile_problem_interest['und']); 
+      
+              foreach($user_data->field_profile_problem_interest['und'] as $val)
+              {    $tid =  $val["tid"];  
+                      foreach($problems as $key=>$val){  
+                       if(in_array($tid, $val)){   
+                          $problem_tax[$key][]=  taxonomy_term_load($tid)->name;
+                        }
+                          $problem[$key] =implode(';', $problem_tax[$key]);
+                      }  
+              }
+
+$main_skill  =array(26,27,28,29,30,31);
+$skills = array(
+  26=>array(33,35,37,34,36),
+  27=>array(120,125,130,121,126,131,122,127,132,123,128,133,124,129),
+  28=>array(39,40,41,134,42),
+  29=>array(135,137,139,136,138,140),
+  30=>array(141,144,146,142,145,147,143),
+  31=>array(43,45,46,44)
+);
+  $skill_tax =array();
+              $skill = array();
+              $i = 0;
+             $all_skill = count($user_data->field_profile_skill_interest['und']); 
+             $l =($la!="")?$la:"";
+              foreach($user_data->field_profile_skill_interest['und'] as $val)
+              {    $tid =  $val["tid"];  
+                      foreach($skills as $key=>$val){  
+                       if(in_array($tid, $val)){   
+                         if($tid==39)
+                         $skill_tax[$key][]=  taxonomy_term_load($tid)->name.' '.$l;
+                         else
+                          $skill_tax[$key][]=  taxonomy_term_load($tid)->name;
+                        }
+                          $skill[$key] =implode(';', $skill_tax[$key]);
+                      }  
+              }
+ 
+   $countRow2 = count($user_data->field_profile_target_group['und']); 
+  if($countRow2>0){ 
+
+  $target_group = $user_data->field_profile_target_group['und'];
+  
+   for ($i=0; $i <  $countRow2 ; $i++) 
+   {   
+   $target_in[] =taxonomy_term_load($target_group[$i]['tid'])->name; 
+    } 
+   $tar_in =implode(';', $target_in);
+  }
+   
+      $province = ($province=="n/a"||$province=="")?"":$province;
+       $zipcode= ($zipcode=="n/a"||$zipcode=="")?"":$zipcode;
+       $address= ($address=="n/a"||$address=="")?"":$address;
+       $data[]=array($uid,$roles,$status,$createAt,$firstname,$nickname,$lastname,$mail,$phone,$birthdate,$career,$organization,"","",$address,$province,$zipcode,$regions,$social,$social_name,$skill[26],$skill[27],$skill[28],$skill[29],$skill[30],$skill[31],$problem[8],$problem[11],$problem[86],$problem[12],$problem[9],$problem[15],$problem[10],$problem[13],$tar_in,$subscriber,'','');
+    }
+ //print_r($data);exit;
+    $dir = file_stream_wrapper_get_instance_by_uri('public://')->realpath();
+   
+    $da = date('Ymd');
+    $filename = 'users_'.$da.'.xlsx';
+    $path = "$dir/$filename";//  echo  $path;
+    $options = array('format' => 'xlsx');
+        
+    $result = phpexcel_export($headers, $data, $path, $options);
+ 
+    if ($result == PHPEXCEL_SUCCESS) {
+        drupal_set_message(t("Export successful"));
+        drupal_set_message(t("<a href='https://www.schoolofchangemakers.com/sites/default/files/".$filename."'>Download</a>"));
+      echo "Success time is " . date("h:i:sa");
+    }
+    else {
+        drupal_set_message(t("Error"), 'error');
+    }
+
+}
+
+

@@ -1,0 +1,21 @@
+name = Changemakers
+description = School of Changemakers Theme based on Bootstrap Theme
+base theme = bootstrap
+core = 7.x
+stylesheets[all][] = css/style.css
+stylesheets[all][] = css/design.css
+stylesheets[all][] = css/backend.css
+stylesheets[all][] = css/style-dev.css
+stylesheets[print][] = css/print.css
+
+
+
+scripts[] = js/script.js
+scripts[] = js/jquery-ui.js
+
+
+version = "7.x-3.1"
+core = "7.x"
+project = "changemakers"
+datestamp = "1447089562"
+

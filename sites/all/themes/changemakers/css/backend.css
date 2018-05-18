@@ -1,0 +1,10 @@
+#views-exposed-form-manage-campaign-page .views-exposed-form  .views-exposed-widgets .views-submit-button{
+    display: block;
+}
+#views-exposed-form-manage-user-page .views-exposed-form  .views-exposed-widgets .views-submit-button{
+    display: block;
+}
+.views-field-field-banner-file img{
+	max-width: 300px;
+}
+.views-exposed-form .form-item-field-profile-join-interest-value ul.multiselect-container li{width:100%;}

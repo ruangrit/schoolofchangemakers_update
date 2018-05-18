@@ -1,0 +1,5372 @@
+<?php
+include("includes/password.inc");
+
+require_once 'changemakers_helper.inc';
+
+function changemakers_menu(){
+  $items['changemakers/register'] = array(
+    'title' => 'User Register',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('changemakers_test'),
+    'access callback' => 'changemakers_register_access',
+    'type' => MENU_LOCAL_TASK,
+  );
+  $items['changemakers/test'] = array(
+    'title' => 'User Form Save File',
+    'description' => 'Form upload file',
+    'page callback' => 'changemakers_test_form',
+    'access arguments' => array(''),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/confirm'] = array(
+    'title' => 'User confirm activekey',
+    'description' => 'User confirm activekey from email',
+    'page callback' => 'changemakers_confirm_register',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/join_campaign'] = array(
+    'title' => 'Project Join campaign',
+    'description' => 'Project join campaign',
+    'page callback' => 'changemakers_join_campaign',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/save_otp'] = array(
+    'title' => 'Svae otp',
+    'description' => 'Ramdom otp',
+    'page callback' => 'changemakers_save_otp',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/verified-otp'] = array(
+    'title' => 'verified otp',
+    'description' => 'verified otp from user',
+    'page callback' => 'changemakers_verified_member',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/following-project'] = array(
+    'title' => 'uesr following-project',
+    'description' => 'uesr following-project',
+    'page callback' => 'changemakers_user_following_project',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/unfollowing-project'] = array(
+    'title' => 'uesr unfollowing-project',
+    'description' => 'uesr unfollowing-project',
+    'page callback' => 'changemakers_user_unfollowing_project',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/approved-project'] = array(
+    'title' => 'owner approved-project',
+    'description' => 'owner approved-project',
+    'page callback' => 'changemakers_approve_join_project',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/leave-project'] = array(
+    'title' => 'user leave-project',
+    'description' => 'user leave-project',
+    'page callback' => 'changemakers_leave_project',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/update-profile'] = array(
+    'title' => 'user update profile',
+    'description' => 'user update profile',
+    'page callback' => 'changemakers_update_profile',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/join-event'] = array(
+    'title' => 'user join event',
+    'description' => 'user join event',
+    'page callback' => 'changemakers_join_event',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/join-project'] = array(
+    'title' => 'user join project',
+    'description' => 'user join project',
+    'page callback' => 'changemakers_join_project',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/check_login'] = array(
+    'title' => 'user check_login',
+    'description' => 'user check_login',
+    'page callback' => 'changemakers_check_login',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/check_forgot'] = array(
+    'title' => 'user check_forgot',
+    'description' => 'user check_forgot',
+    'page callback' => 'changemakers_check_forgot',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/delete_fund'] = array(
+    'title' => 'user delete_fund',
+    'description' => 'user delete_fund',
+    'page callback' => 'changemakers_delete_fund',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/update_fund'] = array(
+    'title' => 'user update_fund',
+    'description' => 'user update_fund',
+    'page callback' => 'changemakers_update_fund',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/like_comment/%/%'] = array(
+    'title' => 'user like_comment',
+    'description' => 'user like_comment',
+    'page callback' => 'changemakers_like_comment',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/infiniteload/%/%'] = array(
+    'title' => 'infiniteload comment',
+    'description' => 'infiniteload comment',
+    'page callback' => 'changemakers_infiniteload_comment',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/close_event'] = array(
+    'title' => 'close event',
+    'description' => 'admin or owner event or coach close event',
+    'page callback' => 'changemakers_close_event',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['changemakers/cancelled_event'] = array(
+    'title' => 'cancel event',
+    'description' => 'admin or owner event or coach cancelled event',
+    'page callback' => 'changemakers_cancelled_event',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['api/changemakers/comment/load'] = array(
+    'title' => 'Load more comment',
+    'description' => 'Load more Comment Project',
+    'page callback' => 'API_changemakers_comment_load',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['api/changemakers/dashboard/comment/load'] = array(
+    'title' => 'Load more comment',
+    'description' => 'Load more Comment Project',
+    'page callback' => 'API_changemakers_dashboard_comment_load',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  $items['api/changemakers/dashboard/project/load'] = array(
+    'title' => 'Load more comment',
+    'description' => 'Load more Comment Project',
+    'page callback' => 'API_changemakers_dashboard_project_load',
+    'access arguments' => array('general'),
+    //'access callback' => 'changemakers_test_form',
+  );
+  return $items;
+}
+#user function
+  function changemakers_permission() {
+    return array(
+        'event/view' => array(
+          'title' => t('Event: View News & Event'),
+          'description' => t(''),
+        ),
+        'general' => array(
+          'title' => t('User: access form'),
+          'description' => t(''),
+        ),
+        'can_submit_project_document' => array(
+          'title' => t('Can submit document to project'),
+          'description' => t('Enable document submission to project'),
+        ),
+        'can_create_forum' => array(
+          'title' => t('Can create forum'),
+          'description' => t('Enable create forum'),
+        ),
+    );
+  }
+
+  function changemakers_check_login(){
+
+    $username = $_POST['username'];
+    //$elements = drupal_get_form("user_login");
+    $query_db = db_query("select uid from users where name like '".$username."' or mail like '".$username."' ");
+    foreach ($query_db as $row) 
+    {
+        $query_data[] = $row->uid;
+    }
+
+    
+    // print "<pre>";
+    // print_r($query_data);
+    // print "</pre>";
+    if(isset($query_data[0]) )
+    {
+      $user_auth = user_load($query_data[0]);
+      if($user_auth->uid)
+      {
+        //print $user_auth->uid;
+        $stored_hash = $user_auth->pass;
+        $password = _password_crypt('sha512', $_POST['password'], $stored_hash);
+        $query_db_p = db_query("select pass from users");
+        foreach ($query_db_p as $row) 
+        {
+            $query_pass[] = $row->pass;
+        }
+        if(in_array($password, $query_pass))
+        {
+          echo 0;
+        }
+        else // password ไม่ตรง
+        {
+          echo 1;
+        }
+      }
+      
+    }
+    else{
+      echo 3;
+    }
+  }
+
+  function changemakers_check_forgot(){
+    $email = $_POST['email'];
+    $query_db = db_query("select uid from users where mail like '".$email."'");
+    foreach ($query_db as $row) 
+    {
+        $query_data[] = $row->uid;
+    }
+
+    if(isset($query_data[0]) )
+    {
+      echo 1;
+    }
+    else{
+      echo 0;
+    }
+  }
+
+  function changemakers_test_form() {
+    //print_r("tong1234");
+    // if(isset($_POST['test']))
+    // {
+    //   $x =$_POST['filename'];
+    //   echo $x;
+    // }
+    // $node = node_load(37);
+    // $node->field_problem_research_planning['und'][0]['filename'] = 'test.jpg';
+    // node_save($node);
+    // echo json_encode($node);
+     drupal_goto('/content/au-all');
+  }
+  
+  function form_test_form($form,&$form_submit) {
+    $form['firstname'] = array(
+      '#title' => t('Firstname'),
+      '#type' => 'textfield',
+      '#required' => TRUE,
+    );
+    $form['lastname'] = array(
+      '#title' => t('Lastname'),
+      '#type' => 'textfield',
+    );
+    $form['submit'] = array(
+      '#value' => 'Submit',
+      '#type' => 'submit',
+      );
+    return $form;
+  }
+
+  function changemakers_test(){
+    global $user;
+
+    $account =  $user;
+    $register = ($user->uid > 0 ? FALSE : TRUE);
+
+    $admin = user_access('administer users');
+
+    // Pass access information to the submit handler. Running an access check
+    // inside the submit function interferes with form processing and breaks
+    // hook_form_alter().
+    $form['administer_users'] = array(
+      '#type' => 'value',
+      '#value' => $admin,
+    );
+
+    $form['#validate'][] = 'user_account_form_validate';
+
+    // Account information.
+    $form['account'] = array(
+      '#type'   => 'container',
+      '#weight' => 5,
+    );
+    // Only show name field on registration form or user can change own username.
+    $form['account']['name'] = array(
+      '#type' => 'textfield',
+      '#title' => t('ชื่อที่ต้องการใช้ในระบบ'),
+      '#maxlength' => 60,
+      //'#description' => t('Spaces are allowed; punctuation is not allowed except for periods, hyphens, apostrophes, and underscores.'),
+      '#required' => TRUE,
+      '#attributes' => array('class' => array('username')),
+      //'#default_value' => (!$register ? $account->name : ''),
+      //'#access' => ($register || ($user->uid == $account->uid && user_access('change own username')) || $admin),
+      '#attributes' =>array('placeholder' => t('ใส่ชื่อที่ต้องการใช้ในระบบ'))
+    );
+
+    $form['account']['mail'] = array(
+      '#type' => 'textfield',
+      '#title' => t('อีเมล'),
+      '#maxlength' => 255,
+      /*'#description' => t('A valid e-mail address. All e-mails from the system will be sent to this address. The e-mail address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by e-mail.'), */
+      '#required' => TRUE,
+      '#attributes' => array('class' => array('email')),
+      //'#default_value' => (!$register ? $account->mail : ''),
+    );
+
+    // Attach field widgets, and hide the ones where the 'user_register_form'
+    // setting is not on.
+    $form['#user'] = drupal_anonymous_user();
+    $form['#user_category'] = 'register';
+    $langcode = entity_language('user', $form['#user']);
+    $form_state['redirect'] = 'changemakers/register';
+
+
+    field_attach_form('user', $form['#user'], $form, $form_state, $langcode);
+
+    $register = ($form['#user']->uid > 0 ? FALSE : TRUE);
+
+    foreach (field_info_instances('user', 'user') as $field_name => $instance) {
+
+     
+      echo $field_name."/";
+      //echo  $form_state['redirect'];
+     //echo  $form['#user']->uid;
+
+      if($field_name = "field_profile_birthdate")
+      {
+         $form[$field_name] = array(
+            '#title' => t('วันเกิด'),
+            '#type' => 'textfield',
+            '#maxlength' => 255,
+            //'#description' => t('Spaces are allowed; punctuation is not allowed except for periods, hyphens, apostrophes, and underscores.'),
+            '#required' => TRUE,
+            //'#default_value' => (!$register ? $field_name->name : ''),
+            '#weight' => 7,
+            '#attributes' =>array('placeholder' => t('วันเกิด')),
+          );
+      }
+      if($field_name = "field_profile_firstname")
+      {
+         $form[$field_name] = array(
+            '#type' => 'textfield',
+            '#maxlength' => 255,
+            //'#description' => t('Spaces are allowed; punctuation is not allowed except for periods, hyphens, apostrophes, and underscores.'),
+            '#required' => TRUE,
+            //'#default_value' => (!$register ? $field_name->name : ''),
+            '#weight' => 5,
+            '#attributes' =>array('placeholder' => t('ชื่อ')),
+          );
+      }
+      if($field_name = "field_profile_lastname")
+      {
+         $form[$field_name] = array(
+            '#type' => 'textfield',
+            '#maxlength' => 255,
+            //'#description' => t('Spaces are allowed; punctuation is not allowed except for periods, hyphens, apostrophes, and underscores.'),
+            '#required' => TRUE,
+            //'#default_value' => (!$register ? $field_name->name : ''),
+            '#weight' => 6,
+            '#attributes' => array('placeholder' => t('นามสกุล')),
+          );
+      }
+      if (empty($instance['settings']['user_register_form'])) {
+        $form[$field_name]['#access'] = TRUE;
+        //echo $form['#user'];
+      }
+    }
+
+    
+
+    
+
+    $form['actions'] = array('#type' => 'actions');
+    $form['actions']['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Submit Register'),
+    );
+
+    //$form['#validate'][] = 'user_register_validate';
+    // Add the final user registration form submit handler.
+    $form['#submit'][] = 'changemakers_register_submit';
+
+    return $form;
+  }
+
+  function changemakers_theme($existing, $type, $theme, $path){
+      
+    $hooks['user_register_form']=array(
+      'render element'=>'form',
+      'template' =>'user-register',
+      //'preprocess function' => array('changemakers_preprocess_user_register'),
+    );
+    return $hooks;
+  }
+  function changemakers_form_picture($form, &$form_state) {
+    
+    $form['file'] = array(
+        '#type' => 'file',
+        '#title' => t('Choose a file'),
+        '#attributes' => array(
+          'id' => 'profile-picture',
+       ),
+    );
+
+    //$form['#attributes'] = array('id' => array('profile-picture'));
+
+    $form['document_submit_button'] = array(
+
+      '#type' => 'submit', 
+      '#value' => t('upload'), 
+    );
+
+    // print "<pre>";
+    // print_r($form);
+    // print "</pre>";
+
+    return $form;
+  }
+
+  function changemakers_form_picture_validate($form, &$form_state) {
+    global $user;
+    $file = file_save_upload('file', array(
+      'file_validate_is_image' => array(),
+      'file_validate_extensions' => array('png gif jpg jpeg'),
+    ));
+
+    $parts = pathinfo($file->filename);
+    $uri = 'public://'.'pictures/'.'picture-'.$user->uid .'-'. $file->timestamp . '.' . $parts['extension'];
+
+    // $path = 'public://pictures/';
+    // drupal_realpath($path);
+    if ($file) {
+      if ($file = file_move($file, $uri)) {
+        $form_state['values']['file'] = $file;
+      }
+      else {
+        form_set_error('file', t('Failed to write the uploaded file the site\'s file folder.'));
+      }
+    }
+    else {
+      form_set_error('file', t('No file was uploaded.'));
+    }
+  }
+
+  function changemakers_form_picture_submit($form, &$form_state) {
+
+
+    global $user;
+    $file=$form_state['values']['file'];
+    unset($form_state['values']['file']);
+    $file->status = FILE_STATUS_PERMANENT;
+    if(file_save($file)){
+      $myuser = user_load($user->uid);
+      $myuser->picture = $file;
+      //$myuser->picture->uri = "public://pictures/".$file->filename;
+      if(user_save($myuser)){
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename)));
+      }else{
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename)));
+      }
+      
+    }
+    else{
+      drupal_set_message(t('ไม่สามารถอัพโหลดไฟล์ได้'));
+    }
+    
+  }
+
+  function changemakers_update_profile(){
+    global $user;
+    $data = user_load($user->uid);
+
+    if(isset($_POST['op'])){
+      $data->field_profile_address['und'][0]['value'] = $_POST['field_profile_address']['und'][0]['value'];
+      $data->field_prifile_district['und'][0]['value'] = $_POST['field_prifile_district']['und'][0]['value'];
+      $data->field_profile_province['und'][0]['value'] = $_POST['field_profile_province']['und'];
+      $data->field_profile_zipcode['und'][0]['value'] = $_POST['field_profile_zipcode']['und'][0]['value'];
+      $data->field_profile_user_id['und'][0]['value'] = $_POST['field_profile_user_id']['und'][0]['value'];
+      $data->field_organization_name_th['und'][0]['value'] = $_POST['field_organization_name_th']['und'][0]['value'];
+      if(isset($_POST['field_profile_join']['und'][1])){
+        $data->field_profile_join['und'][0]['value'] = $_POST['field_profile_join']['und'][1];
+      }
+      else{
+        $data->field_profile_join['und'][0]['value'] = 0;
+      }
+      if(isset($_POST['field_profile_join']['und'][2])){
+        $data->field_profile_join['und'][1]['value'] = $_POST['field_profile_join']['und'][2];
+      }
+      else{
+        $data->field_profile_join['und'][1]['value'] = 0;
+      }
+      user_save($data);
+    }
+    else if(isset($_POST['op_contact']))
+    {
+      $data->mail = $_POST['mail'];
+      $data->field_profile_phone['und'][0]['value'] = $_POST['field_profile_phone']['und'][0]['value'];
+      if(isset($_POST['field_profile_contact']['und'][1]))
+      {
+        $data->field_profile_contact['und'][0]['value'] = $_POST['field_profile_contact']['und'][1];
+      }
+      else
+      {
+        $data->field_profile_contact['und'][0]['value'] = 0;
+      }
+      if(isset($_POST['field_profile_contact']['und'][2]))
+      {
+        $data->field_profile_contact['und'][1]['value'] = $_POST['field_profile_contact']['und'][2];
+      }
+      else
+      {
+        $data->field_profile_contact['und'][1]['value'] = 0;
+      }
+      if(isset($_POST['field_profile_contact']['und'][3]))
+      {
+        $data->field_profile_contact['und'][2]['value'] = $_POST['field_profile_contact']['und'][3];
+      }
+      else
+      {
+        $data->field_profile_contact['und'][2]['value'] = 0;
+      }
+      user_save($data);
+    }
+    else if(isset($_POST['op_login']))
+    {
+      $stored_hash = $data->pass;
+      $password = _password_crypt('sha512', $_POST['oldPassword'], $stored_hash);
+
+      if($password != $data->pass)
+      {
+        drupal_goto('/user/', array(
+            'query' => array(
+                'respond' => 'รหัสผ่านเเดิมไม่ตรงกัน',
+            ),
+          )
+        );
+      }
+      else{
+        $data->pass = _password_crypt('sha512', $_POST['newPassword'], $stored_hash);
+        user_save($data);
+      }
+      
+
+
+      // print "<pre>";
+      // print_r($password);
+      // print "</pre>";
+    }
+    else if(isset($_POST['op_problem'])){
+      //$taxonomy_id = array('tid'=>55);
+      $data->field_profile_problem_interest['und'] = array();
+      //
+      //user_save($data);
+      $problem =array();
+      foreach ($_POST['field_profile_problem_interest']['und'] as $key => $value) {
+        
+       $data->field_profile_problem_interest['und'][] =  array('tid'=>$value);
+      }
+
+      print "<pre>";
+      print_r($data->field_profile_problem_interest['und']);
+      print "</pre>";
+      //user_save($data);
+      // print "<pre>";
+      // print_r(count($data->field_profile_problem_interest['und']));
+      // print "</pre>";
+
+      // print "<pre>";
+      // print_r($data->field_profile_problem_interest);
+      // print "</pre>";
+    }
+    else if(isset($_POST['op_target'])){
+      //$taxonomy_id = array('tid'=>55);
+      $data->field_profile_target_group['und'] = array();
+      //
+      //user_save($data);
+      $problem =array();
+      foreach ($_POST['field_profile_target_group']['und'] as $key => $value) {
+       $data->field_profile_target_group['und'][] =  array('tid'=>$value);
+      }
+      $data->field_profile_target_group_other['und'][0]['value'] = $_POST['field_profile_target_group_other']['und'][0]['value'];
+      print "<pre>";
+      print_r($data);
+      print "</pre>";
+      user_save($data);
+
+    }
+    else if(isset($_POST['op_skill'])){
+      //$taxonomy_id = array('tid'=>55);
+      $data->field_profile_skill_interest['und'] = array();
+      //
+      //user_save($data);
+      $problem =array();
+      foreach ($_POST['field_profile_skill_interest']['und'] as $key => $value) {
+       $data->field_profile_skill_interest['und'][] =  array('tid'=>$value);
+      }
+      $data->field_proflie_language['und'][0]['value'] = $_POST['field_proflie_language']['und'][0]['value'];
+      $data->field_interest_other['und'][0]['value'] = $_POST['field_interest_other']['und'][0]['value'];
+
+      user_save($data);
+
+    }
+    else if(isset($_POST['op_intro'])){
+      
+      $data->field_intro_self['und'][0]['value'] = $_POST['field_intro_self']['und'][0]['value'];
+      // print "<pre>";
+      // print_r($data);
+      // print "</pre>";
+      user_save($data);
+
+    }
+    else if(isset($_POST['op_picture'])){
+      global $user;
+      $myuser = user_load($user->uid);
+
+      //$data->picture = $_FILES['files'];
+      //user_save($data);
+      //ftp://khunakorn@changemakers.devfunction.com@changemakers.devfunction.com/public_html/sites/default/files/pictures
+
+      
+
+      $target_dir = "/public_html/sites/default/files/pictures/";
+      $filename_upload = $_FILES["filesUpload"]["name"];
+      $target_file = $target_dir . basename($_FILES["filesUpload"]["name"]);
+      $uploadOk = 1;
+      $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+      // Check if image file is a actual image or fake image
+      if(isset($_POST["op_picture"])) {
+          $check = getimagesize($_FILES["filesUpload"]["tmp_name"]);
+          if($check !== false) {
+              //echo "success - " . $check["mime"] . ".";
+              $uploadOk = 1;
+          } else {
+              echo "File is not an image.";
+              $uploadOk = 0;
+          }
+      }
+
+      // Check if file already exists
+      if (file_exists($target_file)) {
+          echo "Sorry, file already exists.";
+          $uploadOk = 0;
+      }
+      // Check file size
+      if ($_FILES["filesUpload"]["size"] > 500000) {
+          echo "Sorry, your file is too large.";
+          $uploadOk = 0;
+      }
+      // Allow certain file formats
+      if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+      && $imageFileType != "gif" && $imageFileType != "JPG" ) {
+          echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+          $uploadOk = 0;
+      }
+      // Check if $uploadOk is set to 0 by an error
+
+      if ($uploadOk == 0) {
+          echo "Sorry, your file was not uploaded.";
+      // if everything is ok, try to upload file
+      } else {
+          if (move_uploaded_file($_FILES["filesUpload"]["tmp_name"], $target_file)) {
+              echo "The file ". basename( $_FILES["filesUpload"]["name"]). " has been uploaded.";
+          } else {
+              echo "Sorry, there was an error uploading your file.";
+          }
+      }
+      print "<pre>";
+      print_r($_FILES["filesUpload"]["tmp_name"]);
+      print "</pre>";
+
+      print "<pre>";
+      print_r($myuser);
+      print "</pre>";
+
+      
+    }
+    
+    
+
+    drupal_goto('/user');
+
+  }
+#end
+
+#function for changemakers registration
+  /*function changemakers_preprocess_user_register(&$vars) {
+    $args = func_get_args();
+    array_shift($args);
+    $form_state['build_info']['args'] = $args; 
+    $vars['form'] = drupal_build_form('user_register_form', $form_state['build_info']['args']);
+  }
+
+
+  function changemakers_register_validate($form, &$form_state) {
+    entity_form_field_validate('user', $form, $form_state);
+  }
+
+
+  function changemakers_register_submit($form, &$form_state) {
+    $admin = $form_state['values']['administer_users'];
+
+    if (!variable_get('user_email_verification', TRUE) || $admin) {
+      $pass = $form_state['values']['pass'];
+    }
+    else {
+      $pass = user_password();
+    }
+    $notify = !empty($form_state['values']['notify']);
+
+    // Remove unneeded values.
+    form_state_values_clean($form_state);
+
+    $form_state['values']['pass'] = $pass;
+    $form_state['values']['init'] = $form_state['values']['mail'];
+
+    $account = $form['#user'];
+
+    entity_form_submit_build_entity('user', $account, $form, $form_state);
+
+    // Populate $edit with the properties of $account, which have been edited on
+    // this form by taking over all values, which appear in the form values too.
+    $edit = array_intersect_key((array) $account, $form_state['values']);
+    $account = user_save($account, $edit);
+
+    // Terminate if an error occurred during user_save().
+    if (!$account) {
+      drupal_set_message(t("Error saving user account."), 'error');
+      $form_state['redirect'] = '';
+      return;
+    }
+    $form_state['user'] = $account;
+    $form_state['values']['uid'] = $account->uid;
+
+    watchdog('user', 'New user: %name (%email).', array('%name' => $form_state['values']['name'], '%email' => $form_state['values']['mail']), WATCHDOG_NOTICE, l(t('edit'), 'user/' . $account->uid . '/edit'));
+
+    // Add plain text password into user account to generate mail tokens.
+    $account->password = $pass;
+
+    // New administrative account without notification.
+    $uri = entity_uri('user', $account);
+    if ($admin && !$notify) {
+      // drupal_set_message(t('Created a new user account for <a href="@url">%name</a>. No e-mail has been sent.', array('@url' => url($uri['path'], $uri['options']), '%name' => $account->name)));
+    }
+    // No e-mail verification required; log in user immediately.
+    elseif (!$admin && !variable_get('user_email_verification', TRUE) && $account->status) {
+      _user_mail_notify('register_no_approval_required', $account);
+      $form_state['uid'] = $account->uid;
+      user_login_submit(array(), $form_state);
+      drupal_set_message(t('Registration successful. You are now logged in.'));
+      $form_state['redirect'] = '';
+    }
+    // No administrator approval required.
+    elseif ($account->status || $notify) {
+      $op = $notify ? 'register_admin_created' : 'register_no_approval_required';
+      _user_mail_notify($op, $account);
+      if ($notify) {
+        drupal_set_message(t('A welcome message with further instructions has been e-mailed to the new user <a href="@url">%name</a>.', array('@url' => url($uri['path'], $uri['options']), '%name' => $account->name)));
+      }
+      else {
+
+        drupal_goto("/user/register/activatedkey");//$form_state['redirect'] = '';
+      }
+    }
+    // Administrator approval required.
+    else {
+      _user_mail_notify('register_pending_approval', $account);
+      drupal_set_message(t('Thank you for applying for an account. Your account is currently pending approval by the site administrator.<br />In the meantime, a welcome message with further instructions has been sent to your e-mail address.'));
+      
+      drupal_goto("/user/register/activatedkey");//$form_state['redirect'] = '';
+    }
+  }
+
+
+
+  function changemakers_form_webform_client_form_92_alter(&$form, &$form_state) {
+    
+  }
+  */
+
+  function changemakers_node_view_alter(&$build)
+  {
+      $node = $build['#node'];
+      if($build['#view_mode'] == "full" && $node->type == "news")
+      {
+        $breadcrumb = array();
+        $breadcrumb[] = l('Home', '<front>');
+        $breadcrumb[] = l('news&event/list', "/news&event/list");
+        $breadcrumb[] = l($node->title, "/news/".arg(1));
+        drupal_set_breadcrumb($breadcrumb);
+      }else if($build['#view_mode'] == "full" && $node->type == "event"){
+        $breadcrumb = array();
+        $breadcrumb[] = l('Home', '<front>');
+        $breadcrumb[] = l('news&event/list', "/news&event/list");
+        $breadcrumb[] = l($node->title, "/event/".arg(1));
+        drupal_set_breadcrumb($breadcrumb);
+      }else if($build['#view_mode'] == "full" && $node->type == "project"){ 
+        $breadcrumb = array();
+        $breadcrumb[] = l('Home', '<front>');
+        $breadcrumb[] = l('project/list', "/project/list");
+        $breadcrumb[] = l($node->title, "/project/".arg(1));
+        drupal_set_breadcrumb($breadcrumb);
+      }else if($build['#view_mode'] == "full" && $node->type == "knowledge"){  
+        $breadcrumb = array();
+        $breadcrumb[] = l('Home', '<front>');
+        $breadcrumb[] = l('knowledge/list', "/knowledge/list");
+        $breadcrumb[] = l($node->title, "/knowledge/".arg(1));
+        drupal_set_breadcrumb($breadcrumb);
+      }
+      else if($build['#view_mode'] == "full" && $node->type == "forum"){  
+        $breadcrumb = array();
+        $breadcrumb[] = l('Home', '<front>');
+        $breadcrumb[] = l('community/list', "/community/list");
+        $breadcrumb[] = l($node->title, "/community/".arg(1));
+        drupal_set_breadcrumb($breadcrumb);
+      }
+      else if($build['#view_mode'] == "full" && $node->type == "webform"){  
+        $breadcrumb = array();
+        $breadcrumb[] = l('Home', '<front>');
+        $breadcrumb[] = l($node->title, arg(1));
+        drupal_set_breadcrumb($breadcrumb);
+      }
+      // print "<pre>";
+      // print_r($node);
+      // print "<pre>";
+  }
+
+  // function changemakers_menu_breadcrumb_alter(&$active_trail, $item) {
+  //   // Always display a link to the current page by duplicating the last link in
+  //   // the active trail. This means that menu_get_active_breadcrumb() will remove
+  //   // the last link (for the current page), but since it is added once more here,
+  //   // it will appear.
+  //   // print "<pre>";
+  //   // print_r($active_trail);
+  //   // print "<pre>";
+    
+  //   if(!$active_trail[1]['link_path'] == "node/add"){
+  //     $active_trail[1]['title'] = $active_trail[1]['path'];
+  //   }
+    
+
+
+
+
+  //   // if($active_trail[1]['path'] == "projects/list"){
+
+  //   //   $active_trail[0] = array(
+  //   //         "title" => "Home/projects/list",
+  //   //         "href" => "",
+  //   //         "link_path" => "" ,
+  //   //         "localized_options" => array(
+  //   //           ),
+  //   //         "type" => 0
+  //   //     );
+  //   // }
+
+
+
+  //   if (!drupal_is_front_page()) {
+  //     $end = end($active_trail);
+  //     if ($item['href'] == $end['href']) {
+  //       $active_trail[] = $end;
+  //     }
+  //   }
+  // }
+
+  
+
+
+  function changemakers_form_alter(&$form, &$form_state, $form_id) {
+      //print_r($form_id);
+
+      switch ($form_id) {
+      case 'user_register_form':
+          $form['resetbutton'] = array(
+            '#markup' => '<button type="reset" class="btn btn-danger" >RESET</button>',
+            '#weight' => 1000
+          );
+
+          $length = 6;
+          $chars = array_merge(range(0,9));
+          shuffle($chars);
+          $randomnumber = implode(array_slice($chars, 0, $length));
+          $form['field_profile_active_key']['und'][0]['value']['#default_value'] = $randomnumber;
+
+         //$form['account']['roles'][10]= TRUE;
+          $form['account']['roles'][10] = array(
+                                '#type' => 'checkbox',
+                                '#title' => 'unvierfied',
+                                '#default_value' => TRUE,
+                            );
+
+          //drupal_goto("/node/4");
+
+          //$form['#validate'][] = 'changemakers_register_validate';
+          // Add the final user registration form submit handler.
+          //$form['#submit'][] = 'changemakers_register_submit';
+
+          // print '<pre>';
+          // print_r($form);
+          // print '</pre>';
+
+
+          return $form;
+
+        break;
+      case 'user_profile_form':
+        global $user;
+        // print "<pre>";
+        // print_r($form);
+        // print "</pre>";
+        if($user->roles[3]){
+
+        }
+        else
+        {
+          $form['field_following_project']['#access'] = 0;
+          $form['field_profile_active_key']['#access'] = 0;
+          $form['field_profile_password_otp']['#access'] = 0;
+          $form['field_profile_user_id']['#access'] = 0;
+          $form['field_organization_name_th']['#access'] = 0;
+          $form['field_organization_name_en']['#access'] = 0;
+          $form['field_organization_position']['#access'] = 0;
+          $form['field_following_project']['#access'] = 0;
+          $form['field_profile_nickname']['#access'] = 0;
+
+        }
+        break;
+      case 'user_login':
+
+        $form['name'] = array(
+          '#type' => 'textfield',
+          '#title' => '',
+          '#size' => 60,
+          '#maxlength' => 60,
+          //'#required' => 1,
+          '#placeholder' => 'E-mail',
+          );
+        $form['pass'] = array(
+          '#type' => 'password',
+          '#title' => '',
+          '#size' => 60,
+          '#maxlength' => 60,
+          //'#required' => 1,
+          '#placeholder' => 'Password',
+          );
+        $form['#validate'][0] = 'changemakers_login_name_validate';
+        $form['#validate'][1] = 'changemakers_login_authenticate_validate';
+        $form['#validate'][2] = 'changemakers_login_final_validate';
+
+       // $form['action']['submit']['#value'] = 'Login My';
+        $form['actions'] = array(
+          '#type' => 'actions',
+          'submit' => array(
+            '#type' => 'submit',
+            '#value' => 'Log in'
+          ),
+          '#weight' => 1,
+        );
+
+        $form['links'] = array(
+          '#markup' => '<div  id="forgot_password"><a href="/user/password" title="Forgot your password">Forgot your password</a></div>',
+          '#weight' => 10,
+          );
+        //$form['redirect'] = 'node/65';
+        // $form['links'] = array(
+        //   '#markup' => 'Forgot your password',
+        // );
+
+        //$form['#']
+        // $form['#validate'][0] = array(
+        //   [0] => 'changemakers_login_name_validate',
+        //   [1] => 'changemakers_login_authenticate_validate',
+        //   [2] => 'changemakers_login_final_validate',
+        // );
+        
+
+        // print '<pre>';
+        // print_r($form);
+        // print '</pre>';
+
+        break;
+      case 'forum_node_form': //add new forum for admintrator and user and coach
+        global $user;
+        //print "tong 1 ";
+         $form['resetbutton'] = array(
+          '#markup' => '<button type="reset" class="btn btn-danger" >RESET</button>',
+          '#weight' => 1000
+        );
+        
+        $form['title']['#title'] = "หัวข้อ";
+        //$form['body']['und'][0]['#title'] = "รายละเอียด";
+        $form['body'] = array(
+            '#type' => 'container',
+            '#attributes' => array(
+                'class' => array(
+                        0 => 'field-type-text-with-summary',
+                        1 => 'field-name-body',
+                        2 => 'field-widget-text-textarea-with-summary'
+                    )
+            ),
+            '#weight' => 7,
+            '#tree' => 1,
+            '#language' => 'und',
+            'und' => array(
+                    0 => array(
+                            '#entity_type' => 'node',
+                            '#bundle' => 'forum',
+                            '#field_name' => 'body',
+                            '#language' => 'und',
+
+                            '#columns' => array(
+                                    0 => 'value',
+                                    1 => 'summary',
+                                    2 => 'format'
+                              ),
+
+                            '#title' => 'รายละเอียด',
+                            '#delta' => 0,
+                            '#weight' => 0,
+                            '#type' => 'text_format',
+                            '#rows' => 10,
+                            '#attributes' => array(
+                                    'class' => array
+                                        (
+                                            0 => 'text-full'
+                                        )
+                                ),
+
+                            '#base_type' => 'textarea',
+                    ),      
+
+                    //'#theme' => 'field_multiple_value_form',
+                    '#field_name' => 'body',
+                    '#cardinality' => 1,
+                    '#title' => 'Body',
+                    '#max_delta' => 0,
+                    '#after_build' => array(
+                            0 => 'field_form_element_after_build'
+                        ),
+
+                    '#language' => 'und',
+                ),
+
+            '#access' => 1,
+        );
+
+        if(isset($user->roles[5]) == "coach"){
+          $form['taxonomy_forums']['#access'] = 1;
+        }
+        else if(($user->roles[3]) == "administrator"){
+          $form['taxonomy_forums']['#access'] = 1;
+        }
+        else
+        {
+          $form['taxonomy_forums']['#access'] = 0;
+          $form['field_community_forum_topic_type']['und']['#options'] = array(111=>'NEED',112=>'OFFER',115 => 'ANNOUNCEMENT', 117 => 'OTHERS');
+          //$form['taxonomy_forums']['und']['#default_value'] = array( 1 => 'Member Community');
+        }
+
+        $form['field_commuity_date']['#access'] = 0;
+
+        // print "<pre>";
+        // print_r($form);
+        // print "</pre>";
+
+        break;
+      case 'project_node_form':
+        global $user;
+        // echo "<pre>";
+        // print_r($form);
+        // echo "</pre>";
+         $form['resetbutton'] = array(
+          '#markup' => '<button type="reset" class="btn btn-danger" >RESET</button>',
+          '#weight' => 1000
+        );
+
+        $form['field_user_join_project']['#access'] = 0;
+       
+
+
+        $form['field_project_conditions_partici']['und']['#options'] = array(1 => 'สมาชิกที่ขอเข้าร่วมโปรเจคได้ต้องเป็น Verified Member เท่านั้น',
+                                                                             2 => 'สมาชิกที่เข้าร่วมโปรเจคได้ต้องได้รับเชิญเท่านั้น');
+
+        
+        
+        
+
+
+          if($user->roles[3]){
+            $form['field_project_status']['#access'] = 1;
+            $form['field_follow_project']['#access'] = 1;
+            $form['field_count_views_project']['#access'] = 1;
+
+            $form['field_coach_project']['#access'] = 1;
+            $form['field_organization_project']['#access'] = 1;
+            $form['field_partner_project']['#access'] = 1;
+            $form['field_helpdesk_project']['#access'] = 1;
+
+            $form['field_concern']['#access'] = 1;
+            $form['field_problem_research_planning']['#access'] = 1;
+            $form['field_root_cause_analysis']['#access'] = 1;
+            $form['field_problem_defined']['#access'] = 1;
+            $form['field_theory_of_change']['#access'] = 1;
+            $form['field_project_overview']['#access'] = 1;
+            $form['field_business_model_canvas']['#access'] = 1;
+            $form['field_gantt_chart']['#access'] = 1;
+            $form['field_teams_financial_report']['#access'] = 1;
+            $form['field_contract']['#access'] = 1;
+            $form['field_teams_bank_account']['#access'] = 1;
+            $form['field_other_document_project']['#access'] = 1;
+
+            $form['field_project_stage']['#access'] = 1;
+            $form['field_verification']['#access'] = 1;
+
+          }else{
+            $form['field_project_status']['#access'] = 0;
+            $form['field_follow_project']['#access'] = 0;
+            $form['field_count_views_project']['#access'] = 0;
+
+            $form['field_coach_project']['#access'] = 0;
+            $form['field_organization_project']['#access'] = 0;
+            $form['field_partner_project']['#access'] = 0;
+            $form['field_helpdesk_project']['#access'] = 0;
+
+            $form['field_concern']['#access'] = 0;
+            $form['field_problem_research_planning']['#access'] = 0;
+            $form['field_root_cause_analysis']['#access'] = 0;
+            $form['field_problem_defined']['#access'] = 0;
+            $form['field_theory_of_change']['#access'] = 0;
+            $form['field_project_overview']['#access'] = 0;
+            $form['field_business_model_canvas']['#access'] = 0;
+            $form['field_gantt_chart']['#access'] = 0;
+            $form['field_teams_financial_report']['#access'] = 0;
+            $form['field_contract']['#access'] = 0;
+            $form['field_teams_bank_account']['#access'] = 0;
+            $form['field_other_document_project']['#access'] = 0;
+
+            $form['field_project_stage']['#access'] = 0;
+            $form['field_verification']['#access'] = 0;
+            
+
+          }
+
+          
+
+          $form['title'] = array(
+            '#type' => 'textfield',
+            '#title' => 'ชื่อโครงการ',
+            '#default_value' => $form['#node']->title,
+            '#required' => 1,
+            '#maxlength' => 255,
+            '#weight' => -5);
+
+          $form['actions'] = array( 
+            '#type'=> 'actions',
+            'submit'=> array(
+              '#type' => 'submit',
+              '#access' => 1,
+              '#value' => 'Submit',
+              '#weight' => 5,
+              '#submit' => array( 0 => 'node_form_submit')),
+          );
+
+          $form['options']['promote']['#default_value'] = 0;
+
+
+          // [actions] => Array
+          // (
+          //     [#type] => actions
+          //     [submit] => Array
+          //         (
+          //             [#type] => submit
+          //             [#access] => 1
+          //             [#value] => Save
+          //             [#weight] => 5
+          //             [#submit] => Array
+          //                 (
+          //                     [0] => node_form_submit
+          //                 )
+
+          //         )
+
+          //     [preview] => Array
+          //         (
+          //             [#access] => 
+          //             [#type] => submit
+          //             [#value] => Preview
+          //             [#weight] => 10
+          //             [#submit] => Array
+          //                 (
+          //                     [0] => node_form_build_preview
+          //                 )
+
+          //         )
+
+          // )
+
+
+
+          // print "<pre>";
+          // print_r($form);
+          // print "</pre>";
+        break;
+      case 'comment_node_project_form':
+
+        $form['subject']['#title'] = "หัวข้อ *";
+        $form['subject']['#default_value'] = "comment_project";
+        //$form['subject']['#access'] = 0;
+        $form['field_like']['#access'] = 0;
+        $form['field_user_like']['#access'] = 0;
+        $form['actions']['preview']['#access'] = 0;
+        $form['#attributes'] = array('name' => 'comment_project_form','class' => array('0' => 'comment-form'));
+
+        $form['actions'] = array( 
+          '#type'=> 'actions',
+          'submit'=> array(
+            '#type' => 'submit',
+            '#access' => 1,
+            '#value' => 'Submit',
+            '#weight' => 5,
+            )
+        );
+        // print "<pre>";
+        // print_r($form['subject']);
+        // print "</pre>";
+        break;
+      case 'comment_node_event_form':
+
+        $form['subject']['#title'] = "หัวข้อ";
+        $form['subject']['#default_value'] = "comment_event";
+        //$form['subject']['#access'] = 0;
+        $form['field_like_event']['#access'] = 0;
+        $form['field_user_like_event']['#access'] = 0;
+        $form['actions']['preview']['#access'] = 0;
+
+        $form['actions'] = array( 
+          '#type'=> 'actions',
+          'submit'=> array(
+            '#type' => 'submit',
+            '#access' => 1,
+            '#value' => 'Submit',
+            '#weight' => 5,
+            )
+        );
+        // print "<pre>";
+        // print_r($form);
+        // print "</pre>";
+        break;
+      case 'comment_node_news_form':
+
+        $form['subject']['#title'] = "หัวข้อ";
+        $form['subject']['#default_value'] = "comment_news";
+        //$form['subject']['#access'] = 0;
+        $form['field_like_news']['#access'] = 0;
+        $form['field_user_like_news']['#access'] = 0;
+        $form['actions']['preview']['#access'] = 0;
+
+        $form['actions'] = array( 
+          '#type'=> 'actions',
+          'submit'=> array(
+            '#type' => 'submit',
+            '#access' => 1,
+            '#value' => 'Submit',
+            '#weight' => 5,
+            )
+        );
+        // print "<pre>";
+        // print_r($form);
+        // print "</pre>";
+        break;
+      case 'comment_node_forum_form':
+
+        $form['subject']['#title'] = "หัวข้อ";
+        //$form['subject']['#access'] = 0;
+        $form['field_like_forum']['#access'] = 0;
+        $form['field_user_like_forum']['#access'] = 0;
+        $form['actions']['preview']['#access'] = 0;
+
+        $form['actions'] = array( 
+          '#type'=> 'actions',
+          'submit'=> array(
+            '#type' => 'submit',
+            '#access' => 1,
+            '#value' => 'Submit',
+            '#weight' => 5,
+            )
+        );
+        // print "<pre>";
+        // print_r($form);
+        // print "</pre>";
+        break;
+      case 'comment_node_campaign_form':
+
+        $form['subject']['#title'] = "หัวข้อ";
+        //$form['subject']['#access'] = 0;
+        $form['field_like_campaign']['#access'] = 0;
+        $form['field_user_like_campaign']['#access'] = 0;
+        $form['actions']['preview']['#access'] = 0;
+
+        $form['actions'] = array( 
+          '#type'=> 'actions',
+          'submit'=> array(
+            '#type' => 'submit',
+            '#access' => 1,
+            '#value' => 'Submit',
+            '#weight' => 5,
+            )
+        );
+        // print "<pre>";
+        // print_r($form);
+        // print "</pre>";
+        break;
+      case 'journal_node_form':
+        $form['resetbutton'] = array(
+          '#markup' => '<button type="reset" class="btn btn-danger" >RESET</button>',
+          '#weight' => 1000
+        );
+        $form['field_journal_project_id']['#access'] = 0;
+        $form['actions']['submit']['#value'] = "Publish Now";
+
+        $destination = (!isset($node->nid) || isset($node->is_new)) ? 'node/add/journal' : "node/{'journal'}";
+
+
+
+        // $form['actions']['cancel'] = array(
+        //   '#markup' => l(t('Cancel'), $destination),
+        //   '#weight' => 20,
+        // );
+        // print "<pre>";
+        // print_r($node->nid);
+        // print "</pre>";
+        break; 
+      case 'campaign_node_form':
+        global $user;
+         $form['resetbutton'] = array(
+          '#markup' => '<button type="reset" class="btn btn-danger" >RESET</button>',
+          '#weight' => 1000
+        );
+        $form['field_count_views']['#access'] = 0;
+        // print "<pre>";
+        // print_r($form);
+        // print "</pre>";
+          //$form['field_project_join']['und'][0]['field_join_by_user']['und'][0]['value'] = $user->uid;
+          break;
+      case 'webform_client_form_92':
+        $arg1 = arg(1);
+        $form["submitted"]['nid']['#default_value'] = $arg1;
+        $form["submitted"]['nid']['#access'] = 0;
+        // print "<pre>";
+        // print_r($form);
+        // print "</pre>";
+       $form['resetbutton'] = array(
+          '#markup' => '<button type="reset" class="btn btn-danger" >RESET</button>',
+          '#weight' => 1000
+        );
+
+        $form['nid']['#access'] = 0;
+        //$form['#submit'][] = 'changemakers_edit_fund';
+        //unset($form['#submit'][1]);
+        
+        // $form['#action'] = '/changemakers/update_fund';
+        
+
+        break;
+     case 'event_node_form':
+        // print "<pre>";
+        // print_r($form);
+        // print "</pre>";
+       $form['resetbutton'] = array(
+          '#markup' => '<button type="reset" class="btn btn-danger" >RESET</button>',
+          '#weight' => 1000
+        );
+        
+
+        break;
+    case 'news_node_form':
+        // print "<pre>";
+        // print_r($form);
+        // print "</pre>";
+       $form['resetbutton'] = array(
+          '#markup' => '<button type="reset" class="btn btn-danger" >RESET</button>',
+          '#weight' => 1000
+        );
+        
+
+        break;
+      // case 'journal_node_form':
+      //   break;
+
+
+      default:
+        // print "<pre>";
+        // print_r($form_state);
+        // print "</pre>";
+        # code...
+        break;
+     }
+  }
+
+  function changemakers_edit_fund($form, &$form_state){
+    print "<pre>";
+    print_r($form);
+    print "</pre>";
+
+    module_load_include('inc','webform','includes/webform.submissions');
+    // node เป็นก้อน สำหรับ webform
+    $node_webform = node_load(92);
+
+    webform_submission_update($node_webform,  $form['submission']);
+    //drupal_goto("/project/65");
+  }
+
+  function changemakers_login_default_validators() {
+    return array('changemakers_login_name_validate', 'changemakers_login_authenticate_validate', 'changemakers_login_final_validate');
+  }
+
+  /**
+   * A FAPI validate handler. Sets an error if supplied username has been blocked.
+   */
+  function changemakers_login_name_validate($form, &$form_state) {
+    if (!empty($form_state['values']['name']) && user_is_blocked($form_state['values']['name'])) {
+      // Blocked in user administration.
+      form_set_error('name', t('The username %name has not been activated or is blocked.', array('%name' => $form_state['values']['name'])));
+    }
+  }
+
+  function changemakers_login_final_validate($form, &$form_state) {
+    if (empty($form_state['uid'])) {
+      // Always register an IP-based failed login event.
+      flood_register_event('failed_login_attempt_ip', variable_get('user_failed_login_ip_window', 3600));
+      // Register a per-user failed login event.
+      if (isset($form_state['flood_control_user_identifier'])) {
+        flood_register_event('failed_login_attempt_user', variable_get('user_failed_login_user_window', 21600), $form_state['flood_control_user_identifier']);
+      }
+
+      if (isset($form_state['flood_control_triggered'])) {
+        if ($form_state['flood_control_triggered'] == 'user') {
+          form_set_error('name', format_plural(variable_get('user_failed_login_user_limit', 5), 'Sorry, there has been more than one failed login attempt for this account. It is temporarily blocked. Try again later or <a href="@url">request a new password</a>.', 'Sorry, there have been more than @count failed login attempts for this account. It is temporarily blocked. Try again later or <a href="@url">request a new password</a>.', array('@url' => url('user/password'))));
+        }
+        else {
+          // We did not find a uid, so the limit is IP-based.
+          form_set_error('name', t('Sorry, too many failed login attempts from your IP address. This IP address is temporarily blocked. Try again later or <a href="@url">request a new password</a>.', array('@url' => url('user/password'))));
+        }
+      }
+      else {
+        form_set_error('name', t('อีเมลหรือรหัสผ่านไม่ถูกต้อง', array('@password' => url('user/password', array('query' => array('name' => $form_state['values']['name']))))));
+        watchdog('user', 'Login attempt failed for %user.', array('%user' => $form_state['values']['name']));
+      }
+    }
+    elseif (isset($form_state['flood_control_user_identifier'])) {
+      // Clear past failures for this user so as not to block a user who might
+      // log in and out more than once in an hour.
+      flood_clear_event('failed_login_attempt_user', $form_state['flood_control_user_identifier']);
+    }
+  }
+
+  function changemakers_login_authenticate_validate($form, &$form_state) {
+    $password = trim($form_state['values']['pass']);
+    if (!empty($form_state['values']['name']) && !empty($password)) {
+      // Do not allow any login from the current user's IP if the limit has been
+      // reached. Default is 50 failed attempts allowed in one hour. This is
+      // independent of the per-user limit to catch attempts from one IP to log
+      // in to many different user accounts.  We have a reasonably high limit
+      // since there may be only one apparent IP for all users at an institution.
+      if (!flood_is_allowed('failed_login_attempt_ip', variable_get('user_failed_login_ip_limit', 50), variable_get('user_failed_login_ip_window', 3600))) {
+        $form_state['flood_control_triggered'] = 'ip';
+        return;
+      }
+      $account = db_query("SELECT * FROM {users} WHERE name = :name OR mail = :name AND status = 1", array(':name' => $form_state['values']['name']))->fetchObject();
+      if ($account) {
+        if (variable_get('user_failed_login_identifier_uid_only', FALSE)) {
+          // Register flood events based on the uid only, so they apply for any
+          // IP address. This is the most secure option.
+          $identifier = $account->uid;
+        }
+        else {
+          // The default identifier is a combination of uid and IP address. This
+          // is less secure but more resistant to denial-of-service attacks that
+          // could lock out all users with public user names.
+          $identifier = $account->uid . '-' . ip_address();
+        }
+        $form_state['flood_control_user_identifier'] = $identifier;
+
+        // Don't allow login if the limit for this user has been reached.
+        // Default is to allow 5 failed attempts every 6 hours.
+        if (!flood_is_allowed('failed_login_attempt_user', variable_get('user_failed_login_user_limit', 5), variable_get('user_failed_login_user_window', 21600), $identifier)) {
+          $form_state['flood_control_triggered'] = 'user';
+          return;
+        }
+      }
+      // We are not limited by flood control, so try to authenticate.
+      // Set $form_state['uid'] as a flag for user_login_final_validate().
+      $isEmail = 0;
+      if (!filter_var($form_state['values']['name'], FILTER_VALIDATE_EMAIL) === false) {
+        $isEmail = 1;
+      } else {
+        $isEmail = 0;
+      }
+      $form_state['uid'] = changemakers_user_authenticate($isEmail, $form_state['values']['name'], $password);
+    }
+  }
+
+  function changemakers_user_authenticate($isEmail, $name, $password){
+    $uid = FALSE;
+    if (!empty($name) && !empty($password)) {
+      if($isEmail == 1){
+        $account = user_load_by_mail($name);
+      }
+      else{
+        $account = user_load_by_name($name);
+      }
+      
+      if ($account) {
+        // Allow alternate password hashing schemes.
+        require_once DRUPAL_ROOT . '/' . variable_get('password_inc', 'includes/password.inc');
+        if (user_check_password($password, $account)) {
+          // Successful authentication.
+          $uid = $account->uid;
+
+          // Update user to new password scheme if needed.
+          if (user_needs_new_hash($account)) {
+            user_save($account, array('pass' => $password));
+          }
+        }
+      }
+    }
+    return $uid;
+  }
+
+  // function changemakers_user_login_redirect($form, &$form_state) {
+  //   $form_state['redirect'] = 'tong';
+  // }
+  function changemakers_user_login(&$edit, $account) {
+    $edit['redirect'] = $_SERVER['HTTP_REFERER'];
+    //drupal_goto( referer_uri() );
+  }
+
+  function changemakers_form_views_exposed_form_alter(&$form, $form_state, $form_id) {
+    if ($form_id == 'views_exposed_form') {
+        global $user;
+        //$form['tid']['#options']['All'] = t('Search');
+        //community post
+        $form['field_community_forum_topic_type_tid']['#options']['All'] = t('All');
+
+        $form['taxonomy_forums_tid']['#options']['All'] = t('All');
+
+        if($user->roles[5] != "coach" && $user->roles[3] != "administrator")
+        {
+          $form['taxonomy_forums_tid']['#access'] = FALSE;
+          $form['#info']['filter-taxonomy_forums_tid']['label'] = "";
+        }
+        //end community post
+         
+        // print '<pre>';
+        // print_r($user);
+        // print '</pre>';
+    }
+  }
+
+  function changemakers_confirm_register(){
+    $activekey = $_POST['activekey'];
+    $result = db_query("select a.entity_id from field_revision_field_profile_active_key a where a.field_profile_active_key_value = ".$activekey);
+    $user_data = null;
+    foreach ($result as $row) {
+      $user_data = user_load($row->entity_id);
+    
+      $json_data[]=array(
+        "uid"=>$user_data->uid,
+        "mail"=>$user_data->mail,
+      );
+    }
+
+    if($user_data != null)
+    {
+      //$json = json_encode($json_data);
+      //$password = "123456";
+      $user_data->status = 1;
+      //$user_data->pass = user_hash_password($password);
+      user_save($user_data);
+
+
+       
+      // $to = "khunakorn@diversition.co.th"; // to e-mail address
+      // $from = "admin_tong@example.com"; // from e-mail address
+       
+      // $subject = "activatedkey success"; // subject of e-mail
+      // $body = "your password :".$password; //it might be any variable from the form eg. $form_state['values']['your_field']
+       
+       
+      // //params is the array passed to hook_mail function 
+      // $params = array(
+      //     'subject' => $subject,
+      //     'body' => $body,
+      //     );
+       
+      // drupal_mail('changemakers', 'information', $to, language_default(), $params, $from);
+
+      // $module = "changemakers";
+      // $key = "activatedkey";
+      // $language = "TH";
+      // $to = $user_data->mail;
+      // $subject ="activatedkey success";
+
+      // drupal_mail($module, $key, $to, $language, $params = array('body'=>'password is :'.$password,'subject'=>$subject), $from = "admin@example.com", $send = TRUE);
+      // $strTo = $user_data->mail;//"nalin@diversition.co.th"; 
+      // $strSubject = "activatedkey success"; 
+  
+      // $strHeader="From: system@changemakers.devfunction.com \r\n".
+      //             "Reply-To: ".$user_data->mail."\r\n".
+      //             "MIME-Version: 1.0\r\n".
+      //             "Content-Type: text/plain; charset=UTF-8";  
+      // $strMessage = "password : ".$password;
+    
+      // @mail($strTo,$strSubject,$strMessage,$strHeader);
+
+        $to = $user_data->mail;
+        $subject = "Activatedkey success";
+
+        $message = "
+        <html>
+        <head>
+        <title>Activatedkey success</title>
+        </head>
+        <body>
+        <p>นี่คือ password ชั่วคราว สำหรับการล็อกอินเข้าระบบ เมื่อท่านเข้าระบบเรียบร้อยแล้วกรุณาเปลี่ยน password</p>
+        <table>
+        <tr>
+        <th>Passwors :</th>
+        <th>".$password."</th>
+        </tr>
+        </table>
+        </body>
+        </html>
+        ";
+
+        // Always set content-type when sending HTML email
+        $headers = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+        // More headers
+        $headers .= 'From: <changemakers@example.com>' . "\r\n";
+        $headers .= 'Cc: myboss@example.com' . "\r\n";
+
+        mail($to,$subject,$message,$headers);
+          
+
+      
+      //echo $user_data->pass; 
+      drupal_goto('/registration/confirmed');
+
+
+    }
+    else
+    {
+      echo "active key incorrect";
+
+      $options = array('query' => array('incorrect'=>1));
+      drupal_goto('/user/register/activatedkey/',$options);
+    }
+    
+    // $query = db_select("select uid from users where field_profile_active_key = 961843");
+    // foreach ($query as $key => $value) {
+      
+    // }
+    // // $query = db_select('users')
+    // //           ->fields('field_profile_active_key')
+    // //           ->condition('field_profile_active_key','value','961843');
+    // // $row = $query->execute();
+
+    // // $result = db_query("select a.uid,a.name,b.field_per_org_tid from users a,field_data_field_per_org b where a.uid = b.entity_id and b.field_per_org_tid = :org",
+    // //   array(
+    // // ":org"=>arg(2)
+    // // ));
+    
+    // // echo $row;
+    // echo $query;
+  }
+
+  function changemakers_save_otp(){
+
+    global $user;
+
+    $user_data = user_load($user->uid);
+
+    $user_phone = $user_data->field_profile_phone['und'][0]['value'] ;
+    $mobile = "66" . substr($user_phone,1);
+
+    if(isset($_POST['submit']))
+    {
+      $length = 6;
+      $chars = array_merge(range(0,9));
+      shuffle($chars);
+      $randomnumber = implode(array_slice($chars, 0, $length));
+
+      $mobile = "66" . substr($user_phone,1);
+      $message = "Changemakers Verified Member, OTP =".$randomnumber;
+      $user_data->field_profile_password_otp['und'][0]['value'] = $randomnumber;
+      
+      user_save($user_data);
+
+      // Encode Messagge
+      //$message=rawurlencode($message);
+
+      // check if it's Ranya number, no need to send sms
+      // remove this if else when on production
+      // keep only the $status = file_get_contents(.....) line
+      /*
+      $mobile_list = array('66867847488');
+      if(in_array($mobile, $mobile_list)):
+        $status = '1701|Developer Number';
+      else:
+        $status = file_get_contents('http://api.rushsms.com:8080/?username=div-pinspirer&password=mypspr&type=5&delivery=1&mobile=' . $mobile . '&sender=PINSPIRER&message=' . $message);
+      endif;
+      */
+      // end of development checking here
+      $status = file_get_contents('http://api.rushsms.com:8080/?username=div-pinspirer&password=mypspr&type=0&delivery=1&mobile='. 
+        $mobile . '&sender=Pinspirer&message='.$message);
+      //echo 'http://api.rushsms.com:8080/?username=div-pinspirer&password=mypspr&type=0&delivery=1&mobile=' . $mobile . '&sender=PINSPIRER&message='.$message;
+      // $sms = new SmsLog();
+      // $sms->mobile = $mobile;
+      // $sms->message = $message;
+      // $sms->return = $status;
+      // $sms->create_at = date("Y-m-d H:i:s");
+      // $sms->save();
+
+      drupal_goto('/verified-member');
+    }
+  }
+
+  function changemakers_verified_member(){
+    global $user;
+
+    $user_data = user_load($user->uid);
+
+    $otp_phone = $user_data->field_profile_password_otp['und'][0]['value'];
+    //$user_data->field_profile_user_id['und'][0]['value'] = $_POST['user_id_card'];
+    if($_POST['otp'] != $otp_phone)
+    {
+      drupal_goto('/node/46/incorrect');
+    }
+    else
+    {
+      $myuserroles = $user_data->roles; 
+      $myuserroles[4]  = 'verified'; 
+      $myuserroles[10]  = "";
+      // print '<pre>';
+      // print_r($myuserroles);
+      // print '</pre>';
+      module_invoke('user', 'save', $user_data, array('roles' => $myuserroles)); 
+
+      // $user_data->roles[10] = "";
+      // $user_data->roles[4] = "verified";
+      // user_save($user_data);
+      drupal_goto('/verified-member');
+    }
+  }
+#end function changemakers registration
+
+#function for changemakers project
+  //***************************************************** function for changemakers project *********************************************************//
+  function changemakers_get_data_from_webform_project($nid){
+    module_load_include('inc','webform','includes/webform.submissions');
+    $seleteions = webform_get_submissions(array('nid'=>2));
+
+    $result = array();
+    foreach ($seleteions as $key => $value) {
+      if($value->data[2][0] == $nid)
+      {
+        $result[] = $value;
+      }
+    }
+    return $result;
+  }
+
+  function changemakers_get_data_from_webform_project_fund($nid){
+    module_load_include('inc','webform','includes/webform.submissions');
+    $seleteions = webform_get_submissions(array('nid'=>92));
+
+    $result = array();
+    foreach ($seleteions as $key => $value) {
+      if($value->data[7][0] == $nid)
+      {
+        $result[] = $value;
+      }
+    }
+
+    return $result;
+  }
+
+  function changemakers_check_join_project($result, $nid){
+    global $user; 
+    $checkJoinProject = 0;
+    for ($i=0; $i < count($result); $i++) 
+    { 
+      if($result[$i]->data[1][0] == $user->uid && $result[$i]->data[2][0] == $nid)
+      {
+        $checkJoinProject  = 1;
+      }
+    }
+    return $checkJoinProject;
+  }
+
+  function changemakers_check_join_project_status($result, $nid){
+    global $user; 
+    $checkJoinProjectStatus = 0;
+    for ($i=0; $i < count($result); $i++) 
+    { 
+      if($result[$i]->data[1][0] == $user->uid && $result[$i]->data[2][0] == $nid)
+      {
+        $checkJoinProjectStatus  = $result[$i]->data[3][0];
+      }
+    }
+    return $checkJoinProjectStatus;
+  }
+
+  function changemakers_check_team_project_status($nid){
+    global $user; 
+    $checkJoinProjectStatus = 0;
+    $sql= "select field_coach_project_uid from field_data_field_coach_project where entity_id ='".$nid."'";
+    $query_db = db_query($sql);
+    $i = 0;
+    foreach ($query_db as $row){
+      if($row->field_coach_project_uid == $user->uid){
+        $checkJoinProjectStatus = 1;
+      }
+    }
+    return $checkJoinProjectStatus;
+  }
+
+  function changemakers_get_team($result){
+    $data_user = array();
+    $i = 0;
+    foreach ($result as $key => $value) 
+    {
+      if($value->data[3][0] == 1)
+      {
+        $user_join = user_load($value->data[1][0]);
+        $data_user[$i]['name'] = '/users/'.$user_join->name;
+        $data_user[$i]['picture'] = '/sites/default/files/pictures/'.$user_join->picture->filename;
+        $data_user[$i]['fname'] = $user_join->field_profile_firstname['und'][0]['value'];
+        $data_user[$i]['lname'] = $user_join->field_profile_lastname['und'][0]['value']; 
+        $data_user[$i]['uid'] = $user_join->uid;
+        $data_user[$i]['sid'] = $value->sid;
+        $data_user[$i]['status'] = $value->data[3][0];
+        $data_user[$i]['username'] = $user_join->name;
+        if($user_join->roles[3] == "administrator"){
+          $data_user[$i]['role'] = "Administrator";
+        }
+        else{
+          $data_user[$i]['role'] = "User join Project";
+        }
+        $i++;     
+      }
+
+    }
+
+    // print "<pre>";
+    // print_r($data_user);
+    // print "</pre>";
+
+
+    
+    return $data_user;
+  }
+
+  function changemakers_get_team_project($nid){
+    $data_user = node_load($nid);
+
+    $user_join_project = array();
+    $count_index = 0;
+    for ($i=0; $i < count($data_user->field_coach_project['und']) ; $i++) { 
+      $user_join = user_load($data_user->field_coach_project['und'][$i]['uid']);
+      $user_join_project[$count_index]['name'] = '/users/'.$user_join->name;
+      $user_join_project[$count_index]['picture'] = '/sites/default/files/pictures/'.$user_join->picture->filename;
+      $user_join_project[$count_index]['fname'] = $user_join->field_profile_firstname['und'][0]['value'];
+      $user_join_project[$count_index]['lname'] = $user_join->field_profile_lastname['und'][0]['value']; 
+      $user_join_project[$count_index]['uid'] = $user_join->uid;
+      $user_join_project[$count_index]['role'] = "Coach";
+      $count_index++;
+    }
+
+    for ($i=0; $i < count($data_user->field_organization_project['und']) ; $i++) { 
+      $user_join = user_load($data_user->field_organization_project['und'][$i]['uid']);
+      $user_join_project[$count_index]['name'] = '/users/'.$user_join->name;
+      $user_join_project[$count_index]['picture'] = '/sites/default/files/pictures/'.$user_join->picture->filename;
+      $user_join_project[$count_index]['fname'] = $user_join->field_profile_firstname['und'][0]['value'];
+      $user_join_project[$count_index]['lname'] = $user_join->field_profile_lastname['und'][0]['value']; 
+      $user_join_project[$count_index]['uid'] = $user_join->uid;
+      $user_join_project[$count_index]['role'] = "Organization";
+      $count_index++;
+    }
+
+    for ($i=0; $i < count($data_user->field_partner_project['und']) ; $i++) { 
+      $user_join = user_load($data_user->field_partner_project['und'][$i]['uid']);
+      $user_join_project[$count_index]['name'] = '/users/'.$user_join->name;
+      $user_join_project[$count_index]['picture'] = '/sites/default/files/pictures/'.$user_join->picture->filename;
+      $user_join_project[$count_index]['fname'] = $user_join->field_profile_firstname['und'][0]['value'];
+      $user_join_project[$count_index]['lname'] = $user_join->field_profile_lastname['und'][0]['value']; 
+      $user_join_project[$count_index]['uid'] = $user_join->uid;
+      $user_join_project[$count_index]['role'] = "Partner";
+      $count_index++;
+    }
+
+    for ($i=0; $i < count($data_user->field_helpdesk_project['und']) ; $i++) { 
+      $user_join = user_load($data_user->field_helpdesk_project['und'][$i]['uid']);
+      $user_join_project[$count_index]['name'] = '/users/'.$user_join->name;
+      $user_join_project[$count_index]['picture'] = '/sites/default/files/pictures/'.$user_join->picture->filename;
+      $user_join_project[$count_index]['fname'] = $user_join->field_profile_firstname['und'][0]['value'];
+      $user_join_project[$count_index]['lname'] = $user_join->field_profile_lastname['und'][0]['value']; 
+      $user_join_project[$count_index]['uid'] = $user_join->uid;
+      $user_join_project[$count_index]['role'] = "Helpdesk";
+      $count_index++;
+    }
+
+    
+
+    // print "<pre>";
+    // print_r($user_join_project);
+    // print "</pre>"; 
+    
+    return $user_join_project;
+  }
+  function changemakers_get_following_project($nid){
+    $data = array();
+    $sql= "select entity_id from field_data_field_following_project where field_following_project_nid ='".$nid."'";
+    $query_db = db_query($sql);
+    $i = 0;
+    foreach ($query_db as $row){
+      $user_data= user_load($row->entity_id);
+      $data[$i]['name'] = $user_data->field_profile_firstname['und'][0]['value']." ".$user_data->field_profile_lastname['und'][0]['value'];
+      $data[$i]['picture'] = '/sites/default/files/pictures/'.$user_data->picture->filename;
+
+      $i++;
+    }
+    return $data;
+  }
+  function changemakers_get_join_project($nid){
+    module_load_include('inc','webform','includes/webform.submissions');
+    $seleteions = webform_get_submissions(array('nid'=>2));
+
+    $result = array();
+    $i = 0;
+    foreach ($seleteions as $key => $value) {
+      if($value->data[2][0] == $nid)
+      {
+        $user_data= user_load($value->data[1][0]);
+        $result[$i]['name'] = $user_data->field_profile_firstname['und'][0]['value']." ".$user_data->field_profile_lastname['und'][0]['value'];
+        $result[$i]['picture'] = '/sites/default/files/pictures/'.$user_data->picture->filename;
+        $i++;
+      }
+    }
+
+    // print "<pre>";
+    // print_r($result);
+    // print "</pre>"; 
+    return $result;
+  }
+
+  function changemakers_get_journal($nid){
+    $data = array();
+    $sql= "select entity_id from field_data_field_project_related where field_project_related_nid='".$nid."'";
+    $query_db = db_query($sql);
+    $journal_id = array();
+    $i = 0;
+    foreach ($query_db as $row){
+      $journal_id= node_load($row->entity_id);
+      $data[$i]['journal_pictrue'] = '/sites/default/files/'.$journal_id->field_journal_image['und'][0]['filename'];
+      $data[$i]['title'] = $journal_id->title;
+      $string = $journal_id->body['und'][0]['value'];
+      $append="...";
+      $length=300;
+      if(strlen($string) > $length) {
+        $string = wordwrap($string, $length);
+        $string = explode("\n", $string, 2);
+        $string = $string[0] . $append;
+      }
+      $data[$i]['content'] = $string ;
+      $data[$i]['date'] = timeAgo($journal_id->created);
+
+      
+      for ($j=0; $j < count($journal_id->field_journal_target['und']) ; $j++) { 
+        if($j==0){
+          $data[$i]['target'] = taxonomy_term_load($journal_id->field_journal_target['und'][$j]['tid'])->name;
+        }
+        else{
+          $data[$i]['target'] =  $data[$i]['target'].", ".taxonomy_term_load($journal_id->field_journal_target['und'][$j]['tid'])->name;
+        }
+      }
+      $i++;
+    }
+
+    // print "<pre>";
+    //   print_r($data);
+    //   print "</pre>";
+    return $data;
+  }
+
+  function changemakers_get_request_join_project(){
+    $node_id = arg(1);
+    module_load_include('inc','webform','includes/webform.submissions');
+
+    $seleteions = webform_get_submissions(array('nid'=>2));
+
+    $result = array();
+    $i = 0;
+    foreach ($seleteions as $key => $value) {
+      if($value->data[2][0] == $node_id)
+      {
+        $get_user = user_load($value->data[1][0]);
+        $result[$i]['uid'] = $value->data[1][0];
+        $result[$i]['username'] = $get_user->name;
+        $result[$i]['name'] = $get_user->field_profile_firstname['und'][0]['value']." ".$get_user->field_profile_lastname['und'][0]['value'];
+        $result[$i]['status'] = $value->data[3][0];
+        $result[$i]['sid'] = $value->sid;
+        $result[$i]['picture'] = '/sites/default/files/pictures/'.$get_user->picture->filename;
+        $result[$i]['fname'] = $get_user->field_profile_firstname['und'][0]['value'];
+        $result[$i]['lname'] = $get_user->field_profile_lastname['und'][0]['value']; 
+        $i++;
+      }
+    }
+    // print '<pre>';
+    // print_r($seleteions);
+    // print '</pre>';
+
+    return $result;
+  }
+
+  function changemakers_approve_join_project(){
+    $uid = $_POST['uid'];
+    $nid = $_POST['nid'];
+    $sid = $_POST['sid'];
+    $data = node_load($nid);
+    if($data->field_user_join_project)
+    {
+      $data->field_user_join_project['und'][] = array('uid'=>$uid);
+    }
+    else
+    {
+      $data->field_user_join_project['und'][0] = array('uid'=>$uid);
+    }
+    node_save($data);
+
+    module_load_include('inc','webform','includes/webform.submissions');
+    // node เป็นก้อน สำหรับ webform
+    $node_webform = node_load(2);
+
+    $submission = webform_get_submission(2, $sid);
+    $submission->data[3][0] = 1;
+
+    webform_submission_update($node_webform,  $submission);
+    // print '<pre>';
+    // print_r($node_webform);
+    // print '</pre>';
+
+    drupal_goto('/project/'.$nid);
+  }
+
+  function changemakers_delete_fund(){
+    $sid = $_POST['sid'];
+    $nid = $_POST['nid'];
+    module_load_include('inc','webform','includes/webform.submissions');
+    // node เป็นก้อน สำหรับ webform
+    $node_webform = node_load(92);
+
+    $submission = webform_get_submission(92, $sid);//(array('nid'=>2,'sid'=>$sid));
+
+
+    webform_submission_delete($node_webform,  $submission);
+    drupal_goto('/project/'.$nid);
+  }
+  function changemakers_update_fund(){
+    $submitted = $_POST['submitted'];
+    $details = $_POST['details'];
+
+    module_load_include('inc','webform','includes/webform.submissions');
+
+    $submission = webform_get_submission(92, $details['sid']);
+
+    print "<pre>";
+    print_r($submitted);
+    print "</pre>";
+
+    print "<pre>";
+    print_r($submission);
+    print "</pre>";
+
+
+    $submission->data[1][0] = $submitted['date_fund_project']['year']."-".$submitted['date_fund_project']['month']."-".$submitted['date_fund_project']['day'];
+    $submission->data[2][0] = $submitted['to_date_fund_project']['year']."-".$submitted['to_date_fund_project']['month']."-".$submitted['to_date_fund_project']['day'];
+    $submission->data[3][0] = $submitted['fund_source_project'];
+    $submission->data[4][0] = $submitted['fund_type_project'];
+    $submission->data[5][0] = $submitted['fund_amount_project'];
+    $submission->data[6][0] = $submitted['fund_use_project'];
+    // node เป็นก้อน สำหรับ webform
+    $node_webform = node_load(92);
+
+    webform_submission_update($node_webform,  $submission);
+
+    // module_load_include('inc','webform','includes/webform.submissions');
+    // // node เป็นก้อน สำหรับ webform
+    // $node_webform = node_load(71);
+
+    // $submission = webform_get_submission(71, $sid);//(array('nid'=>2,'sid'=>$sid));
+
+
+    // webform_submission_delete($node_webform,  $submission);
+    //drupal_goto('/project/'.$submitted['nid']);
+  }
+
+  function changemakers_leave_project() {
+    $uid = $_POST['uid'];
+    $nid = $_POST['nid'];
+    $sid = $_POST['sid'];
+
+    module_load_include('inc','webform','includes/webform.submissions');
+    // node เป็นก้อน สำหรับ webform
+    $node_webform = node_load(2);
+
+    $submission = webform_get_submission(2, $sid);//(array('nid'=>2,'sid'=>$sid));
+    $submission->data[3][0] = 0;
+
+    webform_submission_update($node_webform,  $submission);
+
+    
+
+    $data = node_load($nid);
+    $i = 0;
+    foreach ($data->field_user_join_project['und'] as $key => $value) 
+    {
+      if($value['uid'] == $uid)
+      {
+        $data->field_user_join_project['und'][$i] = "";
+      }
+      $i++;
+    }
+
+    
+    // print '<pre>';
+    // print_r($data);
+    // print '</pre>';
+    node_save($data);
+    drupal_goto('/project/'.$nid);
+  }
+
+  //user following projects
+  function changemakers_check_user_following_project()
+  {
+    //global $user;
+  }
+
+  function changemakers_get_progress_project($value){
+    if($value == 1){
+      return "เขียนโครงร่าง";
+    }
+    else if($value == 2){
+      return "เสนอโครงร่าง";
+    }
+    else if($value == 3){
+      return "ทดลองรูปแบบ";
+    }
+    else{
+      return "ขยายผล";
+    }
+  }
+
+  function changemakers_user_following_project() {
+    global $user;
+    print_r($user->uid);
+
+    // if(isset($_POST['submit']))
+    // {
+      $node_id = $_POST['node_id'];
+      $u = user_load($user->uid);
+      $u->field_following_project['und'][]['nid']=$node_id;
+
+      //print_r($node_id);
+      user_save($u);
+      drupal_goto('/project/'.$node_id);
+    // }
+  }
+
+  function changemakers_user_unfollowing_project() {
+    global $user;
+    //print_r($user->uid);
+
+    // if(isset($_POST['submit']))
+    // {
+      $node_id = $_POST['node_id'];
+      $u = user_load($user->uid);
+      for ($i=0; $i < count($u->field_following_project['und'])  ; $i++) { 
+        if($u->field_following_project['und'][$i]['nid'] == $node_id){
+          unset($u->field_following_project['und'][$i]);
+        }
+      }
+      
+
+      print "<pre>";
+      print_r($u->field_following_project);
+      print "</pre>";
+      user_save($u);
+      drupal_goto('/project/'.$node_id);
+    // }
+  }
+
+  function changemakers_get_other_document($nid){
+    $data = node_load($nid);
+    $other_doc = array();
+    for ($i=0; $i < count($data->field_other_document_project['und']) ; $i++) { 
+      $other_doc[$i]['name'] = $data->field_other_document_project['und'][$i]['filename'] ;
+      $other_doc[$i]['size'] = "(".round(($data->field_other_document_project['und'][$i]['filesize'] / 1024), 0)." Kb )";
+    }
+
+    // print "<pre>";
+    // print_r($other_doc);
+    // print "</pre>";
+    return $other_doc;
+
+  }
+
+  function changemakers_form_document1($form, &$form_state) {
+
+    
+    
+    $form['file'] = array(
+        '#type' => 'file',
+        '#title' => t('Browse'), 
+    );
+
+    $form['project_submit_button'] = array(
+
+      '#type' => 'submit', 
+      '#value' => t('upload'), 
+    );
+
+    // print "<pre>";
+    // print_r($node_id);
+    // print "</pre>";
+
+    return $form;
+  }
+
+  function changemakers_form_document1_validate($form, &$form_state) {
+    $node_id = arg(1);
+    $file = file_save_upload('file', array(
+      'file_validate_extensions' => array('pdf doc docx pages xlsx xls'),
+      'file_validate_size' => array(1024 * 1024), 
+    ));
+
+    $parts = pathinfo($file->filename);
+    $uri = 'public://'.$node_id.'-'. $file->filename;
+
+    //$path = 'public://files/';
+    //drupal_realpath($uri);
+    if ($file) {
+      if ($file = file_move($file, $uri)) {
+        $form_state['values']['file'] = $file;
+      }
+      else {
+        form_set_error('file', t('Failed to write the uploaded file the site\'s file folder.'));
+        drupal_set_message(t('ไม่สามารถอัพโหลดไฟล์ได้'));
+      }
+    }
+    else {
+      form_set_error('file', t('No file was uploaded.'));
+      drupal_set_message(t('ไม่สามารถอัพโหลดไฟล์ได้'));
+    }
+  }
+
+  function changemakers_form_document1_submit($form, &$form_state) {
+
+
+    $node_id = arg(1);
+
+    $file=$form_state['values']['file'];
+    unset($form_state['values']['file']);
+    $file->status = FILE_STATUS_PERMANENT;
+    if(file_save($file)){
+      $node = node_load($node_id);
+      $node->field_concern['und'][0]['fid'] = $file->fid;
+      $node->field_concern['und'][0]['uid'] = $file->uid;
+      $node->field_concern['und'][0]['filename'] = $file->filename;
+      $node->field_concern['und'][0]['uri'] = $file->uri;
+      $node->field_concern['und'][0]['filemime'] = $file->filemime;
+      $node->field_concern['und'][0]['filesize'] = $file->filesize;
+      $node->field_concern['und'][0]['status'] = 1;
+      $node->field_concern['und'][0]['timestamp'] = $file->timestamp;
+      $node->field_concern['und'][0]['rdf_mapping'] = array();
+      $node->field_concern['und'][0]['display'] = 1;
+      $node->field_concern['und'][0]['description'] = "";
+      //$myuser->picture->uri = "public://pictures/".$file->filename;
+      if(node_save($node)){
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename)));
+      }else{
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename )));
+      }
+      
+    }
+    else{
+      drupal_set_message(t('ไม่สามารถอัพโหลดไฟล์ได้'));
+    }
+    
+  }
+
+  function changemakers_form_document2($form, &$form_state) {
+
+    
+    
+    $form['file'] = array(
+        '#type' => 'file',
+        '#title' => t('Browse'), 
+    );
+
+    $form['project_submit_button'] = array(
+
+      '#type' => 'submit', 
+      '#value' => t('upload'), 
+    );
+
+    // print "<pre>";
+    // print_r($node_id);
+    // print "</pre>";
+
+    return $form;
+  }
+
+  function changemakers_form_document2_validate($form, &$form_state) {
+    $node_id = arg(1);
+    $file = file_save_upload('file', array(
+      'file_validate_extensions' => array('pdf doc docx pages xlsx xls'),
+      'file_validate_size' => array(1024 * 1024), 
+    ));
+
+    $parts = pathinfo($file->filename);
+    $uri = 'public://'.$node_id.'-'. $file->filename;
+
+    //$path = 'public://files/';
+    //drupal_realpath($uri);
+    if ($file) {
+      if ($file = file_move($file, $uri)) {
+        $form_state['values']['file'] = $file;
+      }
+      else {
+        form_set_error('file', t('Failed to write the uploaded file the site\'s file folder.'));
+      }
+    }
+    else {
+      form_set_error('file', t('No file was uploaded.'));
+    }
+  }
+
+  function changemakers_form_document2_submit($form, &$form_state) {
+
+
+    $node_id = arg(1);
+
+    $file=$form_state['values']['file'];
+    unset($form_state['values']['file']);
+    $file->status = FILE_STATUS_PERMANENT;
+    if(file_save($file)){
+      $node = node_load($node_id);
+      $node->field_problem_research_planning['und'][0]['fid'] = $file->fid;
+      $node->field_problem_research_planning['und'][0]['uid'] = $file->uid;
+      $node->field_problem_research_planning['und'][0]['filename'] = $file->filename;
+      $node->field_problem_research_planning['und'][0]['uri'] = $file->uri;
+      $node->field_problem_research_planning['und'][0]['filemime'] = $file->filemime;
+      $node->field_problem_research_planning['und'][0]['filesize'] = $file->filesize;
+      $node->field_problem_research_planning['und'][0]['status'] = 1;
+      $node->field_problem_research_planning['und'][0]['timestamp'] = $file->timestamp;
+      $node->field_problem_research_planning['und'][0]['rdf_mapping'] = array();
+      $node->field_problem_research_planning['und'][0]['display'] = 1;
+      $node->field_problem_research_planning['und'][0]['description'] = "";
+      //$myuser->picture->uri = "public://pictures/".$file->filename;
+      if(node_save($node)){
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename)));
+      }else{
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename )));
+      }
+      
+    }
+    else{
+      drupal_set_message(t('ไม่สามารถอัพโหลดไฟล์ได้'));
+    }
+    
+  }
+
+  function changemakers_form_document3($form, &$form_state) {
+
+    
+    
+    $form['file'] = array(
+        '#type' => 'file',
+        '#title' => t('Browse'), 
+    );
+
+    $form['project_submit_button'] = array(
+
+      '#type' => 'submit', 
+      '#value' => t('upload'), 
+    );
+
+    // print "<pre>";
+    // print_r($node_id);
+    // print "</pre>";
+
+    return $form;
+  }
+
+  function changemakers_form_document3_validate($form, &$form_state) {
+    $node_id = arg(1);
+    $file = file_save_upload('file', array(
+      'file_validate_extensions' => array('pdf doc docx pages xlsx xls'),
+      'file_validate_size' => array(1024 * 1024), 
+    ));
+
+    $parts = pathinfo($file->filename);
+    $uri = 'public://'.$node_id.'-'. $file->filename;
+
+    //$path = 'public://files/';
+    //drupal_realpath($uri);
+    if ($file) {
+      if ($file = file_move($file, $uri)) {
+        $form_state['values']['file'] = $file;
+      }
+      else {
+        form_set_error('file', t('Failed to write the uploaded file the site\'s file folder.'));
+      }
+    }
+    else {
+      form_set_error('file', t('No file was uploaded.'));
+    }
+  }
+
+  function changemakers_form_document3_submit($form, &$form_state) {
+
+
+    $node_id = arg(1);
+
+    $file=$form_state['values']['file'];
+    unset($form_state['values']['file']);
+    $file->status = FILE_STATUS_PERMANENT;
+    if(file_save($file)){
+      $node = node_load($node_id);
+      $node->field_root_cause_analysis['und'][0]['fid'] = $file->fid;
+      $node->field_root_cause_analysis['und'][0]['uid'] = $file->uid;
+      $node->field_root_cause_analysis['und'][0]['filename'] = $file->filename;
+      $node->field_root_cause_analysis['und'][0]['uri'] = $file->uri;
+      $node->field_root_cause_analysis['und'][0]['filemime'] = $file->filemime;
+      $node->field_root_cause_analysis['und'][0]['filesize'] = $file->filesize;
+      $node->field_root_cause_analysis['und'][0]['status'] = 1;
+      $node->field_root_cause_analysis['und'][0]['timestamp'] = $file->timestamp;
+      $node->field_root_cause_analysis['und'][0]['rdf_mapping'] = array();
+      $node->field_root_cause_analysis['und'][0]['display'] = 1;
+      $node->field_root_cause_analysis['und'][0]['description'] = "";
+      //$myuser->picture->uri = "public://pictures/".$file->filename;
+      if(node_save($node)){
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename)));
+      }else{
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename )));
+      }
+      
+    }
+    else{
+      drupal_set_message(t('ไม่สามารถอัพโหลดไฟล์ได้'));
+    }
+    
+  }
+
+  function changemakers_form_document4($form, &$form_state) {
+
+    
+    
+    $form['file'] = array(
+        '#type' => 'file',
+        '#title' => t('Browse'), 
+    );
+
+    $form['project_submit_button'] = array(
+
+      '#type' => 'submit', 
+      '#value' => t('upload'), 
+    );
+
+    // print "<pre>";
+    // print_r($node_id);
+    // print "</pre>";
+
+    return $form;
+  }
+
+  function changemakers_form_document4_validate($form, &$form_state) {
+    $node_id = arg(1);
+    $file = file_save_upload('file', array(
+      'file_validate_extensions' => array('pdf doc docx pages xlsx xls'),
+      'file_validate_size' => array(1024 * 1024), 
+    ));
+
+    $parts = pathinfo($file->filename);
+    $uri = 'public://'.$node_id.'-'. $file->filename;
+
+    //$path = 'public://files/';
+    //drupal_realpath($uri);
+    if ($file) {
+      if ($file = file_move($file, $uri)) {
+        $form_state['values']['file'] = $file;
+      }
+      else {
+        form_set_error('file', t('Failed to write the uploaded file the site\'s file folder.'));
+      }
+    }
+    else {
+      form_set_error('file', t('No file was uploaded.'));
+    }
+  }
+
+  function changemakers_form_document4_submit($form, &$form_state) {
+
+
+    $node_id = arg(1);
+
+    $file=$form_state['values']['file'];
+    unset($form_state['values']['file']);
+    $file->status = FILE_STATUS_PERMANENT;
+    if(file_save($file)){
+      $node = node_load($node_id);
+      $node->field_problem_defined['und'][0]['fid'] = $file->fid;
+      $node->field_problem_defined['und'][0]['uid'] = $file->uid;
+      $node->field_problem_defined['und'][0]['filename'] = $file->filename;
+      $node->field_problem_defined['und'][0]['uri'] = $file->uri;
+      $node->field_problem_defined['und'][0]['filemime'] = $file->filemime;
+      $node->field_problem_defined['und'][0]['filesize'] = $file->filesize;
+      $node->field_problem_defined['und'][0]['status'] = 1;
+      $node->field_problem_defined['und'][0]['timestamp'] = $file->timestamp;
+      $node->field_problem_defined['und'][0]['rdf_mapping'] = array();
+      $node->field_problem_defined['und'][0]['display'] = 1;
+      $node->field_problem_defined['und'][0]['description'] = "";
+      //$myuser->picture->uri = "public://pictures/".$file->filename;
+      if(node_save($node)){
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename)));
+      }else{
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename )));
+      }
+      
+    }
+    else{
+      drupal_set_message(t('ไม่สามารถอัพโหลดไฟล์ได้'));
+    }
+    
+  }
+
+  function changemakers_form_document5($form, &$form_state) {
+
+    
+    
+    $form['file'] = array(
+        '#type' => 'file',
+        '#title' => t('Browse'), 
+    );
+
+    $form['project_submit_button'] = array(
+
+      '#type' => 'submit', 
+      '#value' => t('upload'), 
+    );
+
+    // print "<pre>";
+    // print_r($node_id);
+    // print "</pre>";
+
+    return $form;
+  }
+
+  function changemakers_form_document5_validate($form, &$form_state) {
+    $node_id = arg(1);
+    $file = file_save_upload('file', array(
+      'file_validate_extensions' => array('pdf doc docx pages xlsx xls'),
+      'file_validate_size' => array(1024 * 1024), 
+    ));
+
+    $parts = pathinfo($file->filename);
+    $uri = 'public://'.$node_id.'-'. $file->filename;
+
+    //$path = 'public://files/';
+    //drupal_realpath($uri);
+    if ($file) {
+      if ($file = file_move($file, $uri)) {
+        $form_state['values']['file'] = $file;
+      }
+      else {
+        form_set_error('file', t('Failed to write the uploaded file the site\'s file folder.'));
+      }
+    }
+    else {
+      form_set_error('file', t('No file was uploaded.'));
+    }
+  }
+
+  function changemakers_form_document5_submit($form, &$form_state) {
+
+
+    $node_id = arg(1);
+
+    $file=$form_state['values']['file'];
+    unset($form_state['values']['file']);
+    $file->status = FILE_STATUS_PERMANENT;
+    if(file_save($file)){
+      $node = node_load($node_id);
+      $node->field_theory_of_change['und'][0]['fid'] = $file->fid;
+      $node->field_theory_of_change['und'][0]['uid'] = $file->uid;
+      $node->field_theory_of_change['und'][0]['filename'] = $file->filename;
+      $node->field_theory_of_change['und'][0]['uri'] = $file->uri;
+      $node->field_theory_of_change['und'][0]['filemime'] = $file->filemime;
+      $node->field_theory_of_change['und'][0]['filesize'] = $file->filesize;
+      $node->field_theory_of_change['und'][0]['status'] = 1;
+      $node->field_theory_of_change['und'][0]['timestamp'] = $file->timestamp;
+      $node->field_theory_of_change['und'][0]['rdf_mapping'] = array();
+      $node->field_theory_of_change['und'][0]['display'] = 1;
+      $node->field_theory_of_change['und'][0]['description'] = "";
+      //$myuser->picture->uri = "public://pictures/".$file->filename;
+      if(node_save($node)){
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename)));
+      }else{
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename )));
+      }
+      
+    }
+    else{
+      drupal_set_message(t('ไม่สามารถอัพโหลดไฟล์ได้'));
+    }
+    
+  }
+
+  function changemakers_form_document6($form, &$form_state) {
+
+    
+    
+    $form['file'] = array(
+        '#type' => 'file',
+        '#title' => t('Browse'), 
+    );
+
+    $form['project_submit_button'] = array(
+
+      '#type' => 'submit', 
+      '#value' => t('upload'), 
+    );
+
+    // print "<pre>";
+    // print_r($node_id);
+    // print "</pre>";
+
+    return $form;
+  }
+
+  function changemakers_form_document6_validate($form, &$form_state) {
+    $node_id = arg(1);
+    $file = file_save_upload('file', array(
+      'file_validate_extensions' => array('pdf doc docx pages xlsx xls'),
+      'file_validate_size' => array(1024 * 1024), 
+    ));
+
+    $parts = pathinfo($file->filename);
+    $uri = 'public://'.$node_id.'-'. $file->filename;
+
+    //$path = 'public://files/';
+    //drupal_realpath($uri);
+    if ($file) {
+      if ($file = file_move($file, $uri)) {
+        $form_state['values']['file'] = $file;
+      }
+      else {
+        form_set_error('file', t('Failed to write the uploaded file the site\'s file folder.'));
+      }
+    }
+    else {
+      form_set_error('file', t('No file was uploaded.'));
+    }
+  }
+
+  function changemakers_form_document6_submit($form, &$form_state) {
+
+
+    $node_id = arg(1);
+
+    $file=$form_state['values']['file'];
+    unset($form_state['values']['file']);
+    $file->status = FILE_STATUS_PERMANENT;
+    if(file_save($file)){
+      $node = node_load($node_id);
+      $node->field_project_overview['und'][0]['fid'] = $file->fid;
+      $node->field_project_overview['und'][0]['uid'] = $file->uid;
+      $node->field_project_overview['und'][0]['filename'] = $file->filename;
+      $node->field_project_overview['und'][0]['uri'] = $file->uri;
+      $node->field_project_overview['und'][0]['filemime'] = $file->filemime;
+      $node->field_project_overview['und'][0]['filesize'] = $file->filesize;
+      $node->field_project_overview['und'][0]['status'] = 1;
+      $node->field_project_overview['und'][0]['timestamp'] = $file->timestamp;
+      $node->field_project_overview['und'][0]['rdf_mapping'] = array();
+      $node->field_project_overview['und'][0]['display'] = 1;
+      $node->field_project_overview['und'][0]['description'] = "";
+      //$myuser->picture->uri = "public://pictures/".$file->filename;
+      if(node_save($node)){
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename)));
+      }else{
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename )));
+      }
+      
+    }
+    else{
+      drupal_set_message(t('ไม่สามารถอัพโหลดไฟล์ได้'));
+    }
+    
+  }
+
+  function changemakers_form_document7($form, &$form_state) {
+
+    
+    
+    $form['file'] = array(
+        '#type' => 'file',
+        '#title' => t('Browse'), 
+    );
+
+    $form['project_submit_button'] = array(
+
+      '#type' => 'submit', 
+      '#value' => t('upload'), 
+    );
+
+    // print "<pre>";
+    // print_r($node_id);
+    // print "</pre>";
+
+    return $form;
+  }
+
+  function changemakers_form_document7_validate($form, &$form_state) {
+    $node_id = arg(1);
+    $file = file_save_upload('file', array(
+      'file_validate_extensions' => array('pdf doc docx pages xlsx xls'),
+      'file_validate_size' => array(1024 * 1024), 
+    ));
+
+    $parts = pathinfo($file->filename);
+    $uri = 'public://'.$node_id.'-'. $file->filename;
+
+    //$path = 'public://files/';
+    //drupal_realpath($uri);
+    if ($file) {
+      if ($file = file_move($file, $uri)) {
+        $form_state['values']['file'] = $file;
+      }
+      else {
+        form_set_error('file', t('Failed to write the uploaded file the site\'s file folder.'));
+      }
+    }
+    else {
+      form_set_error('file', t('No file was uploaded.'));
+    }
+  }
+
+  function changemakers_form_document7_submit($form, &$form_state) {
+
+
+    $node_id = arg(1);
+
+    $file=$form_state['values']['file'];
+    unset($form_state['values']['file']);
+    $file->status = FILE_STATUS_PERMANENT;
+    if(file_save($file)){
+      $node = node_load($node_id);
+      $node->field_business_model_canvas['und'][0]['fid'] = $file->fid;
+      $node->field_business_model_canvas['und'][0]['uid'] = $file->uid;
+      $node->field_business_model_canvas['und'][0]['filename'] = $file->filename;
+      $node->field_business_model_canvas['und'][0]['uri'] = $file->uri;
+      $node->field_business_model_canvas['und'][0]['filemime'] = $file->filemime;
+      $node->field_business_model_canvas['und'][0]['filesize'] = $file->filesize;
+      $node->field_business_model_canvas['und'][0]['status'] = 1;
+      $node->field_business_model_canvas['und'][0]['timestamp'] = $file->timestamp;
+      $node->field_business_model_canvas['und'][0]['rdf_mapping'] = array();
+      $node->field_business_model_canvas['und'][0]['display'] = 1;
+      $node->field_business_model_canvas['und'][0]['description'] = "";
+      //$myuser->picture->uri = "public://pictures/".$file->filename;
+      if(node_save($node)){
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename)));
+      }else{
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename )));
+      }
+      
+    }
+    else{
+      drupal_set_message(t('ไม่สามารถอัพโหลดไฟล์ได้'));
+    }
+    
+  }
+
+  function changemakers_form_document8($form, &$form_state) {
+
+    
+    
+    $form['file'] = array(
+        '#type' => 'file',
+        '#title' => t('Browse'), 
+    );
+
+    $form['project_submit_button'] = array(
+
+      '#type' => 'submit', 
+      '#value' => t('upload'), 
+    );
+
+    // print "<pre>";
+    // print_r($node_id);
+    // print "</pre>";
+
+    return $form;
+  }
+
+  function changemakers_form_document8_validate($form, &$form_state) {
+    $node_id = arg(1);
+    $file = file_save_upload('file', array(
+      'file_validate_extensions' => array('pdf doc docx pages xlsx xls'),
+      'file_validate_size' => array(1024 * 1024), 
+    ));
+
+    $parts = pathinfo($file->filename);
+    $uri = 'public://'.$node_id.'-'. $file->filename;
+
+    //$path = 'public://files/';
+    //drupal_realpath($uri);
+    if ($file) {
+      if ($file = file_move($file, $uri)) {
+        $form_state['values']['file'] = $file;
+      }
+      else {
+        form_set_error('file', t('Failed to write the uploaded file the site\'s file folder.'));
+      }
+    }
+    else {
+      form_set_error('file', t('No file was uploaded.'));
+    }
+  }
+
+  function changemakers_form_document8_submit($form, &$form_state) {
+
+
+    $node_id = arg(1);
+
+    $file=$form_state['values']['file'];
+    unset($form_state['values']['file']);
+    $file->status = FILE_STATUS_PERMANENT;
+    if(file_save($file)){
+      $node = node_load($node_id);
+      $node->field_gantt_chart['und'][0]['fid'] = $file->fid;
+      $node->field_gantt_chart['und'][0]['uid'] = $file->uid;
+      $node->field_gantt_chart['und'][0]['filename'] = $file->filename;
+      $node->field_gantt_chart['und'][0]['uri'] = $file->uri;
+      $node->field_gantt_chart['und'][0]['filemime'] = $file->filemime;
+      $node->field_gantt_chart['und'][0]['filesize'] = $file->filesize;
+      $node->field_gantt_chart['und'][0]['status'] = 1;
+      $node->field_gantt_chart['und'][0]['timestamp'] = $file->timestamp;
+      $node->field_gantt_chart['und'][0]['rdf_mapping'] = array();
+      $node->field_gantt_chart['und'][0]['display'] = 1;
+      $node->field_gantt_chart['und'][0]['description'] = "";
+      //$myuser->picture->uri = "public://pictures/".$file->filename;
+      if(node_save($node)){
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename)));
+      }else{
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename )));
+      }
+      
+    }
+    else{
+      drupal_set_message(t('ไม่สามารถอัพโหลดไฟล์ได้'));
+    }
+    
+  }
+
+  function changemakers_form_document9($form, &$form_state) {
+
+    
+    
+    $form['file'] = array(
+        '#type' => 'file',
+        '#title' => t('Browse'), 
+    );
+
+    $form['project_submit_button'] = array(
+
+      '#type' => 'submit', 
+      '#value' => t('upload'), 
+    );
+
+    // print "<pre>";
+    // print_r($node_id);
+    // print "</pre>";
+
+    return $form;
+  }
+
+  function changemakers_form_document9_validate($form, &$form_state) {
+    $node_id = arg(1);
+    $file = file_save_upload('file', array(
+      'file_validate_extensions' => array('pdf doc docx pages xlsx xls'),
+      'file_validate_size' => array(1024 * 1024), 
+    ));
+
+    $parts = pathinfo($file->filename);
+    $uri = 'public://'.$node_id.'-'. $file->filename;
+
+    //$path = 'public://files/';
+    //drupal_realpath($uri);
+    if ($file) {
+      if ($file = file_move($file, $uri)) {
+        $form_state['values']['file'] = $file;
+      }
+      else {
+        form_set_error('file', t('Failed to write the uploaded file the site\'s file folder.'));
+      }
+    }
+    else {
+      form_set_error('file', t('No file was uploaded.'));
+    }
+  }
+
+  function changemakers_form_document9_submit($form, &$form_state) {
+
+
+    $node_id = arg(1);
+
+    $file=$form_state['values']['file'];
+    unset($form_state['values']['file']);
+    $file->status = FILE_STATUS_PERMANENT;
+    if(file_save($file)){
+      $node = node_load($node_id);
+      $node->field_teams_financial_report['und'][0]['fid'] = $file->fid;
+      $node->field_teams_financial_report['und'][0]['uid'] = $file->uid;
+      $node->field_teams_financial_report['und'][0]['filename'] = $file->filename;
+      $node->field_teams_financial_report['und'][0]['uri'] = $file->uri;
+      $node->field_teams_financial_report['und'][0]['filemime'] = $file->filemime;
+      $node->field_teams_financial_report['und'][0]['filesize'] = $file->filesize;
+      $node->field_teams_financial_report['und'][0]['status'] = 1;
+      $node->field_teams_financial_report['und'][0]['timestamp'] = $file->timestamp;
+      $node->field_teams_financial_report['und'][0]['rdf_mapping'] = array();
+      $node->field_teams_financial_report['und'][0]['display'] = 1;
+      $node->field_teams_financial_report['und'][0]['description'] = "";
+      //$myuser->picture->uri = "public://pictures/".$file->filename;
+      if(node_save($node)){
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename)));
+      }else{
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename )));
+      }
+      
+    }
+    else{
+      drupal_set_message(t('ไม่สามารถอัพโหลดไฟล์ได้'));
+    }
+    
+  }
+
+  function changemakers_form_document10($form, &$form_state) {
+
+    
+    
+    $form['file'] = array(
+        '#type' => 'file',
+        '#title' => t('Browse'), 
+    );
+
+    $form['project_submit_button'] = array(
+
+      '#type' => 'submit', 
+      '#value' => t('upload'), 
+    );
+
+    // print "<pre>";
+    // print_r($node_id);
+    // print "</pre>";
+
+    return $form;
+  }
+
+  function changemakers_form_document10_validate($form, &$form_state) {
+    $node_id = arg(1);
+    $file = file_save_upload('file', array(
+      'file_validate_extensions' => array('pdf doc docx pages xlsx xls'),
+      'file_validate_size' => array(1024 * 1024), 
+    ));
+
+    $parts = pathinfo($file->filename);
+    $uri = 'public://'.$node_id.'-'. $file->filename;
+
+    //$path = 'public://files/';
+    //drupal_realpath($uri);
+    if ($file) {
+      if ($file = file_move($file, $uri)) {
+        $form_state['values']['file'] = $file;
+      }
+      else {
+        form_set_error('file', t('Failed to write the uploaded file the site\'s file folder.'));
+      }
+    }
+    else {
+      form_set_error('file', t('No file was uploaded.'));
+    }
+  }
+
+  function changemakers_form_document10_submit($form, &$form_state) {
+
+
+    $node_id = arg(1);
+
+    $file=$form_state['values']['file'];
+    unset($form_state['values']['file']);
+    $file->status = FILE_STATUS_PERMANENT;
+    if(file_save($file)){
+      $node = node_load($node_id);
+      $node->field_contract['und'][0]['fid'] = $file->fid;
+      $node->field_contract['und'][0]['uid'] = $file->uid;
+      $node->field_contract['und'][0]['filename'] = $file->filename;
+      $node->field_contract['und'][0]['uri'] = $file->uri;
+      $node->field_contract['und'][0]['filemime'] = $file->filemime;
+      $node->field_contract['und'][0]['filesize'] = $file->filesize;
+      $node->field_contract['und'][0]['status'] = 1;
+      $node->field_contract['und'][0]['timestamp'] = $file->timestamp;
+      $node->field_contract['und'][0]['rdf_mapping'] = array();
+      $node->field_contract['und'][0]['display'] = 1;
+      $node->field_contract['und'][0]['description'] = "";
+      //$myuser->picture->uri = "public://pictures/".$file->filename;
+      if(node_save($node)){
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename)));
+      }else{
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename )));
+      }
+      
+    }
+    else{
+      drupal_set_message(t('ไม่สามารถอัพโหลดไฟล์ได้'));
+    }
+    
+  }
+
+  function changemakers_form_document11($form, &$form_state) {
+
+    
+    
+    $form['file'] = array(
+        '#type' => 'file',
+        '#title' => t('Browse'), 
+    );
+
+    $form['project_submit_button'] = array(
+
+      '#type' => 'submit', 
+      '#value' => t('upload'), 
+    );
+
+    // print "<pre>";
+    // print_r($node_id);
+    // print "</pre>";
+
+    return $form;
+  }
+
+  function changemakers_form_document11_validate($form, &$form_state) {
+    $node_id = arg(1);
+    $file = file_save_upload('file', array(
+      'file_validate_extensions' => array('pdf doc docx pages xlsx xls'),
+      'file_validate_size' => array(1024 * 1024), 
+    ));
+
+    $parts = pathinfo($file->filename);
+    $uri = 'public://'.$node_id.'-'. $file->filename;
+
+    //$path = 'public://files/';
+    //drupal_realpath($uri);
+    if ($file) {
+      if ($file = file_move($file, $uri)) {
+        $form_state['values']['file'] = $file;
+      }
+      else {
+        form_set_error('file', t('Failed to write the uploaded file the site\'s file folder.'));
+        drupal_set_message(t('ไม่สามารถอัพโหลดไฟล์ได้'));
+      }
+    }
+    else {
+      form_set_error('file', t('No file was uploaded.'));
+    }
+  }
+
+  function changemakers_form_document11_submit($form, &$form_state) {
+
+
+    $node_id = arg(1);
+
+    $file=$form_state['values']['file'];
+    unset($form_state['values']['file']);
+    $file->status = FILE_STATUS_PERMANENT;
+    if(file_save($file)){
+      $node = node_load($node_id);
+      $node->field_teams_bank_account['und'][0]['fid'] = $file->fid;
+      $node->field_teams_bank_account['und'][0]['uid'] = $file->uid;
+      $node->field_teams_bank_account['und'][0]['filename'] = $file->filename;
+      $node->field_teams_bank_account['und'][0]['uri'] = $file->uri;
+      $node->field_teams_bank_account['und'][0]['filemime'] = $file->filemime;
+      $node->field_teams_bank_account['und'][0]['filesize'] = $file->filesize;
+      $node->field_teams_bank_account['und'][0]['status'] = 1;
+      $node->field_teams_bank_account['und'][0]['timestamp'] = $file->timestamp;
+      $node->field_teams_bank_account['und'][0]['rdf_mapping'] = array();
+      $node->field_teams_bank_account['und'][0]['display'] = 1;
+      $node->field_teams_bank_account['und'][0]['description'] = "";
+      //$myuser->picture->uri = "public://pictures/".$file->filename;
+      if(node_save($node)){
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename)));
+      }else{
+        drupal_set_message(t('success , filename: @filename.', array('@filename' => $file->filename )));
+      }
+      
+    }
+    else{
+      drupal_set_message(t('ไม่สามารถอัพโหลดไฟล์ได้'));
+    }
+    
+  }
+
+  function changemakers_get_join_campaign($nid){
+    $nodes = node_load_multiple(array(), array('type' => 'Campaign'));
+
+
+    $result = array();
+    $i =0;
+    $check = 0;
+    foreach ($nodes as $key => $value) {
+      for ($j=0; $j < count($value->field_project_join['und']); $j++) { 
+        $data_result =  field_collection_item_load($value->field_project_join['und'][$j]['value'] , $reset = FALSE)->field_join_project['und'][0]['nid'];
+        if($data_result == $nid){
+          $check = 1;
+        }
+
+        //$result[$i][$j] = $result[$i][$j]->field_join_project;
+      }
+      
+      if($check == 1){
+        $result[$i]['node_id'] = $value->nid;
+        $result[$i]['title'] = $value->title;
+        $result[$i]['date'] = changemakers_format_date_thai_short($value->created);
+        $result[$i]['picture'] = "/sites/default/files/".$value->field_campaign_image['und'][0]['filename'];
+        //$result[$i] = $value;
+        $i++;
+        $check = 0;
+      }
+      
+      
+    }
+    // print '<pre>';
+    // print_r($result);
+    // print '</pre>';
+
+    return  $result;
+
+    
+
+  }
+  function changemakers_get_data_in_list($number){
+    if($number == 1){
+      return "Project Update";
+    }
+    else if($number == 2){
+      return "Journal";
+    }
+  }
+
+#end function for changemakers project
+
+#function for changemakers campaign
+  function changemakers_get_projects_join_campaigns_final($campaign_id){
+    $project_join_campaign = node_load($campaign_id);
+    $get_project_data = array();
+    $i=0;
+    foreach ($project_join_campaign->field_project_join['und'] as $key => $value) {
+      $get_project_id = field_collection_item_load( $value['value'], $reset = FALSE);
+      $get_project = node_load($get_project_id->field_join_project['und'][0]['nid']);//->field_join_project['und'][0]['value'];
+      if(isset($get_project_id->field_join_project['und'][0]['nid']) && $get_project_id->field_join_status['und'][0]['value'] == 1){
+        $get_project_data[$i]['title'] =  $get_project->title;
+        $get_project_data[$i]['picture'] =  "/sites/default/files/".$get_project->field_project_image['und'][0]['filename'];
+        $get_project_data[$i]['last_update'] =  changemakers_format_date_thai_short($get_project->changed);
+        $get_project_data[$i]['nid'] =  $get_project->nid;
+        $i++;
+      }
+    }
+    // print '<pre>';
+    // print_r($get_project_data);
+    // print '</pre>';
+    return $get_project_data;
+    
+  }
+
+  function changemakers_get_projects_join_campaigns($campaign_id){
+    $project_join_campaign = node_load($campaign_id);
+    $get_project_data = array();
+    $i=0;
+    foreach ($project_join_campaign->field_project_join['und'] as $key => $value) {
+      $get_project_id = field_collection_item_load( $value['value'], $reset = FALSE);
+      $get_project = node_load($get_project_id->field_join_project['und'][0]['nid']);//->field_join_project['und'][0]['value'];
+      if(isset($get_project_id->field_join_project['und'][0]['nid'])){
+        $get_project_data[$i]['title'] =  $get_project->title;
+        $get_project_data[$i]['picture'] =  "/sites/default/files/".$get_project->field_project_image['und'][0]['filename'];
+        $get_project_data[$i]['last_update'] =  changemakers_format_date_thai_short($get_project->changed);
+        $get_project_data[$i]['nid'] =  $get_project->nid;
+        $i++;
+      }
+    }
+    // print '<pre>';
+    // print_r($get_project_data);
+    // print '</pre>';
+    return $get_project_data;
+    
+  }
+
+  function changemakers_get_projects_in_final($campaign_id){
+    $project_join_campaign = node_load($campaign_id);
+    $get_project_data = array();
+    $count = 0;
+
+    foreach ($project_join_campaign->field_project_join['und'] as $key => $value) {
+      $get_project_id = field_collection_item_load( $value['value'], $reset = FALSE);
+      //$get_project = node_load($get_project_id->field_join_project['und'][0]['nid']);//->field_join_project['und'][0]['value'];
+      if($get_project_id->field_join_status['und'][0]['value'] == 1){
+        $count++;
+
+
+      }
+
+      
+
+      
+    }
+    // print '<pre>';
+    //     print_r($count);
+    //     print '</pre>';
+
+
+
+    return $count;
+    
+  }
+
+  function changemakers_get_active_campaign(){
+    $nodes = node_load_multiple(array(), array('type' => 'Campaign'));
+    $result = array();
+
+    $count = 0;
+    foreach ($nodes as $key => $value) {
+      if($value->field_campaign_active['und'][0]['value'] == 1){
+        $count += 1;
+      }
+      // for ($j=0; $j < count($value->field_project_join['und']); $j++) { 
+      //   $data_result =  field_collection_item_load($value->field_project_join['und'][$j]['value'] , $reset = FALSE)->field_join_project['und'][0]['nid'];
+      //   if($data_result == $nid){
+      //     $check = 1;
+      //   }
+
+      //   //$result[$i][$j] = $result[$i][$j]->field_join_project;
+      // }
+      
+    }
+
+    // print '<pre>';
+    // print_r($nodes);
+    // print '</pre>';
+    return $count;
+
+  }
+  function changemakers_get_end_campaign(){
+    $nodes = node_load_multiple(array(), array('type' => 'Campaign'));
+    $result = array();
+
+    $count = 0;
+    foreach ($nodes as $key => $value) {
+      if($value->field_campaign_active['und'][0]['value'] != 1){
+        $count += 1;
+      }
+      // for ($j=0; $j < count($value->field_project_join['und']); $j++) { 
+      //   $data_result =  field_collection_item_load($value->field_project_join['und'][$j]['value'] , $reset = FALSE)->field_join_project['und'][0]['nid'];
+      //   if($data_result == $nid){
+      //     $check = 1;
+      //   }
+
+      //   //$result[$i][$j] = $result[$i][$j]->field_join_project;
+      // }
+      
+    }
+
+    // print '<pre>';
+    // print_r($nodes);
+    // print '</pre>';
+    return $count;
+
+  }
+  function changemakers_get_count_project_join_campaign_active(){
+    $nodes = node_load_multiple(array(), array('type' => 'Campaign'));
+    $result = array();
+
+    $count = 0;
+    foreach ($nodes as $key => $value) {
+      for ($j=0; $j < count($value->field_project_join['und']); $j++) 
+      { 
+        $count++;
+      }
+      
+    }
+
+    // print '<pre>';
+    // print_r($nodes);
+    // print '</pre>';
+    return $count;
+
+  }
+  function changemakers_join_campaign(){
+    global $user;
+    if (isset($_POST['submit'])) 
+    {
+      $project_id = $_POST['project_id'];
+      $campaign_id = $_POST['campaign_id'];
+      print_r($_POST['project_id']);
+      if($_POST['project_id'] != 0)
+      {
+        $node = node_load($campaign_id);
+        $field_collection_item = entity_create('field_collection_item', array('field_name' => 'field_project_join'));
+        $field_collection_item->field_join_project['und'][]['nid'] = $project_id;
+        $field_collection_item->field_join_status['und'][]['value']= 0;//$item['id'];
+        $field_collection_item->field_join_by_user['und'][]['value']= $user->uid;
+        $field_collection_item->field_user_join['und'][]['value']= $user->uid;
+        $field_collection_item->setHostEntity('node', $node);
+        $field_collection_item->save();
+      }
+      drupal_goto('/campaign/'.$campaign_id);
+    }
+    else
+    {
+       drupal_goto('/campaign/list');
+    }
+    //$node->field_project_id = $project_id;
+    // $result = field_collection_item_load_multiple(array(15), array(), FALSE);
+
+    // print '<pre>';
+    // print_r($result);
+    // print '</pre>';
+    //Create field collection item field_quiz_result
+    
+  }
+  function changemakers_chcek_join_campaign($node){
+    global $user;
+    $node_project =  node_load_multiple(array(),array('type'=> 'project'));
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'node')
+      ->propertyCondition('uid', $user->uid)
+      ->propertyCondition('type', array('project'))
+      ->propertyOrderBy('created', 'DESC');
+    $result = $query->execute();
+
+    $nids = array_keys($result['node']);
+    $result_filter_project = node_load_multiple($nids);
+
+    $project_value_join = field_get_items('node', $node, 'field_project_join');
+    $query_data = array();
+    for ($i=0; $i < count($project_value_join); $i++) 
+    { 
+      $query_db = db_query("select field_join_project_nid from field_data_field_join_project where entity_id =".$project_value_join[$i]['value']);
+      foreach ($query_db as $row) 
+      {
+          $query_data[] = $row->field_join_project_nid;
+      }
+    }
+    module_load_include('inc','webform','includes/webform.submissions');
+    $seleteions = webform_get_submissions(array('nid'=>2));
+    $result_join_project = array();
+    $result_user_join_data = array();
+    foreach ($seleteions as $key => $value) {
+      $result_join_project[] = $value;
+    }
+
+    if($user->roles[6] == "organization")
+    {
+      foreach ($result_join_project as $key => $value) 
+      {
+        if($user->uid == $value->data[1][0])
+        {
+          $result_user_join_data[] = $value;
+        }
+      }
+    }
+
+    $check_duplicate = array();
+    $index = 0;
+    $select_tile = array();
+    $count_index = 0;
+    for ($i=0; $i < count($result_filter_project); $i++) 
+    { 
+      for ($j=0; $j < count($query_data) ; $j++) 
+      { 
+        if($query_data[$j] == $result_filter_project[$nids[$i]]->nid)
+        {
+          $check_duplicate[$index] = $i;  
+          $index++;
+          // print '<pre>';
+          // print_r($query_data);
+          // print '</pre>';  
+        }
+      }
+
+      $select_tile[$i][0] = $result_filter_project[$nids[$i]]->title;
+      $select_tile[$i][1] = $result_filter_project[$nids[$i]]->nid;
+      $count_index++;
+    }
+
+
+
+    for ($i=0; $i < count($result_user_join_data); $i++) 
+    { 
+      for ($j=0; $j < count($query_data) ; $j++) 
+      { 
+        if($query_data[$j] == $result_user_join_data[$i]->data[2][0])
+        {
+          $check_duplicate[$index] = $count_index;
+
+          $index++;
+        }
+      }
+      $data_load = node_load($result_user_join_data[$i]->data[2][0]);
+      
+
+      $select_tile[$count_index][0] = $data_load->title;
+      $select_tile[$count_index][1] = $data_load->nid;
+      $count_index++;
+    }
+
+    foreach ($check_duplicate as $key => $value) 
+    {
+      $select_tile[$value] = 1;
+    }
+
+    return $select_tile;
+  }
+#end function for changemakers campaign 
+
+#function for changemakers news&&event
+  function changemakers_check_user_join_event($uid, $nid)
+  {
+    module_load_include('inc','webform','includes/webform.submissions');
+    $seleteions = webform_get_submissions(array('nid'=>3));
+    $check = 0;
+    foreach($seleteions as $key => $value) 
+    {
+      if($value->data[1][0] == $uid && $value->data[2][0] == $nid)
+      {
+        $check = 1;
+      }
+    }
+    return $check;
+  }
+  function changemakers_join_event(){
+    module_load_include('inc','webform','includes/webform.submissions');
+    //Start Webform //
+    if($_POST['op'])
+    {
+      $web_form = node_load(3);
+      $data = array(
+        1 => array('0' => $_POST['submitted']['uid']),
+        2 => array('0' => $_POST['submitted']['nid']),
+        3 => array('0' => $_POST['submitted']['answer_1']),
+        4 => array('0' => $_POST['submitted']['answer_2']),
+        5 => array('0' => $_POST['submitted']['answer_3']),
+        6 => array('0' => $_POST['submitted']['answer_4']),
+        7 => array('0' => $_POST['submitted']['answer_5']),
+        );
+      $submission = (object) array(
+        // 'nid' => 1,
+        'uid' => $_POST['submitted']['uid'],
+        'submitted' => REQUEST_TIME,
+        'remote_addr' => ip_address(),
+        'is_draft' => FALSE,
+        'data' => $data,
+      );
+      // print "<pre>";
+      // print_r($_POST['submitted']);
+      // print "</pre>";
+      $submission = webform_submission_insert($web_form,$submission);
+      drupal_goto('event/'.$_POST['submitted']['nid']);
+
+    }
+    // print "<pre>";
+    // print_r($_POST['submitted']['nid']);
+    // print "</pre>";
+   
+
+    // End web form //
+  }
+
+  function changemakers_join_project(){
+    module_load_include('inc','webform','includes/webform.submissions');
+    //Start Webform //
+    if($_POST['op'])
+    {
+      $web_form = node_load(2);
+      $data = array(
+        1 => array('0' => $_POST['submitted']['uid']),
+        2 => array('0' => $_POST['submitted']['nid']),
+        3 => array('0' => $_POST['submitted']['status']),
+        );
+      $submission = (object) array(
+        // 'nid' => 1,
+        'uid' => $_POST['submitted']['uid'],
+        'submitted' => REQUEST_TIME,
+        'remote_addr' => ip_address(),
+        'is_draft' => FALSE,
+        'data' => $data,
+      );
+      // print "<pre>";
+      // print_r($_POST['submitted']);
+      // print "</pre>";
+      $submission = webform_submission_insert($web_form,$submission);
+      drupal_goto('project/'.$_POST['submitted']['nid']);
+
+    }
+    // print "<pre>";
+    // print_r($_POST['submitted']['nid']);
+    // print "</pre>";
+   
+
+    // End web form //
+  }
+
+  function changemakers_close_event(){
+    $nid = $_POST['nid'];
+    $node_event = node_load($nid);
+    $node_event->field_event_status['und'][0]['value'] = 2;
+    node_save($node_event);
+    drupal_goto('/event/'.$nid);
+  }
+
+  function changemakers_cancelled_event(){
+    $nid = $_POST['nid'];
+    $node_event = node_load($nid);
+    $node_event->field_event_status['und'][0]['value'] = 3;
+    node_save($node_event);
+    drupal_goto('/event/'.$nid);
+  }
+
+  function changemakers_get_event_status($nid){
+    $node_event = node_load($nid);
+    if($node_event->field_event_status['und'][0]['value'] == 1){
+      return "เปิดให้ลงชื่อ";
+    }
+    else if($node_event->field_event_status['und'][0]['value'] == 2){
+      return "ปิดกิจกรรม";
+    }
+    else{
+      return "ยกเลิกกิจกรรม";
+    }
+    // print "<pre>";
+    // print_r($node_event->field_event_status);
+    // print "</pre>";
+  }
+
+  function changemakers_get_user_join_event($nid){
+    module_load_include('inc','webform','includes/webform.submissions');
+    //Start Webform //
+    $seleteions = webform_get_submissions(array('nid'=>3));
+
+    $result = array();
+    $i = 0;
+    foreach ($seleteions as $key => $value) {
+      if($value->data[2][0] == $nid)
+      {
+        $user_data= user_load($value->data[1][0]);
+        $result[$i]['name'] = $user_data->field_profile_firstname['und'][0]['value']." ".$user_data->field_profile_lastname['und'][0]['value'];
+        $result[$i]['picture'] = '/sites/default/files/pictures/'.$user_data->picture->filename;
+        $result[$i]['username'] = $user_data->name;
+        $result[$i]['uid'] = $user_data->uid;
+        $i++;
+      }
+    }
+
+    // print "<pre>";
+    // print_r($result);
+    // print "</pre>"; 
+    return $result;
+  }
+
+  function changemakers_get_user_join_evenr_csv($nid){
+
+    module_load_include('inc','webform','includes/webform.submissions');
+    //Start Webform //
+    $seleteions = webform_get_submissions(array('nid'=>3));
+
+    $result_csv = array();
+    $i = 0;
+    foreach ($seleteions as $key => $value) {
+      if($value->data[2][0] == $nid)
+      {
+
+
+
+        $user_data= user_load($value->data[1][0]);
+
+        // print "<pre>";
+        // print_r($value->data[3][0]);
+        // print "</pre>"; 
+        if($value->data[3][0]){
+          $result_csv[$i]['answer1'] = $value->data[3][0];
+        }else{
+          $result_csv[$i]['answer1'] = "";
+        }
+
+        if($value->data[4][0]){
+          $result_csv[$i]['answer2'] = strip_tags($value->data[4][0]);
+        }else{
+          $result_csv[$i]['answer2'] = "";
+        }
+
+        if($value->data[5][0]){
+          $result_csv[$i]['answer3'] = strip_tags($value->data[5][0]);
+        }else{
+          $result_csv[$i]['answer3'] = "";
+        }
+
+        if($value->data[6][0]){
+          $result_csv[$i]['answer4'] = strip_tags($value->data[6][0]);
+        }else{
+          $result_csv[$i]['answer4'] = "";
+        }
+
+        if($value->data[7][0]){
+          $result_csv[$i]['answer5'] = strip_tags($value->data[7][0]);
+        }else{
+          $result_csv[$i]['answer5'] = "";
+        }
+
+        $result_csv[$i]['fname'] = $user_data->field_profile_firstname['und'][0]['value'];
+        $result_csv[$i]['lname'] = $user_data->field_profile_lastname['und'][0]['value'];
+        $result_csv[$i]['email'] = $user_data->mail;
+        $result_csv[$i]['phone'] = $user_data->field_profile_phone['und'][0]['value'];
+
+        if($user_data->roles){
+          foreach ($user_data->roles as $key => $value) {
+            $result_csv[$i]['role'] = $result_csv[$i]['role']."/".$value;
+          }
+        }
+        $result_csv[$i]['uid'] = $user_data->uid;
+
+        
+
+        
+        
+        // $result_csv[$i]['answer3'] = strip_tags($value->data[3][0]);
+        // $result_csv[$i]['answer4'] = strip_tags($value->data[3][0]);
+        // $result_csv[$i]['answer5'] = strip_tags($value->data[3][0]);
+
+
+
+        // foreach ($value->data as $key => $value2) {
+        //   if($value2[0] != 1 && $value2[0] != 2 && isset($value2[0])){
+        //     $answer = "answer".$index;
+        //     $result[$i]["answer"] = $value2[0];
+        //     $index++;
+        //   }
+          
+        // }
+
+        //$result[$i]['phone'] = $user_data->field_profile_phone['und'][0]['value'];
+
+
+        //$user_data->field_profile_lastname['und'][0]['value'];
+
+        
+        $i++;
+      }
+    }
+
+    // print "<pre>";
+    // print_r($result_csv);
+    // print "</pre>"; 
+    return $result_csv;
+  }
+#end function for changemakers news&&event
+
+#function for changemakers dashboard
+  function changemakers_get_user_follow_project_dashboard(){
+    global $user;
+    $user_data = user_load($user->uid);
+    $user_follow_project = array();
+    for ($i=0; $i < count($user_data->field_following_project['und']) ; $i++) 
+    {
+      if($user_data->field_following_project['und'][$i]['nid']){
+
+        $project = node_load($user_data->field_following_project['und'][$i]['nid']);
+        $user_follow_project[$i]['picture'] = "/sites/default/files/".$project->field_project_image['und'][0]['filename'];
+        $user_follow_project[$i]['title'] = $project->title;
+        $user_follow_project[$i]['last_update'] = changemakers_format_date_thai_short($project->changed);
+        $user_follow_project[$i]['nid'] = $user_data->field_following_project['und'][$i]['nid'];
+        $user_follow_project[$i]['status'] = $project->field_project_status['und'][0]['value'];
+
+
+      }
+  
+
+      
+      
+    }
+      // print "<pre>";
+      // print_r($user_data->field_following_project);
+      // print "</pre>"; 
+
+
+    return $user_follow_project;
+  }
+
+  function changemakers_get_user_join_project_dashboard(){
+    global $user;
+    module_load_include('inc','webform','includes/webform.submissions');
+    //Start Webform //
+    $seleteions = webform_get_submissions(array('nid'=>2));
+
+    $user_join_project = array();
+    $i = 0;
+    foreach ($seleteions as $key => $value) {
+      if($value->data[1][0] == $user->uid)
+      {
+        $project = node_load($value->data[2][0]);
+        $user_join_project[$i]['picture'] = "/sites/default/files/".$project->field_project_image['und'][0]['filename'];
+        $user_join_project[$i]['title'] = $project->title;
+        $user_join_project[$i]['last_update'] = changemakers_format_date_thai_short($project->changed);
+        $user_join_project[$i]['status'] = $project->field_project_status['und'][0]['value'];
+        $user_join_project[$i]['nid'] = $project->nid;
+        $i++;
+      }
+    }
+    // print '<pre>';
+    // print_r($user_join_project); 
+    // print '</pre>';
+
+    return $user_join_project;
+  }
+  function changemakers_get_user_create_project_dashboard(){
+    global $user;
+   
+    $sql= "select * from node where uid='".$user->uid."' and type='project'";
+    $query_db = db_query($sql);
+    $journal_id = array();
+    $i = 0;
+    $user_create_project = array();
+    foreach ($query_db as $row){
+      $data = node_load($row->nid);
+      $user_create_project[$i]['title'] = $data->title;
+      $user_create_project[$i]['picture'] = "/sites/default/files/".$data->field_project_image['und'][0]['filename'];
+      $user_create_project[$i]['last_update'] = changemakers_format_date_thai_short($data->changed);
+      $user_create_project[$i]['status'] = $data->field_project_status['und'][0]['value'];
+      $user_create_project[$i]['nid'] = $row->nid;
+      $i++;
+    }
+    // print '<pre>';
+    // print_r($user_create_project); 
+    // print '</pre>';
+    return $user_create_project;
+  }
+
+  function changemakers_get_project_related_campaign_dashboard($project_id){
+
+    $sql= "select n.entity_id from field_data_field_project_join n JOIN field_data_field_join_project c ON c.entity_id = n.field_project_join_value WHERE c.field_join_project_nid = ".$project_id;
+    $query_db = db_query($sql);
+    $i = 0;
+    $project_joincampaign = array();
+    foreach ($query_db as $row){
+      $campaign = node_load($row->entity_id);
+      $project_joincampaign[$i]['nid'] = $row->entity_id;
+      $project_joincampaign[$i]['title'] = $campaign->title;
+      $project_joincampaign[$i]['status'] = $campaign->field_campaign_stage['und'][0]['value'];
+      $project_joincampaign[$i]['period'] = changemakers_get_date_thai_short($campaign->field_campaign_date['und'][0]['value'])." - ".changemakers_get_date_thai_short($campaign->field_campaign_date['und'][0]['value2']);
+      // print '<pre>';
+      // print_r($project_joincampaign); 
+      // print '</pre>';
+      // foreach ($project_join_campaign->field_project_join['und'] as $key => $value) {
+      //   $get_project_id = field_collection_item_load( $value['value'], $reset = FALSE);
+      //   if($get_project_id->field_join_status['und'][0]['value'] == 1){
+      //     $count++;
+
+
+      //   } 
+      // }
+    }
+    return $project_joincampaign;
+  }
+
+  function changemakers_get_project_related_event($skill){
+
+    $event_use_skill = node_load_multiple(array(), array('type' => 'event'));
+    $event_use_skill_user = array();
+    $i =0;
+    foreach ($event_use_skill as $key => $value) {
+      $check = 0;
+      foreach ($skill as $key => $value2) {
+       foreach ($value->field_event_skill_interest['und'] as $key => $value3) {
+         if($value2['tid'] == $value3['tid']){
+          $check = $value;
+         }
+       }
+
+      }
+      if($check != 0){
+        $event_use_skill_user[$i]['nid'] = $check->nid;
+        $event_use_skill_user[$i]['title'] = $check->title;
+        $event_use_skill_user[$i]['facilities'] = $check->field_event_facilities['und'][0]['value'];
+        $event_use_skill_user[$i]['period'] = changemakers_get_date_thai_short($check->field_news_event_date['und'][0]['value'])." - ".changemakers_get_date_thai_short($check->field_news_event_date['und'][0]['value2']);
+        $i++;
+       }
+      
+      // for ($i=0; $i < count($value->field_organization_campaign['und']) ; $i++) { 
+      //   if($value->field_organization_campaign['und'][$i]['uid'] == $user->uid){
+      //     $count_project += count($value->field_project_join['und']);
+      //     $user_join_campaign[$j]['title'] = $value->title;
+      //     $user_join_campaign[$j]['picture'] = "/sites/default/files/".$value->field_campaign_image['und'][0]['filename'];
+      //     $user_join_campaign[$j]['last_update'] = changemakers_format_date_thai_short($value->changed);
+      //     $user_join_campaign[$j]['nid'] = $value->nid;
+      //     $user_join_campaign[$j]['project_related'] = count($value->field_project_join['und']);
+      //     $user_join_campaign[$j]['project_in_campaign'] = $count_project;
+      //     $j++;
+      //   }
+      // }
+      
+      
+    }
+    // print '<pre>';
+    // print_r($event_use_skill_user); 
+    // print '</pre>';
+    return $event_use_skill_user;
+  }
+
+  function changemakers_get_project_related_news($problem){
+
+    $news_interest = node_load_multiple(array(), array('type' => 'news'));
+    $news_interest_user = array();
+    $i =0;
+    foreach ($news_interest as $key => $value) {
+      $check = 0;
+      foreach ($problem as $key => $value2) {
+       foreach ($value->field_problem_interest['und'] as $key => $value3) {
+         if($value2['tid'] == $value3['tid']){
+          $check = $value;
+         }
+       }
+
+      }
+      if($check != 0){
+        $news_interest_user[$i]['nid'] = $check->nid;
+        $news_interest_user[$i]['title'] = $check->title;
+        $news_interest_user[$i]['period'] = changemakers_get_date_thai_short($check->field_news_event_date['und'][0]['value'])." - ".changemakers_get_date_thai_short($check->field_news_event_date['und'][0]['value2']);
+        $i++;
+       }
+      
+      // for ($i=0; $i < count($value->field_organization_campaign['und']) ; $i++) { 
+      //   if($value->field_organization_campaign['und'][$i]['uid'] == $user->uid){
+      //     $count_project += count($value->field_project_join['und']);
+      //     $user_join_campaign[$j]['title'] = $value->title;
+      //     $user_join_campaign[$j]['picture'] = "/sites/default/files/".$value->field_campaign_image['und'][0]['filename'];
+      //     $user_join_campaign[$j]['last_update'] = changemakers_format_date_thai_short($value->changed);
+      //     $user_join_campaign[$j]['nid'] = $value->nid;
+      //     $user_join_campaign[$j]['project_related'] = count($value->field_project_join['und']);
+      //     $user_join_campaign[$j]['project_in_campaign'] = $count_project;
+      //     $j++;
+      //   }
+      // }
+      
+      
+    }
+    // print '<pre>';
+    // print_r($news_interest_user); 
+    // print '</pre>';
+    return $news_interest_user;
+  }
+
+  function changemakers_check_user_create_project_dashboard(){
+    global $user;
+   
+    $sql= "select * from node where uid='".$user->uid."' and type='project'";
+    $query_db = db_query($sql);
+    $journal_id = array();
+    $i = 0;
+    $user_create_project = 0;
+    foreach ($query_db as $row){
+      if($row->nid){
+         $user_create_project = 1;
+         break; 
+      }
+    }
+    // print '<pre>';
+    // print_r($user_create_project); 
+    // print '</pre>';
+    return $user_create_project;
+  }
+
+  function changemakers_get_coach_join_campaign_dashboard(){
+    global $user;
+
+    $data_user_join_campaign = node_load_multiple(array(), array('type' => 'campaign'));
+    $j = 0;
+    $count_project = 0;
+    $user_join_campaign = array();
+    foreach ($data_user_join_campaign as $key => $value) {
+      for ($i=0; $i < count($value->field_coach_campaign['und']) ; $i++) { 
+        if($value->field_coach_campaign['und'][$i]['uid'] == $user->uid){
+          $count_project += count($value->field_project_join['und']);
+          $user_join_campaign[$j]['title'] = $value->title;
+          $user_join_campaign[$j]['picture'] = "/sites/default/files/".$value->field_campaign_image['und'][0]['filename'];
+          $user_join_campaign[$j]['last_update'] = changemakers_format_date_thai_short($value->changed);
+          $user_join_campaign[$j]['nid'] = $value->nid;
+          $user_join_campaign[$j]['project_related'] = count($value->field_project_join['und']);
+          $user_join_campaign[$j]['project_in_campaign'] = $count_project;
+          $j++;
+        }
+      }
+      
+      // print '<pre>';
+      // print_r($value); 
+      // print '</pre>';
+    }
+   
+    // $sql= "select * from node where uid='".$user->uid."' and type='campaign'";
+    // $query_db = db_query($sql);
+    // $journal_id = array();
+    // $i = 0;
+    // $user_create_campaign = array();
+    // foreach ($query_db as $row){
+    //   $data = node_load($row->nid);
+    //   $user_create_campaign[$i]['title'] = $data->title;
+    //   $user_create_campaign[$i]['picture'] = "/sites/default/files/".$data->field_campaign_image['und'][0]['filename'];
+    //   $user_create_campaign[$i]['last_update'] = changemakers_format_date_thai_short($data->changed);
+    //   $user_create_campaign[$i]['nid'] = $row->nid;
+    //   $i++;
+    // }
+    // print '<pre>';
+    // print_r($user_create_project); 
+    // print '</pre>';
+    return $user_join_campaign;
+  }
+
+  function changemakers_get_partner_join_campaign_dashboard(){
+    global $user;
+
+    $data_user_join_campaign = node_load_multiple(array(), array('type' => 'campaign'));
+    $j = 0;
+    $count_project = 0;
+    $user_join_campaign = array();
+    foreach ($data_user_join_campaign as $key => $value) {
+      for ($i=0; $i < count($value->field_partner_campaign['und']) ; $i++) { 
+        if($value->field_partner_campaign['und'][$i]['uid'] == $user->uid){
+          $count_project += count($value->field_project_join['und']);
+          $user_join_campaign[$j]['title'] = $value->title;
+          $user_join_campaign[$j]['picture'] = "/sites/default/files/".$value->field_campaign_image['und'][0]['filename'];
+          $user_join_campaign[$j]['last_update'] = changemakers_format_date_thai_short($value->changed);
+          $user_join_campaign[$j]['nid'] = $value->nid;
+          $user_join_campaign[$j]['project_related'] = count($value->field_project_join['und']);
+          $user_join_campaign[$j]['project_in_campaign'] = $count_project;
+          $j++;
+        }
+      }
+      
+      
+    }
+   // print '<pre>';
+   //    print_r($user_join_campaign); 
+   //    print '</pre>';
+    return $user_join_campaign;
+  }
+
+  function changemakers_get_org_join_campaign_dashboard(){
+    global $user;
+
+    //$user_data = user_load($user->uid);
+    $data_user_join_campaign = node_load_multiple(array(), array('type' => 'campaign'));
+    $j = 0;
+    $count_project = 0;
+    $user_join_campaign = array();
+    foreach ($data_user_join_campaign as $key => $value) {
+      for ($i=0; $i < count($value->field_organization_campaign['und']) ; $i++) { 
+        if($value->field_organization_campaign['und'][$i]['uid'] == $user->uid){
+          $count_project += count($value->field_project_join['und']);
+          $user_join_campaign[$j]['title'] = $value->title;
+          $user_join_campaign[$j]['picture'] = "/sites/default/files/".$value->field_campaign_image['und'][0]['filename'];
+          $user_join_campaign[$j]['last_update'] = changemakers_format_date_thai_short($value->changed);
+          $user_join_campaign[$j]['nid'] = $value->nid;
+          $user_join_campaign[$j]['project_related'] = count($value->field_project_join['und']);
+          $user_join_campaign[$j]['project_in_campaign'] = $count_project;
+          $j++;
+        }
+      }
+      
+      // print '<pre>';
+      // print_r($value); 
+      // print '</pre>';
+    }
+
+    // for ($i=0; $i < count($user_data->field_join_campaign['und']); $i++) { 
+    //   $data = node_load($user_data->field_join_campaign['und'][$i]['nid']);
+    //   $user_join_campaign[$i]['title'] = $data->title;
+    //   $user_join_campaign[$i]['picture'] = "/sites/default/files/".$data->field_campaign_image['und'][0]['filename'];
+    //   $user_join_campaign[$i]['last_update'] = changemakers_format_date_thai_short($data->changed);
+    //   $user_join_campaign[$i]['nid'] = $row->nid;
+    // }
+   
+    // $sql= "select * from node where uid='".$user->uid."' and type='campaign'";
+    // $query_db = db_query($sql);
+    // $journal_id = array();
+    // $i = 0;
+    // $user_create_campaign = array();
+    // foreach ($query_db as $row){
+    //   $data = node_load($row->nid);
+    //   $user_create_campaign[$i]['title'] = $data->title;
+    //   $user_create_campaign[$i]['picture'] = "/sites/default/files/".$data->field_campaign_image['und'][0]['filename'];
+    //   $user_create_campaign[$i]['last_update'] = changemakers_format_date_thai_short($data->changed);
+    //   $user_create_campaign[$i]['nid'] = $row->nid;
+    //   $i++;
+    // }
+    // print '<pre>';
+    // print_r($user_join_campaign); 
+    // print '</pre>';
+    return $user_join_campaign;
+  }
+
+  function changemakers_get_helpdesk_join_project_dashboard(){
+    global $user;
+
+    //$user_data = user_load($user->uid);
+    $data_user_join_project = node_load_multiple(array(), array('type' => 'project'));
+    $j = 0;
+    $count_project = 0;
+    $user_join_project = array();
+    foreach ($data_user_join_project as $key => $value) {
+      for ($i=0; $i < count($value->field_helpdesk_project['und']) ; $i++) { 
+        if($value->field_helpdesk_project['und'][$i]['uid'] == $user->uid){
+          $count_project += count($value->field_project_join['und']);
+          $user_join_project[$j]['title'] = $value->title;
+          $user_join_project[$j]['picture'] = "/sites/default/files/".$value->field_project_image['und'][0]['filename'];
+          $user_join_project[$j]['last_update'] = changemakers_format_date_thai_short($value->changed);
+          $user_join_project[$j]['nid'] = $value->nid;
+          $user_join_project[$j]['project_related'] = count($value->field_project_join['und']);
+          $user_join_project[$j]['project_in_campaign'] = $count_project;
+          $j++;
+        }
+      }
+      
+      // print '<pre>';
+      // print_r($value); 
+      // print '</pre>';
+    }
+    return $user_join_project;
+  }
+
+  function changemakers_get_org_join_projects_dashboard(){
+    global $user;
+
+    //$user_data = user_load($user->uid);
+    $data_user_join_project = node_load_multiple(array(), array('type' => 'project'));
+    $j = 0;
+    $user_join_projects = array();
+    foreach ($data_user_join_project as $key => $value) {
+      for ($i=0; $i < count($value->field_organization_project['und']) ; $i++) { 
+        if($value->field_organization_project['und'][$i]['uid'] == $user->uid){
+          $user_join_projects[$j]['title'] = $value->title;
+          $user_join_projects[$j]['picture'] = "/sites/default/files/".$value->field_project_image['und'][0]['filename'];
+          $user_join_projects[$j]['last_update'] = changemakers_format_date_thai_short($value->changed);
+
+          $user_join_projects[$j]['nid'] = $value->nid;
+          $j++;
+        }
+      }
+      
+      // print '<pre>';
+      // print_r($value); 
+      // print '</pre>';
+    }
+    return $user_join_projects;
+  }
+
+  function changemakers_get_new_project_dashboard(){
+    global $user;
+   
+    $sql= "select * from node n JOIN field_data_field_coach_project c ON c.entity_id != n.nid WHERE n.type = 'project'";
+    $query_db = db_query($sql);
+    $i = 0;
+    $coach_project = array();
+    foreach ($query_db as $row){
+      $data = node_load($row->nid);
+      $coach_project[$i]['title'] = $data->title;
+      $coach_project[$i]['picture'] = "/sites/default/files/".$data->field_project_image['und'][0]['filename'];
+      $coach_project[$i]['last_update'] = changemakers_format_date_thai_short($data->changed);
+      $coach_project[$i]['nid'] = $row->nid;
+      $i++;
+    }
+    // print '<pre>';
+    // print_r($user_create_project); 
+    // print '</pre>';
+    return $coach_project;
+  }
+
+  function changemakers_get_project_join_campaign(){
+    global $user;
+   
+    $sql= "select * from node n JOIN field_data_field_coach_project c ON c.entity_id != n.nid WHERE n.type = 'project'";
+    $query_db = db_query($sql);
+    $i = 0;
+    $coach_project = array();
+    foreach ($query_db as $row){
+      $data = node_load($row->nid);
+      $coach_project[$i]['title'] = $data->title;
+      $coach_project[$i]['picture'] = "/sites/default/files/".$data->field_project_image['und'][0]['filename'];
+      $coach_project[$i]['last_update'] = changemakers_format_date_thai_short($data->changed);
+      $coach_project[$i]['nid'] = $row->nid;
+      $i++;
+    }
+    // print '<pre>';
+    // print_r($user_create_project); 
+    // print '</pre>';
+    return $coach_project;
+  }
+  function changemakers_get_project_join_campaign_dashboard($campaign_id){
+    $project_join_campaign = node_load($campaign_id);
+    $get_project_data = array();
+    $i=0;
+    foreach ($project_join_campaign->field_project_join['und'] as $key => $value) {
+      $get_project_id = field_collection_item_load( $value['value'], $reset = FALSE);
+      $get_project = node_load($get_project_id->field_join_project['und'][0]['nid']);//->field_join_project['und'][0]['value'];
+      if($get_project_id->field_join_project['und'][0]['nid']){
+        $get_project_data[$i]['title'] =  $get_project->title;
+        $get_project_data[$i]['picture'] =  "/sites/default/files/".$get_project->field_project_image['und'][0]['filename'];
+        $get_project_data[$i]['last_update'] =  changemakers_format_date_thai_short($get_project->changed);
+        $get_project_data[$i]['nid'] =  $get_project->nid;
+        $i++;
+      }
+    }
+    return $get_project_data;
+    
+  }
+  function changemakers_get_all_campaign_for_admin (){
+    $value = 5;
+    $sql= "
+      SELECT n.nid, n.title, n.changed, cp.field_campaign_image_fid
+      FROM node n 
+      LEFT JOIN field_data_field_campaign_image cp ON cp.entity_id = n.nid 
+      WHERE n.type like 'campaign'
+      ORDER BY n.nid DESC
+      LIMIT ".$value."";
+      ;
+    $query_db = db_query($sql);
+    
+    $campaign_list = array();
+    $i = 0;
+    foreach ($query_db as $key => $value) {
+      $picture = file_load($value->field_campaign_image_fid);
+      $campaign_list[$i]['title'] = $value->title;
+      $campaign_list[$i]['picture'] = "/sites/default/files/".$picture->filename;
+      $campaign_list[$i]['last_update'] = changemakers_format_date_thai_short($value->changed);
+      $campaign_list[$i]['nid'] = $value->nid;
+      //$value['picture'] = $picture;
+      // print '<pre>';
+      // print_r($picture); 
+      // print '</pre>';
+      $i++;
+    }
+    // $campaign_list_data = node_load_multiple(array(), array('type' => 'campaign'));
+    // $j = 0;
+    // $count_project = 0;
+    // foreach ($campaign_list_data as $key => $value) {
+
+    //     $campaign_list[$j]['title'] = $value->title;
+    //     $campaign_list[$j]['picture'] = "/sites/default/files/".$value->field_campaign_image['und'][0]['filename'];
+    //     $campaign_list[$j]['last_update'] = changemakers_format_date_thai_short($value->changed);
+    //     $campaign_list[$j]['nid'] = $value->nid;
+    //     $j++;
+    //   }
+      
+      // print '<pre>';
+      // print_r($value); 
+      // print '</pre>';
+    return $campaign_list;
+  }
+
+
+#end function for changemakers dashboard
+#function for changemakers my-project
+
+
+  function changemakers_get_coach_project(){
+    global $user;
+   
+    $sql= "select * from field_data_field_coach_project where field_coach_project_uid=".$user->uid;
+    $query_db = db_query($sql);
+    $i = 0;
+    $coach_project = array();
+    foreach ($query_db as $row){
+      $data = node_load($row->entity_id);
+      $coach_project[$i]['title'] = $data->title;
+      $coach_project[$i]['picture'] = "/sites/default/files/".$data->field_project_image['und'][0]['filename'];
+      $coach_project[$i]['last_update'] = changemakers_format_date_thai_short($data->changed);
+      $coach_project[$i]['nid'] = $data->nid;
+      $i++;
+    }
+    // print '<pre>';
+    // print_r($coach_project); 
+    // print '</pre>';
+    return $coach_project;
+  }
+
+
+  function changemakers_get_own_project(){
+    global $user;
+    $sql= "select nid from node where type='project' and uid=".$user->uid;
+    $query_db = db_query($sql);
+    $i = 0;
+    $coach_project = array();
+    foreach ($query_db as $row){
+      $data = node_load($row->nid);
+      $coach_project[$i]['title'] = $data->title;
+      $coach_project[$i]['picture'] = "/sites/default/files/".$data->field_project_image['und'][0]['filename'];
+      $coach_project[$i]['last_update'] = changemakers_format_date_thai_short($data->changed);
+      $coach_project[$i]['nid'] = $data->nid;
+      $i++;
+    }
+    // print '<pre>';
+    // print_r($coach_project); 
+    // print '</pre>';
+    return $coach_project;
+  }
+#end function for changemakers my-project
+#function for changemakers search
+  function datetidArray($data, $haystack) {
+    foreach($haystack as $datas) {
+       if($data==$datas['tid']){
+          return true;
+        }
+      
+     }
+
+    return false;
+  }
+
+  function changemakers_get_search_konwledge($text,$problem="",$target="",$sort ="DESC"){
+    if($problem=="All"){
+      $problem = "";
+    }
+    if($target=="All"){
+      $target = "";
+    }
+
+    if(!empty($problem)){
+      $problem_s = " and tid='$problem'";
+    }else{
+      $problem_s ="";
+    }
+    if(!empty($target)){
+       $target_s = " and tid='$target'";
+    }else{
+       $target_s = "";
+    }
+
+    $sql_knowledge_tax= "select tid from taxonomy_term_data where name like '%".$text."%'";
+    
+    $query_db_tax = db_query($sql_knowledge_tax);
+    if(empty($problem) and empty($target)):
+    $sql_knowledge_title = "select nid from node where title like '%".$text."%' and type='knowledge' order by nid $sort";
+    $query_db_title = db_query($sql_knowledge_title);
+    endif;
+    //print_r($query_db_title);
+   
+   
+    $tid = array();
+    $title_id = array();
+    foreach ($query_db_tax as $row){
+      $tid[] = $row->tid;
+    }
+    $tid[] = $problem; 
+    $tid[] = $target; 
+     //print_r($tid);
+
+    $nid = array();
+    if(!empty($problem) and !empty($target)){
+      $sql_knowledge= "select k.entity_id from field_data_field_knowledge_problem as k inner join field_data_field_knowledge_target as t on k.entity_type=t.entity_type where k.field_knowledge_problem_tid ='$problem' and t.field_knowledge_target_tid='$target' group by k.entity_id order by k.entity_id $sort";
+    }else if(!empty($problem)) {
+      $sql_knowledge= "select k.entity_id from field_data_field_knowledge_problem as k where k.field_knowledge_problem_tid ='$problem' group by k.entity_id order by k.entity_id $sort";
+    }else if(!empty($target)) {
+      $sql_knowledge= "select entity_id from field_data_field_knowledge_target  where field_knowledge_target_tid ='$target' group by entity_id order by entity_id $sort";
+    }else{
+      $sql_knowledge = "";
+    }
+
+    $knowledge = array();
+    $index = 0;
+    if(!empty($sql_knowledge)):
+    $node_knowledge = db_query($sql_knowledge);
+   // $data_knowledge = node_load_multiple(array(), array('type' => 'knowledge'));
+    // echo "<pre>";
+    // print_r($data_knowledge);
+    // echo "</pre>";
+    foreach ($node_knowledge as $key => $value) {
+        $node_load =  node_load($value->entity_id);
+    //      echo "<pre>";
+    // print_r($node_load);
+    // echo "</pre>";
+        if(!empty($problem) and !empty($target)){
+          if(datetidArray($problem,$node_load->field_knowledge_problem['und'])==true and  datetidArray($target,$node_load->field_knowledge_target['und'])==true){
+              $image = image_style_url("cover-image", $node_load->field_knowledge_image['und'][0]['uri']);
+              $knowledge[$index]['title'] = $node_load->title;
+              $knowledge[$index]['picture'] = $image;
+              $knowledge[$index]['body'] = "";
+              $knowledge[$index]['nid'] = $node_load->nid;
+              $index++;
+          }
+        }else{
+            $image = image_style_url("cover-image", $node_load->field_knowledge_image['und'][0]['uri']);
+            $knowledge[$index]['title'] = $node_load->title;
+            $knowledge[$index]['picture'] = $image;
+            $knowledge[$index]['body'] = "";
+            $knowledge[$index]['nid'] = $node_load->nid;
+            $index++;
+        }
+      
+    }
+    else:
+      $data_knowledge = node_load_multiple(array(), array('type' => 'knowledge'));
+    // echo "<pre>";
+    // print_r($data_knowledge);
+    // echo "</pre>";
+       foreach ($data_knowledge as $key => $value) {
+        if($value->field_knowledge_problem){
+          foreach ($value->field_knowledge_problem['und'] as $key => $value2) {
+            for ($i=0; $i < count($tid) ; $i++) {
+              if($value2['tid'] == $tid[$i]){
+                if(!in_array($value->nid, $nid)) :
+                  $nid[] = $value->nid;
+                    $image = image_style_url("cover-image", $value->field_knowledge_image['und'][0]['uri']);
+                    $knowledge[$index]['title'] = $value->title;
+                    $knowledge[$index]['picture'] = $image;
+                    $knowledge[$index]['body'] = "";
+                    $knowledge[$index]['nid'] = $value->nid;
+                    $index++;
+                  endif;
+              }
+            }
+
+          }
+            # code...
+        }
+        else if($value->field_knowledge_target){
+          foreach ($value->field_knowledge_target['und'] as $key => $value2) {
+            for ($i=0; $i < count($tid) ; $i++) {
+              if($value2['tid'] == $tid[$i]){
+                if(!in_array($value->nid, $nid)) :
+                $nid[] = $value->nid;
+                  $image = image_style_url("cover-image", $value->field_knowledge_image['und'][0]['uri']);
+                  $knowledge[$index]['title'] = $value->title;
+                  $knowledge[$index]['picture'] = $image;
+                  $knowledge[$index]['body'] = "";
+                  $knowledge[$index]['nid'] = $value->nid;
+                  $index++;
+                endif;
+              }
+            }
+
+          }
+
+        }
+      }
+
+    endif;
+
+    if(empty($problem) and empty($target)):
+    foreach ($query_db_title as $row){
+         $title_id[] = $row->nid;
+     
+    }
+    // for ($j=0; $j < count($title_id) ; $j++) { 
+    //   foreach ($knowledge as $key => $value_k) {
+    //     if($value_k['nid'] == $title_id[$j]){
+    //       unset($title_id[$j]);
+    //     }
+    //   }
+    // }
+    foreach ($title_id as $key => $value) {
+      if($value != ""){
+        $node_knowledge = node_load($value);
+        if(!in_array($node_knowledge->nid, $nid)) :
+        $nid[] = $node_knowledge->nid;
+        $image = image_style_url("cover-image", $node_knowledge->field_knowledge_image['und'][0]['uri']);
+        $knowledge[$index]['title'] = $node_knowledge->title;
+        $knowledge[$index]['picture'] = $image;
+        $knowledge[$index]['body'] = "";
+        $knowledge[$index]['nid'] = $node_knowledge->nid;
+        $index++;
+        endif;
+      }
+      
+    }
+    endif;
+    // print '<pre>';
+    //     print_r($title_id);  
+    //     print '</pre>';
+    return $knowledge;
+        
+  }
+  function changemakers_get_search_project($text,$problem="",$target="",$sort="desc"){
+    if($problem=="All"){
+      $problem = "";
+    }
+    if($target=="All"){
+      $target = "";
+    }
+
+    if(!empty($problem)){
+      $problem_s = " and tid='$problem'";
+    }else{
+      $problem_s ="";
+    }
+    if(!empty($target)){
+       $target_s = " and tid='$target'";
+    }else{
+       $target_s = "";
+    }
+
+    $sql_project_tax= "select tid from taxonomy_term_data where name like '%".$text."%'";
+    
+    $query_db_tax = db_query($sql_project_tax);
+    if(empty($problem) and empty($target)):
+    $sql_project_title = "select nid from node where title like '%".$text."%' and type='project' order by nid $sort";
+    $query_db_title = db_query($sql_project_title);
+    endif;
+    //print_r($query_db_title);
+   
+   
+    $tid = array();
+    $title_id = array();
+    foreach ($query_db_tax as $row){
+      $tid[] = $row->tid;
+    }
+    $tid[] = $problem; 
+    $tid[] = $target; 
+     //print_r($tid);
+
+    $nid = array();
+    if(!empty($problem) and !empty($target)){
+      $sql_project= "select k.entity_id from field_data_field_problem_topic as k inner join field_data_field_project_target as t on k.entity_type=t.entity_type where k.field_problem_topic_tid ='$problem' and t.field_project_target_tid='$target' group by k.entity_id order by k.entity_id $sort";
+    }else if(!empty($problem)) {
+      $sql_project= "select k.entity_id from field_data_field_problem_topic as k where k.field_problem_topic_tid ='$problem'  group by k.entity_id order by k.entity_id $sort";
+    }else if(!empty($target)) {
+      $sql_project= "select entity_id from field_data_field_project_target  where field_project_target_tid ='$target' group by entity_id order by entity_id $sort";
+    }else{
+      $sql_project = "";
+    }
+    $sql_project;
+
+    $knowledge = array();
+    $index = 0;
+    if(!empty($sql_project)):
+    $node_project = db_query($sql_project);
+   // $data_knowledge = node_load_multiple(array(), array('type' => 'knowledge'));
+    // echo "<pre>";
+    // print_r($data_knowledge);
+    // echo "</pre>";
+    foreach ($node_project as $key => $value) {
+        $node_load =  node_load($value->entity_id);
+    //      echo "<pre>";
+    // print_r($node_load);
+    // echo "</pre>";
+        if(!empty($problem) and !empty($target)){
+          if(datetidArray($problem,$node_load->field_problem_topic['und'])==true and  datetidArray($target,$node_load->field_project_target['und'])==true){
+              $user_data = user_load($node_load->uid);
+              $image = image_style_url("cover-image", $node_load->field_project_image['und'][0]['uri']);
+              $project[$index]['title'] = $node_load->title;
+              $project[$index]['picture'] = $image;
+              $project[$index]['body'] = "";
+              $project[$index]['user'] = $user_data->field_profile_firstname['und'][0]['value']." ".$user_data->field_profile_lastname['und'][0]['value'];
+              $project[$index]['nid'] = $node_load->nid;
+              $index++;
+          }
+        }else{
+            $user_data = user_load($node_load->uid);
+           $image = image_style_url("cover-image", $node_load->field_project_image['und'][0]['uri']);
+            $project[$index]['title'] = $node_load->title;
+            $project[$index]['picture'] = $image;
+            $project[$index]['user'] = $user_data->field_profile_firstname['und'][0]['value']." ".$user_data->field_profile_lastname['und'][0]['value'];
+            $project[$index]['body'] = "";
+            $project[$index]['nid'] = $node_load->nid;
+            $index++;
+        }
+      
+    }
+    else:
+    $data_project = node_load_multiple(array(), array('type' => 'project'));
+    foreach ($data_project as $key => $value) {
+      if($value->field_problem_topic){
+        foreach ($value->field_problem_topic['und'] as $key => $value2) {
+          for ($i=0; $i < count($tid) ; $i++) {
+            if($value2['tid'] == $tid[$i]){
+              $user_data = user_load($value->uid);
+              $image = image_style_url("cover-image", $value->field_project_image['und'][0]['uri']);
+              $project[$index]['title'] = $value->title;
+              $project[$index]['picture'] = $image;
+              $project[$index]['body'] = "";
+              $project[$index]['user'] = $user_data->field_profile_firstname['und'][0]['value']." ".$user_data->field_profile_lastname['und'][0]['value'];
+              $project[$index]['nid'] = $value->nid;
+              $index++;
+            }
+          }
+
+        }
+          # code...
+      }
+      else if($value->field_project_target){
+        foreach ($value->field_project_target['und'] as $key => $value2) {
+          for ($i=0; $i < count($tid) ; $i++) {
+            if($value2['tid'] == $tid[$i]){
+              $user_data = user_load($value->uid);
+              $image = image_style_url("cover-image", $value->field_project_image['und'][0]['uri']);
+              $project[$index]['title'] = $value->title;
+              $project[$index]['picture'] = $image;
+              $project[$index]['body'] = "";
+              $project[$index]['user'] = $user_data->field_profile_firstname['und'][0]['value']." ".$user_data->field_profile_lastname['und'][0]['value'];
+              $project[$index]['nid'] = $value->nid;
+              $index++;
+            }
+          }
+
+        }
+
+      }
+    }
+    endif;
+    if(empty($problem) and empty($target)):
+    foreach ($query_db_title as $row){
+     $title_id[] = $row->nid;
+    }
+    for ($j=0; $j < count($title_id) ; $j++) { 
+      foreach ($project as $key => $value_k) {
+        if($value_k['nid'] == $title_id[$j]){
+          unset($title_id[$j]);
+        }
+      }
+    }
+    foreach ($title_id as $key => $value) {
+      if($value != ""){
+
+        $node_prolect = node_load($value);
+        if(!in_array($node_prolect->nid, $nid)) :
+        $user_data = user_load($node_prolect->uid);
+        $nid[] = $node_prolect->nid;
+        $image = image_style_url("cover-image", $node_prolect->field_project_image['und'][0]['uri']);
+        $project[$index]['title'] = $node_prolect->title;
+        $project[$index]['picture'] = $image;
+        $project[$index]['body'] = "";
+        $project[$index]['user'] = $user_data->field_profile_firstname['und'][0]['value']." ".$user_data->field_profile_lastname['und'][0]['value'];
+        $project[$index]['nid'] = $node_prolect->nid;
+        $index++;
+        endif;
+      }
+      
+    }
+    endif;
+    // print '<pre>';
+    //     print_r($title_id);  
+    //     print '</pre>';
+    return $project;
+        
+  }
+  function changemakers_get_search_news($text,$problem="",$target="",$sort ="DESC"){
+    if($problem=="All"){
+      $problem = "";
+    }
+    if($target=="All"){
+      $target = "";
+    }
+
+    if(!empty($problem)){
+      $problem_s = " and tid='$problem'";
+    }else{
+      $problem_s ="";
+    }
+    if(!empty($target)){
+       $target_s = " and tid='$target'";
+    }else{
+       $target_s = "";
+    }
+
+    $sql_news_tax= "select tid from taxonomy_term_data where name like '%".$text."%'";
+    
+    $query_db_tax = db_query($sql_news_tax);
+    if(empty($problem) and empty($target)):
+    $sql_news_title = "select nid from node where title like '%".$text."%' and type='news' order by nid $sort";
+    $query_db_title = db_query($sql_news_title);
+    endif;
+    //print_r($query_db_title);
+   
+   
+    $tid = array();
+    $title_id = array();
+    foreach ($query_db_tax as $row){
+      $tid[] = $row->tid;
+    }
+    $tid[] = $problem; 
+    $tid[] = $target; 
+     //print_r($tid);
+
+    $nid = array();
+    
+    
+    $news = array();
+    $index = 0;
+    if(!empty($problem) and !empty($target)){
+      $sql_news= "select k.entity_id from field_data_field_problem_interest as k inner join field_data_field_target_interest as t on k.entity_type=t.entity_type where k.field_problem_interest_tid ='$problem' and t.field_target_interest_tid='$target' and k.bundle='news' group by k.entity_id order by k.entity_id $sort";
+    }else if(!empty($problem)) {
+      $sql_news= "select k.entity_id from field_data_field_problem_interest as k where k.field_problem_interest_tid ='$problem' and k.bundle='news'  group by k.entity_id order by k.entity_id $sort";
+    }else if(!empty($target)) {
+      $sql_news= "select entity_id from field_data_field_target_interest  where field_target_interest_tid ='$target' and bundle='news' group by entity_id order by entity_id $sort";
+    }else{
+      $sql_news = "";
+    }
+    //echo $sql_news;
+
+    $news = array();
+    $index = 0;
+    if(!empty($sql_news)):
+    $node_news = db_query($sql_news);
+   // $data_knowledge = node_load_multiple(array(), array('type' => 'knowledge'));
+    // echo "<pre>";
+    // print_r($data_knowledge);
+    // echo "</pre>";
+    foreach ($node_news as $key => $value) {
+        $node_load =  node_load($value->entity_id);
+    //      echo "<pre>";
+    // print_r($node_load);
+    // echo "</pre>";
+      if(!in_array($node_load->nid, $nid)) :
+              $nid[] = $node_load->nid;
+        if(!empty($problem) and !empty($target)){
+          if(datetidArray($problem,$node_load->field_problem_interest['und'])==true and  datetidArray($target,$node_load->field_target_interest['und'])==true){
+              $image = image_style_url("cover-image", $node_load->field_picture['und'][0]['uri']);
+              $news[$index]['title'] = $node_load->title;
+              $news[$index]['picture'] = $image;
+              $news[$index]['body'] = "";
+              $news[$index]['date'] = changemakers_get_date_thai_short($node_load->field_news_event_date['und'][0]['value'])." - ".changemakers_get_date_thai_short($node_load->field_news_event_date['und'][0]['value2']);
+              $news[$index]['nid'] = $node_load->nid;
+              $index++;
+          }
+        }else{
+              $image = image_style_url("cover-image", $node_load->field_picture['und'][0]['uri']);
+              $news[$index]['title'] = $node_load->title;
+              $news[$index]['picture'] = $image;
+              $news[$index]['body'] = "";
+              $news[$index]['date'] = changemakers_get_date_thai_short($node_load->field_news_event_date['und'][0]['value'])." - ".changemakers_get_date_thai_short($node_load->field_news_event_date['und'][0]['value2']);
+              $news[$index]['nid'] = $node_load->nid;
+            $index++;
+        }
+        endif;
+      
+    }
+    else:
+  
+    $data_news = node_load_multiple(array(), array('type' => 'news'));
+    foreach ($data_news as $key => $value) {
+      if($value->field_problem_interest){
+        foreach ($value->field_problem_interest['und'] as $key => $value2) {
+          for ($i=0; $i < count($tid) ; $i++) {
+            if($value2['tid'] == $tid[$i]){
+              if(!in_array($value->nid, $nid)) :
+              $nid[] = $value->nid;
+              $image = image_style_url("cover-image", $value->field_picture['und'][0]['uri']);
+              $news[$index]['title'] = $value->title;
+              $news[$index]['picture'] = $image;
+              $news[$index]['body'] = "";
+              $news[$index]['date'] = changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value'])." - ".changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value2']);
+              $news[$index]['nid'] = $value->nid;
+              $index++;
+              endif;
+            }
+          }
+
+        }
+          # code...
+      }
+      else if($value->field_target_interest){
+        foreach ($value->field_target_interest['und'] as $key => $value2) {
+          for ($i=0; $i < count($tid) ; $i++) {
+            if($value2['tid'] == $tid[$i]){
+              if(!in_array($value->nid, $nid)) :
+              $nid[] = $value->nid;
+              $image = image_style_url("cover-image", $value->field_picture['und'][0]['uri']);
+              $news[$index]['title'] = $value->title;
+              $news[$index]['picture'] = $image;
+              $news[$index]['body'] = "";
+              $news[$index]['date'] = changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value'])." - ".changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value2']);
+              $news[$index]['nid'] = $value->nid;
+              $index++;
+              endif;
+            }
+          }
+
+        }
+
+      }
+    }
+    endif;
+    if(empty($problem) and empty($target)):
+   foreach ($query_db_title as $row){
+     $title_id[] = $row->nid;
+    }
+    for ($j=0; $j < count($title_id) ; $j++) { 
+      foreach ($project as $key => $value_k) {
+        if($value_k['nid'] == $title_id[$j]){
+          unset($title_id[$j]);
+        }
+      }
+    }
+    foreach ($title_id as $key => $value) {
+      if($value != ""){
+        $node_news = node_load($value);
+        if(!in_array($node_news->nid, $nid)) :
+        $nid[] = $node_news->nid;
+        $img = explode( '://', $node_news->field_picture['und'][0]['uri'] ); 
+        $image = image_style_url("cover-image", $node_news->field_picture['und'][0]['uri']);
+        $news[$index]['title'] = $node_news->title;
+        $news[$index]['picture'] = $image;
+        $news[$index]['body'] = "";
+        $news[$index]['date'] = changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value'])." - ".changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value2']);
+        $news[$index]['nid'] = $node_news->nid;
+        $index++;
+        endif;
+      }
+      
+    }
+    endif;
+        //   print '<pre>';
+        // print_r($news);  
+        // print '</pre>';
+
+    return $news;
+        
+  }
+  function changemakers_get_search_event($text,$problem="",$target="",$sort ="DESC"){
+    if($problem=="All"){
+      $problem = "";
+    }
+    if($target=="All"){
+      $target = "";
+    }
+
+    if(!empty($problem)){
+      $problem_s = " and tid='$problem'";
+    }else{
+      $problem_s ="";
+    }
+    if(!empty($target)){
+       $target_s = " and tid='$target'";
+    }else{
+       $target_s = "";
+    }
+
+    $sql_event_tax= "select tid from taxonomy_term_data where name like '%".$text."%'";
+    
+    $query_db_tax = db_query($sql_event_tax);
+    if(empty($problem) and empty($target)):
+    $sql_event_title = "select nid from node where title like '%".$text."%' and type='event' order by nid $sort";
+    $query_db_title = db_query($sql_event_title);
+    endif;
+    //print_r($query_db_title);
+   
+   
+    $tid = array();
+    $title_id = array();
+    foreach ($query_db_tax as $row){
+      $tid[] = $row->tid;
+    }
+    $tid[] = $problem; 
+    $tid[] = $target; 
+     //print_r($tid);
+
+    $nid = array();
+    
+    
+    $news = array();
+    $index = 0;
+    if(!empty($problem) and !empty($target)){
+      $sql_event= "select k.entity_id from field_data_field_problem_interest as k inner join field_data_field_target_interest as t on k.entity_type=t.entity_type where k.field_problem_interest_tid ='$problem' and t.field_target_interest_tid='$target' and k.bundle='event' group by k.entity_id order by k.entity_id $sort";
+    }else if(!empty($problem)) {
+      $sql_event= "select k.entity_id from field_data_field_problem_interest as k where k.field_problem_interest_tid ='$problem' and k.bundle='event'  group by k.entity_id order by k.entity_id $sort";
+    }else if(!empty($target)) {
+      $sql_event= "select entity_id from field_data_field_target_interest  where field_target_interest_tid ='$target' and bundle='event' group by entity_id order by entity_id $sort";
+    }else{
+      $sql_event = "";
+    }
+    //echo $sql_event;
+
+    $event = array();
+    $index = 0;
+    if(!empty($sql_event)):
+    $node_event = db_query($sql_event);
+   // $data_knowledge = node_load_multiple(array(), array('type' => 'knowledge'));
+    // echo "<pre>";
+    // print_r($data_knowledge);
+    // echo "</pre>";
+    foreach ($node_event as $key => $value) {
+        $node_load =  node_load($value->entity_id);
+    //      echo "<pre>";
+    // print_r($node_load);
+    // echo "</pre>";
+      if(!in_array($node_load->nid, $nid)) :
+              $nid[] = $node_load->nid;
+        if(!empty($problem) and !empty($target)){
+          if(datetidArray($problem,$node_load->field_problem_interest['und'])==true and  datetidArray($target,$node_load->field_target_interest['und'])==true){
+              $image = image_style_url("cover-image", $node_load->field_picture['und'][0]['uri']);
+              $event[$index]['title'] = $node_load->title;
+              $event[$index]['picture'] = $image;
+              $event[$index]['body'] = "";
+              $event[$index]['date'] = changemakers_get_date_thai_short($node_load->field_news_event_date['und'][0]['value'])." - ".changemakers_get_date_thai_short($node_load->field_news_event_date['und'][0]['value2']);
+              $event[$index]['nid'] = $node_load->nid;
+              $index++;
+          }
+        }else{
+              $image = image_style_url("cover-image", $node_load->field_picture['und'][0]['uri']);
+              $event[$index]['title'] = $node_load->title;
+              $event[$index]['picture'] = $image;
+              $event[$index]['body'] = "";
+              $event[$index]['date'] = changemakers_get_date_thai_short($node_load->field_news_event_date['und'][0]['value'])." - ".changemakers_get_date_thai_short($node_load->field_news_event_date['und'][0]['value2']);
+              $event[$index]['nid'] = $node_load->nid;
+            $index++;
+        }
+        endif;
+      
+    }
+    else:
+    $data_event = node_load_multiple(array(), array('type' => 'event'));
+    foreach ($data_event as $key => $value) {
+      if($value->field_problem_interest){
+        foreach ($value->field_problem_interest['und'] as $key => $value2) {
+          for ($i=0; $i < count($tid) ; $i++) {
+            if($value2['tid'] == $tid[$i]){
+        //       print '<pre>';
+        // print_r($value);  
+        // print '</pre>';
+               $image = image_style_url("cover-image", $value->field_picture['und'][0]['uri']);
+              $event[$index]['title'] = $value->title;
+              $event[$index]['picture'] = $image;
+              $event[$index]['body'] = "";
+              $event[$index]['date'] = changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value'])." - ".changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value2']);
+              $event[$index]['nid'] = $value->nid;
+              $index++;
+            }
+          }
+
+        }
+          # code...
+      }
+      else if($value->field_target_interest){
+        foreach ($value->field_target_interest['und'] as $key => $value2) {
+          for ($i=0; $i < count($tid) ; $i++) {
+            if($value2['tid'] == $tid[$i]){
+              $image = image_style_url("cover-image", $value->field_picture['und'][0]['uri']);
+              $event[$index]['title'] = $value->title;
+              $event[$index]['picture'] = $image;
+              $event[$index]['body'] = "";
+              $event[$index]['date'] = changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value'])." - ".changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value2']);
+              $event[$index]['nid'] = $value->nid;
+              $index++;
+            }
+          }
+
+        }
+
+      }
+      // else if($value->field_event_skill_interest){
+      //   foreach ($value->field_event_skill_interest['und'] as $key => $value2) {
+      //     for ($i=0; $i < count($tid) ; $i++) {
+      //       if($value2['tid'] == $tid[$i]){
+      //         $event[$index]['title'] = $value->title;
+      //         $event[$index]['picture'] = "/sites/default/files/".$value->field_picture['und'][0]['filename'];
+      //         $event[$index]['body'] = "";
+      //         $event[$index]['date'] = changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value'])." - ".changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value2']);
+      //         $event[$index]['nid'] = $value->nid;
+      //         $index++;
+      //       }
+      //     }
+
+      //   }
+
+      // }
+    }
+    endif;
+    foreach ($query_db_title as $row){
+     $title_id[] = $row->nid;
+    }
+    for ($j=0; $j < count($title_id) ; $j++) { 
+      foreach ($project as $key => $value_k) {
+        if($value_k['nid'] == $title_id[$j]){
+          unset($title_id[$j]);
+        }
+      }
+    }
+    foreach ($title_id as $key => $value) {
+      if($value != ""){
+        $node_event = node_load($value);
+        $image = image_style_url("cover-image", $node_event->field_picture['und'][0]['uri']);
+        $event[$index]['title'] = $node_event->title;
+        $event[$index]['picture'] = $image;
+        $event[$index]['body'] = "";
+        $event[$index]['date'] = changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value'])." - ".changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value2']);
+        $event[$index]['nid'] = $node_event->nid;
+        $index++;
+      }
+      
+    }
+
+    return $event;
+        
+  }
+
+  function changemakers_get_search_user($text,$problem="",$target="",$sort="desc"){
+    if($problem=="All"){
+      $problem = "";
+    }
+    if($target=="All"){
+      $target = "";
+    }
+
+    if(!empty($problem)){
+      $problem_s = " and tid='$problem'";
+    }else{
+      $problem_s ="";
+    }
+    if(!empty($target)){
+       $target_s = " and tid='$target'";
+    }else{
+       $target_s = "";
+    }
+
+    $sql_event_tax= "select tid from taxonomy_term_data where name like '%".$text."%'";
+    //$sql_event_title = "select nid from node where title like '%".$text."%' and type='event'";
+    $query_db_tax = db_query($sql_event_tax);
+    $query = new EntityFieldQuery();
+    $results = $query->entityCondition('entity_type', 'user')
+      ->propertyCondition('status', 1)
+      ->execute();
+    $uids = array();
+    foreach ($results['user'] as $uid => $user) {
+      $uids[] = $uid;
+    }
+    
+    //$query_db_title = db_query($sql_event_title);
+    $tid = array();
+    $title_id = array();
+    foreach ($query_db_tax as $row){
+     $tid[] = $row->tid;
+    }
+    $tid[] = $problem; 
+    $tid[] = $target;
+    
+    $users = array();
+    $index = 0;
+    
+     if(!empty($problem) and !empty($target)){
+      $sql_user= "select k.entity_id from field_data_field_profile_problem_interest as k inner join field_data_field_profile_target_group as t on k.entity_type=t.entity_type where k.field_profile_problem_interest_tid ='$problem' and t.field_profile_target_group_tid='$target' and k.bundle='user' group by k.entity_id order by k.entity_id $sort";
+    }else if(!empty($problem)) {
+      $sql_user= "select k.entity_id from field_data_field_profile_problem_interest as k where k.field_profile_problem_interest_tid ='$problem' and k.bundle='user'  group by k.entity_id order by k.entity_id $sort";
+    }else if(!empty($target)) {
+      $sql_user= "select entity_id from field_data_field_profile_target_group  where field_profile_target_group_tid ='$target' and bundle='user' group by entity_id order by entity_id $sort";
+    }else{
+      $sql_user = "";
+    }
+    //echo $sql_user;
+
+    $event = array();
+    $index = 0;
+    if(!empty($sql_user)):
+    $node_user = db_query($sql_user);
+   // $data_knowledge = node_load_multiple(array(), array('type' => 'knowledge'));
+    // echo "<pre>";
+    // print_r($data_knowledge);
+    // echo "</pre>";
+    foreach ($node_user as $key => $value) {
+        $user_load =  user_load($value->entity_id);
+    //      echo "<pre>";
+    // print_r($user_load);
+    // echo "</pre>";
+        if(empty($user_load->roles[3])):    
+          if(!empty($problem) and !empty($target)){
+            if(datetidArray($problem,$user_load->field_profile_problem_interest['und'])==true and  datetidArray($target,$user_load->field_profile_target_group['und'])==true){
+                $users[$index]['name'] = $user_load->field_profile_firstname['und'][0]['value']." ".$user_load->field_profile_lastname['und'][0]['value'];
+                if($user_load->picture->filename){
+                  $image = image_style_url("cover-image", $user_load->picture->uri);
+                  $users[$index]['picture'] = $image;
+                }
+                else{
+                  $image = image_style_url("cover-image", 'pictures/picture-86-1463556854.png');
+                  $users[$index]['picture'] = $image;
+                }
+                
+                $users[$index]['interest'] = $text;
+                $users[$index]['project'] = chanagemakers_search_project($user_load->uid, $tid);
+                // $users[$index]['date'] = changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value'])." - ".changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value2']);
+                $users[$index]['uid'] = $user_load->uid;
+                $index++;
+            }
+          }else{
+                $users[$index]['name'] = $user_load->field_profile_firstname['und'][0]['value']." ".$user_load->field_profile_lastname['und'][0]['value'];
+                if($user_load->picture->filename){
+                  $image = image_style_url("cover-image", $user_load->picture->uri);
+                  $users[$index]['picture'] = $image;
+                }
+                else{
+                  $image = image_style_url("cover-image", 'pictures/picture-86-1463556854.png');
+                  $users[$index]['picture'] = $image;
+                }
+                
+                $users[$index]['interest'] = $text;
+                $users[$index]['project'] = chanagemakers_search_project($user_load->uid, $tid);
+                // $users[$index]['date'] = changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value'])." - ".changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value2']);
+                $users[$index]['uid'] = $user_load->uid;
+                $index++;
+          }
+          endif;
+
+      
+    }
+    else:
+    $accounts = user_load_multiple($uids);
+    foreach ($accounts as $key => $value) {
+        //     print '<pre>';
+        // print_r($value);  
+        // print '</pre>';
+      if($value->field_profile_problem_interest){
+        foreach ($value->field_profile_problem_interest['und'] as $key => $value2) {
+          for ($i=0; $i < count($tid) ; $i++) {
+            if($value2['tid'] == $tid[$i]){
+              
+              $users[$index]['name'] = $value->field_profile_firstname['und'][0]['value']." ".$value->field_profile_lastname['und'][0]['value'];
+              if($value->picture->filename){
+
+                $users[$index]['picture'] = "/sites/default/files/pictures/".$value->picture->filename;
+              }
+              else{
+                $users[$index]['picture'] = "/sites/default/files/pictures/picture-86-1463556854.png";
+              }
+              
+              $users[$index]['interest'] = $text;
+              $users[$index]['project'] = chanagemakers_search_project($value->uid, $tid);
+              // $users[$index]['date'] = changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value'])." - ".changemakers_get_date_thai_short($value->field_news_event_date['und'][0]['value2']);
+              $users[$index]['uid'] = $value->uid;
+              $index++;
+            }
+          }
+
+        }
+      }
+
+    }
+    endif;
+    // print '<pre>';
+    // print_r($users);  
+    // print '</pre>';
+
+
+    return $users;
+        
+  }
+  function chanagemakers_search_project($uid,$tid)
+  {
+    $sql= "select * from node where uid='".$uid."' and type='project'";
+    $query_db = db_query($sql);
+    $project = array();
+    $i = 0;
+    $user_create_project = array();
+    foreach ($query_db as $row){
+      $data = node_load($row->nid);
+
+      if($data->field_problem_topic['und']){
+        foreach ($data->field_problem_topic['und'] as $key => $value) {
+          for ($i=0; $i < count($tid) ; $i++) {
+              if($value['tid'] == $tid[$i]){ 
+                $project[0]['title'] = $data->title;
+                $project[0]['nid'] = $data->nid;
+              }
+          }
+        }
+
+      }
+      
+      // $user_create_project[$i]['title'] = $data->title;
+      // $user_create_project[$i]['nid'] = $row->nid;
+      // $i++;
+    }
+    // print '<pre>';
+    // print_r($project); 
+    // print '</pre>';
+    return $project;
+  }
+#end general search  
+#general function using in website
+
+  function changemakers_get_date_thai_block($date){
+    $get_array_date = explode(" ", $date);
+    return changemakers_get_date_start_and_end($get_array_date[0], $get_array_date[3]);
+
+     // print '<pre>';
+     // print_r($get_array_date); 
+     // print '</pre>';
+  }
+  function changemakers_get_date_thai_block_knowledge($date){
+    return changemakers_get_date_start_and_end($date);
+
+     // print '<pre>';
+     // print_r($get_array_date); 
+     // print '</pre>';
+  }
+
+  function changemakers_get_date_start_and_end($date1, $date2){
+    $result = array();
+    $time1 = explode(" ", $date1);
+    $time1_exp = explode(":", $time1[1]);
+    $time2 = explode(" ", $date2);
+    $time2_exp = explode(":", $time2[1]);
+    if(isset($time1_exp[1]) && isset($time2_exp[1]))
+    {
+      $result[0] = changemakers_get_date_thai_short($date1)." ".$time1_exp[0].":".$time1_exp[1];
+      $result[1] = changemakers_get_date_thai_short($date2)." ".$time2_exp[0].":".$time2_exp[1];
+    }
+    else
+    {
+      $result[0] = changemakers_get_date_thai_short($date1)." ".$time1_exp[0];
+      $result[1] = changemakers_get_date_thai_short($date2)." ".$time2_exp[0];
+    }
+    
+    return $result;
+  }
+
+  function changemakers_get_date_start_date($date1){
+    $result = array();
+    $time1 = explode(" ", $date1);
+    $time1_exp = explode(":", $time1[1]);
+    if(isset($time1_exp[1]))
+    {
+      $result[0] = changemakers_get_date_thai_short($date1)." ".$time1_exp[0].":".$time1_exp[1];
+    }
+    else
+    {
+      $result[0] = changemakers_get_date_thai_short($date1)." ".$time1_exp[0];
+    }
+    
+    return $result;
+  }
+
+  function changemakers_get_date_start_date_campaign($date1){
+    $result = array();
+    $time = explode("to ", $date1);
+
+    $time1 = explode(" ", $time[0]);
+    //$time1_exp = explode(":", $time1[1]);
+    $time2 = explode(" ", $time[1]);
+    //$time2_exp = explode(":", $time2[1]);
+    if(isset($time1[0]) && isset($time2[0]))
+    {
+      $result[0] = changemakers_get_date_thai_short($time1[0])." ".$time1[1];//.":".$time1_exp[1];
+      $result[1] = changemakers_get_date_thai_short($time2[0])." ".$time2[1];//.":".$time2_exp[1];
+    }
+    else
+    {
+      $result[0] = changemakers_get_date_thai_short($time1[0])." ".$time1[1];
+      $result[1] = changemakers_get_date_thai_short($time2[0])." ".$time2[1];
+    }
+    
+    return $result;
+  }
+
+  function changemakers_get_date_thai_short($date)
+  {
+    $timestamps = new DateTime($date);
+    $timestamps->format('Y-m-d H:i:s');    // MySQL datetime format
+    $timestamps->getTimestamp(); 
+
+    return changemakers_format_date_thai_short($timestamps->getTimestamp());
+  }
+
+  function changemakers_get_date_min($date)
+  {
+    $timestamps = new DateTime($date);
+    $timestamps->format('Y-m-d H:i:s');    // MySQL datetime format
+    $timestamps->getTimestamp(); 
+    return timeAgo($timestamps->getTimestamp());
+  }
+
+  function changemakers_get_date_thai($date)
+  {
+    $timestamps = new DateTime($date);
+    $timestamps->format('Y-m-d H:i:s');    // MySQL datetime format
+    $timestamps->getTimestamp(); 
+    return changemakers_format_date_thai($timestamps->getTimestamp());
+  }
+
+  function changemakers_format_date_thai($timestamp){
+    $d = date('d',$timestamp);
+    $m = intval(date('m',$timestamp));
+    $y = date('Y',$timestamp)+543;
+    $month = array('','มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม');
+
+    return $d." ".$month[$m]." ".$y;
+  }
+
+  function changemakers_format_date_thai_short($timestamp){
+    $d = date('d',$timestamp);
+    $m = intval(date('m',$timestamp));
+    $y = date('Y',$timestamp)+543;
+    $month = array('','ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.');
+
+
+    return $d." ".$month[$m]." ".$y;
+  }
+
+  function changemakers_format_date_thai_profile($date){
+    list($birthdate_y,$birthdate_m,$birthdate_d)=explode("-", $date->format('Y-m-d'));
+    $dcreateAt = date('d',$createAt );
+    $m = intval(date('m',$createAt ));
+    $ycreateAt = date('Y',$createAt )+543;
+    $monthcreateAt = array('','มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม');
+
+    return $birthdate_d." ".$monthcreateAt[intval($birthdate_m)]. " ".($birthdate_y+543);
+  }
+  function timeAgo($timestamp){
+    $datetime1=new DateTime("now");
+    $datetime2=date_create($timestamp);
+    $diff=date_diff($datetime1, $datetime2);
+    $timemsg='';
+    if($diff->y > 0){
+        $timemsg = $diff->y .' year'. ($diff->y > 1?"'s":'');
+
+    }
+    else if($diff->m > 0){
+     $timemsg = changemakers_get_date_thai_short($timestamp);
+    }
+    else if($diff->d > 0){
+     $timemsg = $diff->d .' d'. ($diff->d > 1?"'s":'');
+     if($timemsg > 14)
+     {
+      $timemsg = changemakers_get_date_thai_short($timestamp); //date_format($datetime2,"d-m-Y"); 
+     }
+     else if($timemsg > 7 && $timemsg < 14)
+     {
+      $timemsg = "1 w";
+     }
+    }
+    else if($diff->h > 0){
+     $timemsg = $diff->h .' h'.($diff->h > 1 ? "":'');
+    }
+    else if($diff->i > 0){
+     $timemsg = $diff->i .' m'. ($diff->i > 1?"":'');
+    }
+    else if($diff->s > 0){
+     $timemsg = $diff->s .' s'. ($diff->s > 1?"":'');
+    }
+     // print '<pre>';
+     // print_r($timestamp); 
+     // print '</pre>';
+
+    $timemsg = $timemsg;
+    return $timemsg;
+  }
+
+  function changemakers_check_user_login(){
+    global $user;
+    if($user->uid){
+      return TRUE;
+    }
+    else{
+      return FALSE;
+    }
+  }
+
+  function changemakers_getListTaxonomy($vid){
+    $result = db_query("select d.tid,d.name,h.parent from taxonomy_term_data as d inner join taxonomy_term_hierarchy as h on d.tid=h.tid  where d.vid='$vid' and h.parent=0 ORDER by d.weight");
+    return $result;
+  }
+  function changemakers_getListSubTaxonomy($parrent){
+    $result = db_query("select d.tid,d.name from taxonomy_term_data as d inner join taxonomy_term_hierarchy as h on d.tid=h.tid  where  h.parent='$parrent' ORDER by d.weight");
+    return $result;
+  }
+  function API_changemakers_comment_load()
+  {
+    $nid = filter_var($_POST["nid"], FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_STRIP_HIGH);
+    $page_number = filter_var($_POST["page"], FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_STRIP_HIGH);
+    $type = $_POST['type'];
+    if(!is_numeric($page_number)){
+      header('HTTP/1.1 500 Invalid page number!');
+      exit();
+    }
+    $item_per_page = 5;
+    //get current starting point of records
+    $position = ($page_number * $item_per_page);
+   echo  get_comment_load($nid,$item_per_page,$page_number,$position,$type);
+  }
+  function API_changemakers_dashboard_comment_load()
+  {
+    $nid = $_POST["nid"];
+    $page_number = filter_var($_POST["page"], FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_STRIP_HIGH);
+    $type = $_POST['type'];
+    if(!is_numeric($page_number)){
+      header('HTTP/1.1 500 Invalid page number!');
+      exit();
+    }
+    $item_per_page = 5;
+    //get current starting point of records
+    $position = ($page_number * $item_per_page);
+    echo  get_dashboard_comment_load($nid,$item_per_page,$page_number,$position);
+  }
+
+  function API_changemakers_dashboard_project_load()
+  {
+    $page_number = filter_var($_POST["page"], FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_STRIP_HIGH);
+    $item_per_page = 12;
+    //get current starting point of records
+    $position = ($page_number * $item_per_page);
+    //echo "12#";
+    echo get_dashboard_project_load($item_per_page,$page_number,$position);
+  }
+  // function changemakers_node_view($node, $view_mode, $langcode) {
+  // // $node->content['my_additional_field'] = array(
+  // //   '#markup' => $additional_field,
+  // //   '#weight' => 10,
+  // //   '#theme' => 'mymodule_my_additional_field',
+  // // );
+  //   if($node->type="type"){
+  //     $node->share='<div class="addthis_sharing_toolbox"></div>';
+  //     //   echo "<pre>";
+  //     // print_r($node);
+  //     }
+  // }
+    
+#end general function
+
+?>
+ 
