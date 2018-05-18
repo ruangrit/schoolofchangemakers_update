@@ -17,3 +17,4 @@ PHPMailer
 .syslog
 upload
 .well-known
+backup_rootfile
