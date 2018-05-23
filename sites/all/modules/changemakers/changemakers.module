@@ -1414,13 +1414,26 @@ function changemakers_test_user(){
     // ========== debug code =========
     global $user;
     //print $user->roles[3];
-
     if(isset($user->roles[3])){
       if ($_GET['q'] === '/node/add/project') {
         drupal_add_js(drupal_get_path('module', 'changemakers') . '/js/script.js');
       }
-      else if ($_GET['q'] === '/node/add/event') {
-        drupal_add_js(drupal_get_path('module', 'changemakers') . '/js/script.js');
+      else if ($_GET['q'] === 'node/add/event') {
+        drupal_add_js(drupal_get_path('module', 'changemakers') . '/script_checkbox.js');
+
+        $maingroup =array(8,9,10,11,12,13,15,86); 
+        $problems = array();
+        foreach ($maingroup as $key => $value) {
+          $terms = taxonomy_get_children($value);
+          $terms_id = array();
+          foreach ($terms as $key_term => $value_term) {
+            $terms_id[] = $value_term->tid;
+          }
+          $problems[$value] = $terms_id; 
+        }
+
+        drupal_add_js(array('changemakers' => array('problems' => $problems)), array('type' => 'setting'));
+
       }
       else if ($_GET['q'] === '/node/add/news') {
         drupal_add_js(drupal_get_path('module', 'changemakers') . '/js/script.js');
