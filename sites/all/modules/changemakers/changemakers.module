@@ -1419,31 +1419,6 @@ function changemakers_test_user(){
         drupal_add_js(drupal_get_path('module', 'changemakers') . '/js/script.js');
       }
       else if ($_GET['q'] === 'node/add/event') {
-        drupal_add_js(drupal_get_path('module', 'changemakers') . '/script_checkbox.js');
-
-        $maingroup =array(8,9,10,11,12,13,15,86); 
-        $problems = array();
-        foreach ($maingroup as $key => $value) {
-          $terms = taxonomy_get_children($value);
-          $terms_id = array();
-          foreach ($terms as $key_term => $value_term) {
-            $terms_id[] = $value_term->tid;
-          }
-          $problems[$value] = $terms_id; 
-        }
-
-        $main_skill  =array(26,27,28,29,30,31);
-        $skills = array();
-        foreach ($main_skill as $key => $value) {
-          $terms = taxonomy_get_children($value);
-          $terms_id = array();
-          foreach ($terms as $key_term => $value_term) {
-            $terms_id[] = $value_term->tid;
-          }
-          $skills[$value] = $terms_id; 
-        }
-
-        drupal_add_js(array('changemakers' => array('problems' => $problems, 'skills' => $skills)), array('type' => 'setting'));
 
       }
       else if ($_GET['q'] === '/node/add/news') {
@@ -2208,6 +2183,46 @@ function changemakers_test_user(){
 
 
   function changemakers_form_alter(&$form, &$form_state, $form_id) {
+
+    // Rit add checkbox script
+    $list_of_content_term_checkbox_form = array(
+      'event_node_form',
+      'news_node_form',
+      'project_node_form',
+      'knowledge_node_form',
+      'campaign_node_form',
+      'journal_node_form',
+      'course_node_form',
+    );
+    if (in_array($form_id, $list_of_content_term_checkbox_form)) {
+
+      drupal_add_js(drupal_get_path('module', 'changemakers') . '/script_checkbox.js');
+
+      $maingroup =array(8,9,10,11,12,13,15,86); 
+      $problems = array();
+      foreach ($maingroup as $key => $value) {
+        $terms = taxonomy_get_children($value);
+        $terms_id = array();
+        foreach ($terms as $key_term => $value_term) {
+          $terms_id[] = $value_term->tid;
+        }
+        $problems[$value] = $terms_id; 
+      }
+
+      $main_skill  =array(26,27,28,29,30,31);
+      $skills = array();
+      foreach ($main_skill as $key => $value) {
+        $terms = taxonomy_get_children($value);
+        $terms_id = array();
+        foreach ($terms as $key_term => $value_term) {
+          $terms_id[] = $value_term->tid;
+        }
+        $skills[$value] = $terms_id; 
+      }
+
+      drupal_add_js(array('changemakers' => array('problems' => $problems, 'skills' => $skills, 'form_id' => $form_id)), array('type' => 'setting'));
+    }
+
         // echo "<pre>";
         // print_r($form); 
         // echo "</pre>";

@@ -1,17 +1,46 @@
 $ = jQuery;
 $(document).ready(function () {
 
-	var problems = Drupal.settings.changemakers.problems;
+	var formId = Drupal.settings.changemakers.form_id;
 	var idOfProblemAll = 'edit-field-problem-interest-und-171';
-	var problemFieldName = 'problem-interest'
+	var problemFieldName = 'problem-interest';
 
+	var problems = Drupal.settings.changemakers.problems;
 	var skills = Drupal.settings.changemakers.skills;
 	var idOfSkillAll = 'edit-field-event-skill-interest-und-173';
-	var skillFieldName = 'event-skill-interest'
+	var skillFieldName = 'event-skill-interest';
+	var targetFieldName = 'target-interest';
+
+
+	if (formId == 'campaign_node_form') {
+		problemFieldName = 'campaign-problems';
+		targetFieldName = 'campaign-target';
+	}
+	else if (formId == 'knowledge_node_form') {
+		problemFieldName = 'knowledge-problem';
+		targetFieldName = 'knowledge-target';
+	}
+	else if (formId == 'project_node_form') {
+		problemFieldName = 'problem-topic';
+		targetFieldName = 'project-target';
+	}
+	else if (formId == 'journal_node_form') {
+		problemFieldName = 'journal-problem';
+		targetFieldName = 'journal-target';
+		skillFieldName = 'journal-interest';
+	}
+	else if (formId == 'course_node_form') {
+		problemFieldName = 'course-problems';
+		targetFieldName = 'course-target';
+		skillFieldName = 'course-interest';
+	}
+
+
 
 
 	loopAddClass(problems, problemFieldName);
 	loopAddClass(skills, skillFieldName);
+
 
 	function loopAddClass(taxonomyList, fieldName) {
 		console.log(taxonomyList);
@@ -33,10 +62,10 @@ $(document).ready(function () {
 	}
     // ========= Interest Check ============
 
-    $('#edit-field-target-interest-und').find('input').addClass('child_checkbox');
-    $('#edit-field-target-interest-und-172').removeClass('child_checkbox');
-    $('#edit-field-target-interest-und-172').click(function () {
-    	$('#edit-field-target-interest-und').find('input').prop("checked", this.checked);;
+    $('#edit-field-'+ targetFieldName +'-und').find('input').addClass('child_checkbox');
+    $('#edit-field-'+ targetFieldName +'-und-172').removeClass('child_checkbox');
+    $('#edit-field-'+ targetFieldName +'-und-172').click(function () {
+    	$('#edit-field-'+ targetFieldName +'-und').find('input').prop("checked", this.checked);;
     });
 
 	//============================= 
@@ -66,11 +95,12 @@ $(document).ready(function () {
     });
 
     //===========  Check All
-
-    $('#' + idOfProblemAll).click(function () {
+    
+    $('#edit-field-'+ problemFieldName +'-und-171').click(function () {
     	loopCheckAllChange(problems, this.checked);
     });
-    $('#' + idOfSkillAll).click(function () {
+
+    $('#edit-field-'+ skillFieldName +'-und-173').click(function () {
     	loopCheckAllChange(skills, this.checked);
     });
 
