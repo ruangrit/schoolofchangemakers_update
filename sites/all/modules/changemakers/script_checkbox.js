@@ -31,6 +31,13 @@ $(document).ready(function () {
 		});
 
 	}
+    // ========= Interest Check ============
+
+    $('#edit-field-target-interest-und').find('input').addClass('child_checkbox');
+    $('#edit-field-target-interest-und-172').removeClass('child_checkbox');
+    $('#edit-field-target-interest-und-172').click(function () {
+    	$('#edit-field-target-interest-und').find('input').prop("checked", this.checked);;
+    });
 
 	//============================= 
     $('.parent_checkbox').change(function () {
@@ -75,6 +82,7 @@ $(document).ready(function () {
     	});
 
     }
+
 
 
 });
