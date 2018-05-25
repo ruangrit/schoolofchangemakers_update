@@ -9667,6 +9667,7 @@ function changemakers_test_user(){
     $query = db_select('node', 'fm');
     $query->leftjoin('field_data_field_knowledge_problem', 'fi', 'fm.nid = fi.entity_id');
     $query->leftjoin('field_data_field_knowledge_target', 'fx', 'fm.nid = fx.entity_id');
+    $query->leftjoin('field_data_body', 'fb', 'fm.nid = fb.entity_id');
     $query->condition('fm.type', 'knowledge' , 'like');
     $query->condition('fm.status', 1 , '=');
     // $query->fields('fm', array('nid'));
@@ -9674,6 +9675,7 @@ function changemakers_test_user(){
     $db_or = db_or();
     if($text){
       $db_or->condition('fm.title', '%'.$text.'%' , 'like');
+      $db_or->condition('fb.body_value', '%'.$text.'%' , 'like');
     }
     if(!empty($tid)){
       $db_or->condition('fi.field_knowledge_problem_tid', $tid, 'in');
@@ -9941,6 +9943,7 @@ function changemakers_test_user(){
     $query = db_select('node', 'fm');
     $query->leftjoin('field_data_field_knowledge_problem', 'fi', 'fm.nid = fi.entity_id');
     $query->leftjoin('field_data_field_knowledge_target', 'fx', 'fm.nid = fx.entity_id');
+    $query->leftjoin('field_data_body', 'fb', 'fm.nid = fb.entity_id');
     $query->condition('fm.type', 'knowledge' , 'like');
     $query->condition('fm.status', 1 , '=');
     // $query->fields('fm', array('nid'));
@@ -9948,6 +9951,7 @@ function changemakers_test_user(){
     $db_or = db_or();
     if($text){
       $db_or->condition('fm.title', '%'.$text.'%' , 'like');
+      $db_or->condition('fb.body_value', '%'.$text.'%' , 'like');
     }
     if(!empty($tid)){
       $db_or->condition('fi.field_knowledge_problem_tid', $tid, 'in');
@@ -10195,12 +10199,22 @@ function changemakers_test_user(){
     $query->leftjoin('field_data_field_problem_topic', 'fi', 'fm.nid = fi.entity_id');
     $query->leftjoin('field_data_field_project_target', 'fx', 'fm.nid = fx.entity_id');
     $query->leftjoin('field_data_body', 'fb', 'fm.nid = fb.entity_id');
+    $query->leftjoin('field_data_field_project_goal', 'pg', 'fm.nid = pg.entity_id');
+    $query->leftjoin('field_data_field_project_solutions', 'ps', 'fm.nid = ps.entity_id');
+    $query->leftjoin('field_data_field_describe_problem', 'dp', 'fm.nid = dp.entity_id');
+    $query->leftjoin('field_data_field_project_impact', 'pi', 'fm.nid = pi.entity_id');
+    $query->leftjoin('field_data_field_project_sustainability_pla', 'psp', 'fm.nid = psp.entity_id');
     // $query->fields('fm', array('nid'));
     $query->addField('fm', 'nid', 'entity_id');
     $db_or = db_or();
     if($text){
       $db_or->condition('fm.title', '%'.$text.'%' , 'like');
       $db_or->condition('fb.body_value', '%'.$text.'%' , 'like');
+      $db_or->condition('pg.field_project_goal_value', '%'.$text.'%' , 'like');
+      $db_or->condition('ps.field_project_solutions_value', '%'.$text.'%' , 'like');
+      $db_or->condition('dp.field_describe_problem_value', '%'.$text.'%' , 'like');
+      $db_or->condition('pi.field_project_impact_value', '%'.$text.'%' , 'like');
+      $db_or->condition('psp.field_project_sustainability_pla_value', '%'.$text.'%' , 'like');
     }
     if(!empty($tid)){
       $db_or->condition('fi.field_problem_topic_tid', $tid, 'in');
@@ -10419,11 +10433,13 @@ function changemakers_test_user(){
     $query = db_select('node', 'fm');
     $query->leftjoin('field_data_field_problem_interest', 'fi', 'fm.nid = fi.entity_id');
     $query->leftjoin('field_data_field_target_interest', 'fx', 'fm.nid = fx.entity_id');
+    $query->leftjoin('field_data_body', 'fb', 'fm.nid = fb.entity_id');
     // $query->fields('fm', array('nid'));
     $query->addField('fm', 'nid', 'entity_id');
     $db_or = db_or();
     if($text){
       $db_or->condition('fm.title', '%'.$text.'%' , 'like');
+      $db_or->condition('fb.body_value', '%'.$text.'%' , 'like');
     }
     if(!empty($tid)){
       $db_or->condition('fi.field_problem_interest_tid', $tid, 'in');
@@ -10631,11 +10647,13 @@ function changemakers_test_user(){
     $query = db_select('node', 'fm');
     $query->leftjoin('field_data_field_problem_interest', 'fi', 'fm.nid = fi.entity_id');
     $query->leftjoin('field_data_field_target_interest', 'fx', 'fm.nid = fx.entity_id');
+    $query->leftjoin('field_data_body', 'fb', 'fm.nid = fb.entity_id');
     // $query->fields('fm', array('nid'));
     $query->addField('fm', 'nid', 'entity_id');
     $db_or = db_or();
     if($text){
       $db_or->condition('fm.title', '%'.$text.'%' , 'like');
+      $db_or->condition('fb.body_value', '%'.$text.'%' , 'like');
     }
     if(!empty($tid)){
       $db_or->condition('fi.field_problem_interest_tid', $tid, 'in');
