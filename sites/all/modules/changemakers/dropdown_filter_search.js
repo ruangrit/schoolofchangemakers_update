@@ -8,4 +8,6 @@ $(document).ready(function() {
 	    $(this).parents('li').addClass('dropdown-taxonomy-parent');
 	  });
     });
+
+  $('.bold--text--search').addClass('dropdown-taxonomy-parent');
 });

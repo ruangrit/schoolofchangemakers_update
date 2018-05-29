@@ -1417,7 +1417,7 @@ function changemakers_test_user(){
       'projects/list',
       'knowledge/list',
       'newsevent/list',
-      'search',
+      'node/2489',
     );
     if(in_array($_GET['q'], $page_add_script_list)) {
       drupal_add_js(drupal_get_path('module', 'changemakers') . '/dropdown_filter_search.js');
