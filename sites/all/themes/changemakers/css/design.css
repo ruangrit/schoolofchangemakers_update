@@ -6189,7 +6189,7 @@ ul.multiselect-container.dropdown-menu {
 /*
 #edit-field-journal-problem-tid-wrapper ul.multiselect-container.dropdown-menu, #edit-field-journal-problem-tid-wrapper ul.multiselect-container.dropdown-menu{ padding: 0; margin: 0;}
 */
-
+/*
 div#edit-field-knowledge-problem-tid-wrapper .multiselect-container li:nth-of-type(1), div#edit-field-knowledge-problem-tid-wrapper .multiselect-container li:nth-of-type(10), div#edit-field-knowledge-problem-tid-wrapper .multiselect-container li:nth-of-type(18), div#edit-field-knowledge-problem-tid-wrapper .multiselect-container li:nth-of-type(25), div#edit-field-knowledge-problem-tid-wrapper .multiselect-container li:nth-of-type(34), div#edit-field-knowledge-problem-tid-wrapper .multiselect-container li:nth-of-type(42), div#edit-field-knowledge-problem-tid-wrapper .multiselect-container li:nth-of-type(51), div#edit-field-knowledge-problem-tid-wrapper .multiselect-container li:nth-of-type(55),
 div#edit-field-problem-topic-tid-wrapper .multiselect-container li:nth-of-type(1), div#edit-field-problem-topic-tid-wrapper .multiselect-container li:nth-of-type(10), div#edit-field-problem-topic-tid-wrapper .multiselect-container li:nth-of-type(18), div#edit-field-problem-topic-tid-wrapper .multiselect-container li:nth-of-type(25), div#edit-field-problem-topic-tid-wrapper .multiselect-container li:nth-of-type(34), div#edit-field-problem-topic-tid-wrapper .multiselect-container li:nth-of-type(42), div#edit-field-problem-topic-tid-wrapper .multiselect-container li:nth-of-type(51), div#edit-field-problem-topic-tid-wrapper .multiselect-container li:nth-of-type(55),
 div#edit-field-problem-interest-tid-wrapper  .multiselect-container li:nth-of-type(1), div#edit-field-problem-interest-tid-wrapper .multiselect-container li:nth-of-type(10), div#edit-field-problem-interest-tid-wrapper .multiselect-container li:nth-of-type(18), div#edit-field-problem-interest-tid-wrapper .multiselect-container li:nth-of-type(25), div#edit-field-problem-interest-tid-wrapper .multiselect-container li:nth-of-type(34), div#edit-field-problem-interest-tid-wrapper .multiselect-container li:nth-of-type(42), div#edit-field-problem-interest-tid-wrapper .multiselect-container li:nth-of-type(51), div#edit-field-problem-interest-tid-wrapper .multiselect-container li:nth-of-type(55), 
@@ -6207,8 +6207,14 @@ div#edit-field-problem-interest-tid-wrapper  .multiselect-container li:nth-of-ty
     margin-top: 5px;
     
 }
+*/
+.dropdown-taxonomy-parent {
 
-
+    clear: both;
+    width: 100% !important;
+    margin-left: 1% !important;
+    margin-top: 5px;
+}
 
 #views-exposed-form-journal-list-page #edit-field-knowledge-problem-tid-wrapper ul.multiselect-container li, #views-exposed-form-journal-list-page #edit-field-problem-topic-tid-wrapper ul.multiselect-container li, #views-exposed-form-journal-list-page #edit-field-problem-interest-tid-wrapper ul.multiselect-container li, #views-exposed-form-journal-list-page #edit-field-journal-problem-tid-wrapper  ul.multiselect-container li, #views-exposed-form-journal-list-page #edit-field-course-problems-tid-wrapper  ul.multiselect-container li, #views-exposed-form-journal-list-page #edit-field-course-interest-tid-wrapper ul.multiselect-container li{
     width: 32%;

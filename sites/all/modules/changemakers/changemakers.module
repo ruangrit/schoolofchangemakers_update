@@ -1413,6 +1413,15 @@ function changemakers_test_user(){
   function changemakers_init() {
     // ========== debug code =========
     global $user;
+    $page_add_script_list = array(
+      'projects/list',
+      'knowledge/list',
+      'newsevent/list',
+      'search',
+    );
+    if(in_array($_GET['q'], $page_add_script_list)) {
+      drupal_add_js(drupal_get_path('module', 'changemakers') . '/dropdown_filter_search.js');
+    }
     //print $user->roles[3];
     if(isset($user->roles[3])){
       if ($_GET['q'] === '/node/add/project') {
