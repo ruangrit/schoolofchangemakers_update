@@ -2333,11 +2333,11 @@ function changemakers_test_user(){
         $form['field_profile_active_key']['und'][0]['value']['#default_value'] = $randomnumber;
 
         //$form['account']['roles'][10]= TRUE;
-        // $form['account']['roles'][10] = array(
-        //                       '#type' => 'radios',
-        //                       '#title' => 'unvierfied',
-        //                       '#default_value' => 10,
-        //                   );
+        $form['account']['roles'][10] = array(
+                               '#type' => 'radios',
+                               '#title' => 'unvierfied',
+                               '#default_value' => 10,
+                           );
 
         //drupal_goto("/node/4");
 
